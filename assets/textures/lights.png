@@ -1,0 +1,14 @@
+import * as THREE from "three";
+
+// تحميل Texture الضوء
+const loader = new THREE.TextureLoader();
+const lightTexture = loader.load("/assets/textures/lights.png");
+
+// استخدام كـ Sprite
+const spriteMaterial = new THREE.SpriteMaterial({ map: lightTexture, color: 0xffffff, transparent: true });
+const lightSprite = new THREE.Sprite(spriteMaterial);
+
+// وضعه في المشهد
+lightSprite.position.set(5, 3, 10);
+lightSprite.scale.set(2, 2, 1); // ضبط الحجم
+scene.add(lightSprite);
