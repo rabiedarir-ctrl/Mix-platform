@@ -50,6 +50,11 @@ function processDream(dreamText, userId) {
         message: "تم تحليل حلمك بنجاح!"
     });
 
+    sendEvent("dream_event", {
+    action: "npc_spawn",
+    data: { npcId: "npc_1" }
+});
+    
     // بث البيانات للـ Frontend
     broadcastDream(parsedDream);
 
