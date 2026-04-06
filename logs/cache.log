@@ -1,0 +1,7 @@
+[2026-04-06T09:01:00Z] [INFO] Cache service started
+[2026-04-06T09:02:10Z] [INFO] Cache loaded: 120 items
+[2026-04-06T09:03:20Z] [WARN] Cache miss: dream_42
+[2026-04-06T09:04:30Z] [INFO] Cache updated: 5 new items
+[2026-04-06T09:05:40Z] [INFO] Cache persisted to disk
+[2026-04-06T09:06:50Z] [INFO] Cache cleanup: removed 12 expired items
+[2026-04-06T09:08:00Z] [INFO] Cache service running normally
