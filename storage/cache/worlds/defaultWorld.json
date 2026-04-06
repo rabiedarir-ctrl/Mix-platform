@@ -1,0 +1,32 @@
+storage/cache/worlds/defaultWorld.json
+
+{
+  "id": 1,
+  "worldName": "defaultWorld",
+  "description": "عالم افتراضي بسيط للمبتدئين لتجربة الحركات الأساسية والمشاهد الأولية.",
+  "energyRequired": 5,
+  "baseFrequency": 438,
+  "lighting": "soft",
+  "terrain": {
+    "groundTexture": "ground.png",
+    "skyTexture": "sky.jpg",
+    "objects": [
+      "tree.glb",
+      "rock.glb"
+    ]
+  },
+  "ambient": {
+    "music": "ambient.mp3",
+    "effects": ["wind", "birds"]
+  },
+  "spawnPoints": [
+    {
+      "id": 1,
+      "position": { "x": 0, "y": 0, "z": 0 },
+      "rotation": { "x": 0, "y": 0, "z": 0 }
+    }
+  ],
+  "status": "active",
+  "createdAt": "2026-04-06T11:00:00Z",
+  "updatedAt": "2026-04-06T11:00:00Z"
+}
