@@ -1,0 +1,10 @@
+[2026-04-06T09:00:05Z] [INFO] Backend server starting on port 3000
+[2026-04-06T09:00:15Z] [INFO] Connecting to database...
+[2026-04-06T09:00:20Z] [INFO] Database connection established
+[2026-04-06T09:00:25Z] [INFO] Middleware loaded: auth, cors, logger
+[2026-04-06T09:00:30Z] [INFO] Routes initialized
+[2026-04-06T09:00:35Z] [INFO] Backend ready to accept requests
+[2026-04-06T09:05:50Z] [WARN] API request delayed: /api/users
+[2026-04-06T09:08:10Z] [ERROR] Unhandled exception in /api/dreams
+[2026-04-06T09:09:00Z] [INFO] API /api/social served successfully
+[2026-04-06T09:12:45Z] [INFO] Periodic cache cleanup completed
