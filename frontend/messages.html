@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرسائل - Mix Platform</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <header>
+        <h1>المحادثات</h1>
+        <nav>
+            <a href="dashboard.html">لوحة التحكم</a>
+            <a href="feed.html">التغذية</a>
+            <a href="games.html">الألعاب</a>
+            <a href="dream_world.html">عالم الأحلام</a>
+            <button id="logoutBtn">تسجيل الخروج</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="users-section">
+            <h2>المستخدمون</h2>
+            <ul id="usersList">
+                <li>جارٍ تحميل المستخدمين...</li>
+            </ul>
+        </section>
+
+        <section id="chat-section">
+            <h2>المحادثة</h2>
+            <div id="chatContainer">
+                <p>اختر مستخدمًا لبدء المحادثة</p>
+            </div>
+            <form id="messageForm">
+                <input type="text" id="messageInput" placeholder="اكتب رسالة..." required>
+                <button type="submit">إرسال</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Mix Platform. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script src="static/api.js"></script>
+    <script src="static/messages.js"></script>
+    <script>
+        const token = localStorage.getItem("mixToken");
+        if (!token) window.location.href = "login.html";
+
+        const logoutBtn = document.getElementById('logoutBtn');
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem("mixToken");
+            window.location.href = "login.html";
+        });
+
+        const usersList = document.getElementById("usersList");
+        const chatContainer = document.getElementById("chatContainer");
+        const messageForm = document.getElementById("messageForm");
+        const messageInput = document.getElementById("messageInput");
+
+        let currentChatUser = null;
+
+        // تحميل قائمة المستخدمين
+        async function loadUsers() {
+            try {
+                const res = await fetch(`${MIX_API_BASE}/users/all`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    usersList.innerHTML = '';
+                    data.forEach(user => {
+                        const li = document.createElement('li');
+                        li.textContent = user.name;
+                        li.style.cursor = "pointer";
+                        li.addEventListener('click', () => selectUser(user));
+                        usersList.appendChild(li);
+                    });
+                } else {
+                    usersList.innerHTML = `<li>خطأ: ${data.message}</li>`;
+                }
+            } catch (err) {
+                usersList.innerHTML = '<li>تعذر الاتصال بالخادم</li>';
+                console.error(err);
+            }
+        }
+
+        // تحديد مستخدم للدردشة
+        function selectUser(user) {
+            currentChatUser = user;
+            chatContainer.innerHTML = `<p>المحادثة مع <strong>${user.name}</strong></p>`;
+            loadMessages();
+        }
+
+        // تحميل الرسائل
+        async function loadMessages() {
+            if (!currentChatUser) return;
+            try {
+                const res = await fetch(`${MIX_API_BASE}/messages/${currentChatUser.id}`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    chatContainer.innerHTML = `<p>المحادثة مع <strong>${currentChatUser.name}</strong></p>`;
+                    data.forEach(msg => {
+                        const p = document.createElement('p');
+                        p.textContent = `[${msg.from === currentChatUser.id ? currentChatUser.name : 'أنت'}] ${msg.content}`;
+                        chatContainer.appendChild(p);
+                    });
+                } else {
+                    chatContainer.innerHTML += `<p>خطأ في تحميل الرسائل: ${data.message}</p>`;
+                }
+            } catch (err) {
+                chatContainer.innerHTML += '<p>تعذر الاتصال بالخادم</p>';
+                console.error(err);
+            }
+        }
+
+        // إرسال رسالة جديدة
+        messageForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentChatUser) return alert("اختر مستخدمًا أولاً");
+
+            const content = messageInput.value.trim();
+            if (!content) return;
+
+            try {
+                const res = await fetch(`${MIX_API_BASE}/messages/send`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ to: currentChatUser.id, content })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    messageInput.value = '';
+                    loadMessages();
+                } else {
+                    alert(data.message || "خطأ في الإرسال");
+                }
+            } catch (err) {
+                alert("تعذر الاتصال بالخادم");
+                console.error(err);
+            }
+        });
+
+        loadUsers();
+    </script>
+</body>
+</html>
