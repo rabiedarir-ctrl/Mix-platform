@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المتجر - Mix Platform</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <header>
+        <h1>المتجر</h1>
+        <nav>
+            <a href="dashboard.html">لوحة التحكم</a>
+            <a href="feed.html">التغذية</a>
+            <a href="messages.html">الرسائل</a>
+            <a href="games.html">الألعاب</a>
+            <a href="dream_world.html">عالم الأحلام</a>
+            <button id="logoutBtn">تسجيل الخروج</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="store-section">
+            <h2>المنتجات</h2>
+            <div id="productsContainer">
+                <p>جارٍ تحميل المنتجات...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Mix Platform. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script src="static/api.js"></script>
+    <script>
+        const token = localStorage.getItem("mixToken");
+        if (!token) window.location.href = "login.html";
+
+        const logoutBtn = document.getElementById('logoutBtn');
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem("mixToken");
+            window.location.href = "login.html";
+        });
+
+        const productsContainer = document.getElementById("productsContainer");
+
+        // تحميل المنتجات من API
+        async function loadProducts() {
+            try {
+                const res = await fetch(`${MIX_API_BASE}/store/items`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    productsContainer.innerHTML = '';
+                    if (data.length === 0) {
+                        productsContainer.innerHTML = '<p>لا توجد منتجات متاحة حاليًا.</p>';
+                    } else {
+                        data.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'product-card';
+                            div.innerHTML = `
+                                <h3>${item.name}</h3>
+                                <p>${item.description}</p>
+                                <p>السعر: ${item.price} ⚡</p>
+                                <button onclick="buyItem('${item.id}')">شراء</button>
+                            `;
+                            productsContainer.appendChild(div);
+                        });
+                    }
+                } else {
+                    productsContainer.innerHTML = `<p>خطأ في تحميل المنتجات: ${data.message}</p>`;
+                }
+            } catch (err) {
+                productsContainer.innerHTML = '<p>تعذر الاتصال بالخادم</p>';
+                console.error(err);
+            }
+        }
+
+        // شراء عنصر
+        async function buyItem(itemId) {
+            if (!confirm("هل تريد تأكيد عملية الشراء؟")) return;
+            try {
+                const res = await fetch(`${MIX_API_BASE}/store/buy`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ itemId })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert("تمت عملية الشراء بنجاح!");
+                    loadProducts();
+                } else {
+                    alert(data.message || "فشل عملية الشراء");
+                }
+            } catch (err) {
+                alert("تعذر الاتصال بالخادم");
+                console.error(err);
+            }
+        }
+
+        loadProducts();
+    </script>
+</body>
+</html>
