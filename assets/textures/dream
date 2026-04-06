@@ -1,0 +1,25 @@
+import * as THREE from "three";
+
+const loader = new THREE.TextureLoader();
+
+// السماء
+const dreamSky = loader.load("/assets/textures/dream/dreamSky.jpg");
+const skyMaterial = new THREE.MeshBasicMaterial({
+    map: dreamSky,
+    side: THREE.BackSide,
+});
+const skySphere = new THREE.Mesh(new THREE.SphereGeometry(500, 32, 32), skyMaterial);
+scene.add(skySphere);
+
+// الأرض
+const dreamGround = loader.load("/assets/textures/dream/dreamGround.jpg");
+dreamGround.wrapS = dreamGround.wrapT = THREE.RepeatWrapping;
+dreamGround.repeat.set(10, 10);
+const groundMaterial = new THREE.MeshStandardMaterial({ map: dreamGround });
+const groundMesh = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), groundMaterial);
+groundMesh.rotation.x = -Math.PI / 2;
+scene.add(groundMesh);
+
+// تأثيرات إضافية
+const dreamLight = loader.load("/assets/textures/dream/dreamLight.png");
+const dreamParticle = loader.load("/assets/textures/dream/dreamParticle.png");
