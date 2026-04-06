@@ -48,7 +48,8 @@
         // 🔹 دمج Dream Engine مع Backend
         // ===========================
         const dreamManager = new DreamEngine(dreamEngine, token);
-
+        window.dreamEngineInstance = dreamManager;
+      
         async function loadDreams() {
             try {
                 await dreamManager.init();
