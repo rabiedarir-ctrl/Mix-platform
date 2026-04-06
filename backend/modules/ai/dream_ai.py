@@ -62,3 +62,10 @@ class DreamAI:
             log_info(f"Dream data sent to Dream Engine: {data}")
         except Exception as e:
             log_info(f"Failed to send dream data to engine: {e}")
+
+
+ // مثال
+const response = await fetch("/api/npc/chat", {
+    method: "POST",
+    body: JSON.stringify({ message })
+});
