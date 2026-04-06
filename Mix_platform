@@ -1,0 +1,175 @@
+Mix_platform/
+│
+├── README.md
+├── LICENSE
+├── mix.config.json
+├── .env.example
+├── docker-compose.yml
+├── Dockerfile
+│
+├── backend/                       # 🔥 النظام الخلفي
+│   ├── server.js
+│   ├── package.json
+│   ├── requirements.txt
+│   │
+│   ├── core/
+│   │   ├── memory.py
+│   │   ├── auth.py
+│   │   ├── self_heal.py
+│   │   ├── logger.py
+│   │   └── scheduler.py
+│   │
+│   ├── api/
+│   │   ├── health.py
+│   │   ├── users.py
+│   │   ├── social.py
+│   │   ├── wallet.py
+│   │   ├── games.py
+│   │   ├── metaverse.py
+│   │   └── dreams.py
+│   │
+│   ├── modules/
+│   │   ├── social/
+│   │   │   ├── post_manager.py
+│   │   │   ├── comment_manager.py
+│   │   │   └── message_manager.py
+│   │   │
+│   │   ├── wallet/
+│   │   │   ├── wallet_manager.py
+│   │   │   └── transactions.py
+│   │   │
+│   │   ├── ai/
+│   │   │   ├── ai_core.py
+│   │   │   ├── ai_alerts.py
+│   │   │   └── dream_ai.py
+│   │   │
+│   │   ├── games/
+│   │   │   ├── btc_game.js
+│   │   │   └── game_utils.js
+│   │   │
+│   │   ├── matrix/
+│   │   │   ├── matrixClient.js
+│   │   │   └── rooms.js
+│   │   │
+│   │   └── metaverse/
+│   │       ├── dreams_engine.js
+│   │       ├── dream_parser.py
+│   │       ├── scene_builder.py
+│   │       └── world_sync.js
+│   │
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Post.js
+│   │   ├── Message.js
+│   │   ├── Transaction.js
+│   │   └── DreamWorld.js
+│   │
+│   ├── routes/
+│   │   ├── userRoutes.js
+│   │   ├── socialRoutes.js
+│   │   ├── walletRoutes.js
+│   │   ├── gameRoutes.js
+│   │   └── dreamRoutes.js
+│   │
+│   └── utils/
+│       ├── helpers.js
+│       ├── validators.js
+│       └── constants.js
+│
+├── frontend/                      # 🔥 الواجهة + Three.js
+│   ├── index.html
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── feed.html
+│   ├── messages.html
+│   ├── store.html
+│   ├── games.html
+│   ├── world.html
+│   ├── dream_world.html
+│   │
+│   ├── manifest.json
+│   ├── service-worker.js
+│   │
+│   └── static/
+│       ├── main.js
+│       ├── api.js
+│       ├── auth.js
+│       ├── social.js
+│       ├── messages.js
+│       ├── wallet.js
+│       ├── store.js
+│       ├── games.js
+│       ├── dreams.js
+│       ├── matrix.js
+│       ├── dashboard.js
+│       │
+│       ├── dream_engine.js
+│       │
+│       ├── three/
+│       │   ├── core/
+│       │   │   ├── scene.js
+│       │   │   ├── camera.js
+│       │   │   ├── renderer.js
+│       │   │   └── loop.js
+│       │   │
+│       │   ├── objects/
+│       │   │   ├── sky.js
+│       │   │   ├── ground.js
+│       │   │   ├── buildings.js
+│       │   │   └── light.js
+│       │   │
+│       │   ├── player/
+│       │   │   ├── controls.js
+│       │   │   ├── movement.js
+│       │   │   └── avatar.js
+│       │   │
+│       │   ├── worlds/
+│       │   │   ├── defaultWorld.js
+│       │   │   ├── dreamWorld.js
+│       │   │   └── cityWorld.js
+│       │   │
+│       │   ├── loaders/
+│       │   │   ├── gltfLoader.js
+│       │   │   └── textureLoader.js
+│       │   │
+│       │   ├── utils/
+│       │   │   ├── helpers.js
+│       │   │   └── constants.js
+│       │   │
+│       │   └── engine.js
+│       │
+│       └── style.css
+│
+├── assets/
+│   ├── models/
+│   │   ├── avatar.glb
+│   │   ├── city.glb
+│   │   └── objects/
+│   │
+│   ├── textures/
+│   │   ├── sky.jpg
+│   │   ├── ground.png
+│   │   └── lights.png
+│   │
+│   └── audio/
+│       ├── ambient.mp3
+│       └── dream.mp3
+│
+├── storage/
+│   ├── users.json
+│   ├── social.json
+│   ├── messages.json
+│   ├── wallets.json
+│   ├── dreams.json
+│   ├── dream_worlds.json
+│   ├── cache/
+│   └── logs/backend.log
+│
+├── scripts/
+│   ├── start.sh
+│   ├── check.sh
+│   ├── deploy.sh
+│   └── backup.sh
+│
+└── logs/
+    └── system.log
