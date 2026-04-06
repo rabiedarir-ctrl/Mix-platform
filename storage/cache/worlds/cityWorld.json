@@ -1,0 +1,37 @@
+{
+  "id": 3,
+  "worldName": "cityWorld",
+  "description": "مدينة مستقبلية مليئة بالأضواء، المباني الضخمة والشوارع النابضة بالحياة لتجربة حضرية تفاعلية.",
+  "energyRequired": 15,
+  "baseFrequency": 440,
+  "lighting": "neon",
+  "terrain": {
+    "groundTexture": "cityGround.png",
+    "skyTexture": "sky.jpg",
+    "objects": [
+      "skyscraper.glb",
+      "streetLamp.glb",
+      "car.glb",
+      "billboard.glb"
+    ]
+  },
+  "ambient": {
+    "music": "cityAmbience.mp3",
+    "effects": ["traffic", "crowd", "wind"]
+  },
+  "spawnPoints": [
+    {
+      "id": 1,
+      "position": { "x": 0, "y": 0, "z": 0 },
+      "rotation": { "x": 0, "y": 0, "z": 0 }
+    },
+    {
+      "id": 2,
+      "position": { "x": 20, "y": 0, "z": -10 },
+      "rotation": { "x": 0, "y": 90, "z": 0 }
+    }
+  ],
+  "status": "active",
+  "createdAt": "2026-04-06T11:30:00Z",
+  "updatedAt": "2026-04-06T11:30:00Z"
+}
