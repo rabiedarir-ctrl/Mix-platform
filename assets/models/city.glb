@@ -1,0 +1,23 @@
+import { GLTFLoader } from "../loaders/gltfLoader.js";
+
+export class CityWorld {
+    constructor(scene) {
+        this.scene = scene;
+        this.loader = new GLTFLoader();
+
+        this.loader.load("/assets/models/city.glb",
+            (gltf) => {
+                this.city = gltf.scene;
+                this.city.scale.set(1, 1, 1);
+                this.scene.add(this.city);
+                console.log("City loaded successfully!");
+            },
+            (xhr) => {
+                console.log(`Loading City: ${(xhr.loaded / xhr.total * 100).toFixed(2)}%`);
+            },
+            (error) => {
+                console.error("Error loading City:", error);
+            }
+        );
+    }
+}
