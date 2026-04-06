@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mix Platform</title>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Favicon -->
+    <link rel="icon" href="assets/textures/sky.jpg" type="image/jpeg">
+
+    <!-- Scripts الرئيسية -->
+    <script type="module" src="engine.js" defer></script>
+    <script type="module" src="scene.js" defer></script>
+    <script type="module" src="dashboard.js" defer></script>
+</head>
+<body>
+    <!-- واجهة المستخدم -->
+    <div id="app">
+        <!-- HUD أو لوحة التحكم -->
+        <div id="dashboard">
+            <h1>مرحبًا بك في Mix Platform</h1>
+            <div id="energy-status">الطاقة: <span id="energy-value">0</span></div>
+            <div id="frequency-status">التردد: <span id="frequency-value">0</span></div>
+        </div>
+
+        <!-- منطقة عرض المشهد ثلاثي الأبعاد -->
+        <canvas id="main-canvas"></canvas>
+
+        <!-- قائمة الرسائل -->
+        <div id="messages-feed"></div>
+
+        <!-- قائمة الشبكات الاجتماعية -->
+        <div id="social-feed"></div>
+    </div>
+
+    <!-- ملفات البيانات -->
+    <script>
+        const MIX_API_BASE = "http://localhost:3000";
+
+        // تحميل بيانات المستخدمين
+        fetch("storage/users.json")
+            .then(res => res.json())
+            .then(data => console.log("Users:", data))
+            .catch(err => console.error(err));
+
+        // تحميل البيانات الاجتماعية
+        fetch("storage/social.json")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("social-feed").innerHTML =
+                    JSON.stringify(data, null, 2);
+            })
+            .catch(err => console.error(err));
+
+        // تحميل الرسائل
+        fetch("storage/messages.json")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("messages-feed").innerHTML =
+                    JSON.stringify(data, null, 2);
+            })
+            .catch(err => console.error(err));
+    </script>
+</body>
+</html>
