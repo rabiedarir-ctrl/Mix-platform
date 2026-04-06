@@ -1,0 +1,17 @@
+import * as THREE from "three";
+
+const loader = new THREE.TextureLoader();
+const groundTexture = loader.load("/assets/textures/ground.png");
+
+// ضبط التكرار
+groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+groundTexture.repeat.set(10, 10);
+
+// إنشاء الأرضية
+const groundMaterial = new THREE.MeshStandardMaterial({ map: groundTexture });
+const groundMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(100, 100),
+    groundMaterial
+);
+groundMesh.rotation.x = -Math.PI / 2;
+scene.add(groundMesh);
