@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التغذية - Mix Platform</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <header>
+        <h1>التغذية الاجتماعية</h1>
+        <nav>
+            <a href="dashboard.html">لوحة التحكم</a>
+            <a href="messages.html">الرسائل</a>
+            <a href="games.html">الألعاب</a>
+            <a href="dream_world.html">عالم الأحلام</a>
+            <button id="logoutBtn">تسجيل الخروج</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="posts-section">
+            <h2>المنشورات</h2>
+            <div id="postsContainer">
+                <p>جارٍ تحميل المنشورات...</p>
+            </div>
+        </section>
+
+        <section id="new-post-section">
+            <h2>إنشاء منشور جديد</h2>
+            <form id="postForm">
+                <textarea id="postContent" placeholder="اكتب شيئًا..." required></textarea>
+                <button type="submit">نشر</button>
+            </form>
+            <p id="postFeedback" style="color:red;"></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Mix Platform. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script src="static/api.js"></script>
+    <script>
+        const token = localStorage.getItem("mixToken");
+        if (!token) window.location.href = "login.html";
+
+        const postsContainer = document.getElementById("postsContainer");
+        const postForm = document.getElementById("postForm");
+        const postFeedback = document.getElementById("postFeedback");
+
+        // تسجيل الخروج
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem("mixToken");
+            window.location.href = "login.html";
+        });
+
+        // تحميل المنشورات
+        async function loadPosts() {
+            try {
+                const res = await fetch(`${MIX_API_BASE}/social/posts`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    postsContainer.innerHTML = '';
+                    if (data.length === 0) {
+                        postsContainer.innerHTML = '<p>لا توجد منشورات بعد.</p>';
+                    } else {
+                        data.forEach(post => {
+                            const div = document.createElement('div');
+                            div.className = 'post-card';
+                            div.innerHTML = `
+                                <p><strong>${post.user}</strong> - ${new Date(post.createdAt).toLocaleString()}</p>
+                                <p>${post.content}</p>
+                                <p>💬 ${post.comments.length} | 👍 ${post.likes}</p>
+                            `;
+                            postsContainer.appendChild(div);
+                        });
+                    }
+                } else {
+                    postsContainer.innerHTML = `<p>خطأ في تحميل المنشورات: ${data.message}</p>`;
+                }
+            } catch (err) {
+                postsContainer.innerHTML = '<p>تعذر الاتصال بالخادم</p>';
+                console.error(err);
+            }
+        }
+
+        // إنشاء منشور جديد
+        postForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            postFeedback.textContent = '';
+            const content = document.getElementById('postContent').value.trim();
+            if (!content) return;
+
+            try {
+                const res = await fetch(`${MIX_API_BASE}/social/posts`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ content })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    document.getElementById('postContent').value = '';
+                    loadPosts();
+                } else {
+                    postFeedback.textContent = data.message || "خطأ في النشر";
+                }
+            } catch (err) {
+                postFeedback.textContent = "تعذر الاتصال بالخادم";
+                console.error(err);
+            }
+        });
+
+        loadPosts();
+    </script>
+</body>
+                                  </html>
