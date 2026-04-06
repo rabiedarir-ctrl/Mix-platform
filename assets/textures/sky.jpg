@@ -1,0 +1,14 @@
+import * as THREE from "three";
+
+// تحميل Texture السماء
+const textureLoader = new THREE.TextureLoader();
+const skyTexture = textureLoader.load("/assets/textures/sky.jpg");
+
+// إنشاء كرة للسماء
+const skyGeometry = new THREE.SphereGeometry(500, 32, 32);
+const skyMaterial = new THREE.MeshBasicMaterial({
+    map: skyTexture,
+    side: THREE.BackSide, // الوجه الداخلي للكائن
+});
+const skyMesh = new THREE.Mesh(skyGeometry, skyMaterial);
+scene.add(skyMesh);
