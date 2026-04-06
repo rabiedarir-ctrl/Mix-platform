@@ -40,3 +40,9 @@ class AICore:
         }
         log_info(f"Dream analyzed: {insights}")
         return insights
+
+// مثال
+const response = await fetch("/api/npc/chat", {
+    method: "POST",
+    body: JSON.stringify({ message })
+});
