@@ -1,0 +1,89 @@
+{
+  "project": "Mix Platform",
+  "version": "1.0.0",
+  "description": "نظام متكامل لإدارة الطاقة، الخلايا، الألعاب، الشبكات الاجتماعية، وعالم الأحلام ثلاثي الأبعاد.",
+  "author": "Darir Rabie",
+  "license": "MIT",
+  
+  "backend": {
+    "host": "localhost",
+    "port": 3000,
+    "api_base": "/api",
+    "jwt_secret": "YOUR_SECRET_KEY",
+    "database": {
+      "type": "json",
+      "storage_path": "./storage"
+    },
+    "modules": {
+      "social": true,
+      "wallet": true,
+      "ai": true,
+      "games": true,
+      "metaverse": true,
+      "dreams": true
+    },
+    "scheduler": {
+      "enabled": true,
+      "energy_update_interval_sec": 60
+    },
+    "logging": {
+      "level": "info",
+      "file": "./storage/logs/backend.log"
+    }
+  },
+  
+  "frontend": {
+    "host": "localhost",
+    "port": 8080,
+    "static_path": "./frontend/static",
+    "main_js": "main.js",
+    "api_base": "http://localhost:3000/api",
+    "threejs": {
+      "enabled": true,
+      "engine": "./frontend/static/three/engine.js",
+      "worlds": [
+        "defaultWorld.js",
+        "dreamWorld.js",
+        "cityWorld.js"
+      ]
+    },
+    "dream_engine": {
+      "enabled": true,
+      "script": "./frontend/static/dream_engine.js"
+    }
+  },
+  
+  "assets": {
+    "models_path": "./assets/models",
+    "textures_path": "./assets/textures",
+    "audio_path": "./assets/audio"
+  },
+  
+  "scripts": {
+    "start": "./scripts/start.sh",
+    "check": "./scripts/check.sh",
+    "deploy": "./scripts/deploy.sh",
+    "backup": "./scripts/backup.sh"
+  },
+  
+  "docker": {
+    "enabled": true,
+    "dockerfile": "./Dockerfile",
+    "compose": "./docker-compose.yml"
+  },
+  
+  "storage": {
+    "users": "./storage/users.json",
+    "social": "./storage/social.json",
+    "messages": "./storage/messages.json",
+    "wallets": "./storage/wallets.json",
+    "dreams": "./storage/dreams.json",
+    "dream_worlds": "./storage/dream_worlds.json",
+    "cache": "./storage/cache"
+  },
+  
+  "logging": {
+    "system_log": "./logs/system.log",
+    "level": "info"
+  }
+  }
