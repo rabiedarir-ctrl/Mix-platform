@@ -1,0 +1,129 @@
+/* ===================================================
+   🔹 DASHBOARD CSS - MIX PLATFORM
+=================================================== */
+
+/* ===========================
+   🔹 DASHBOARD CONTAINER
+=========================== */
+#dashboard {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+
+    width: 250px;
+    min-height: 120px;
+
+    background: rgba(30,30,30,0.85);
+    backdrop-filter: blur(10px);
+
+    padding: 14px 18px;
+    border-radius: 12px;
+
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #00ffcc;
+
+    border: 1px solid rgba(0,255,204,0.3);
+    box-shadow: 0 0 20px rgba(0,255,204,0.2);
+    z-index: 1000;
+}
+
+/* ===========================
+   🔹 DASHBOARD ITEMS
+=========================== */
+#dashboard span {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #00ffcc;
+}
+
+#dashboard h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #00ffcc;
+}
+
+#dashboard .label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+}
+
+#dashboard .value {
+    font-size: 14px;
+    font-weight: bold;
+    color: #00ffcc;
+}
+
+/* ===========================
+   🔹 DASHBOARD BORDERS & SHADOWS
+=========================== */
+#dashboard .section {
+    margin-top: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.3);
+    border-left: 3px solid #00ffcc;
+}
+
+/* ===========================
+   🔹 PROGRESS BARS
+=========================== */
+#dashboard .progress-container {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+#dashboard .progress-bar {
+    height: 100%;
+    background: #00ffcc;
+    width: 0%;
+    border-radius: 6px;
+    transition: width 0.3s ease;
+}
+
+/* ===========================
+   🔹 BUTTONS INSIDE DASHBOARD
+=========================== */
+#dashboard button {
+    padding: 6px 12px;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #00ffcc;
+    background: rgba(0,255,204,0.1);
+    border: 1px solid rgba(0,255,204,0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#dashboard button:hover {
+    background: rgba(0,255,204,0.2);
+    transform: scale(1.05);
+}
+
+/* ===========================
+   🔹 RESPONSIVE
+=========================== */
+@media (max-width: 768px) {
+    #dashboard {
+        width: 200px;
+        font-size: 12px;
+        padding: 10px 12px;
+    }
+
+    #dashboard h2 {
+        font-size: 14px;
+    }
+
+    #dashboard button {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+  }
