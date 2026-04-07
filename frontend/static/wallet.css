@@ -1,0 +1,192 @@
+/* ===================================================
+   🔹 WALLET CSS - MIX PLATFORM
+=================================================== */
+
+/* ===========================
+   🔹 WALLET CONTAINER
+=========================== */
+#wallet-container {
+    position: fixed;
+    width: 350px;
+    height: auto;
+    top: 50px;
+    right: 20px;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 16px;
+    color: #00ffcc;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 14px;
+    z-index: 50;
+    box-shadow: 0 0 20px rgba(0,255,204,0.3);
+}
+
+/* ===========================
+   🔹 WALLET HEADER
+=========================== */
+#wallet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+#wallet-header h2 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #00ffcc;
+}
+
+#wallet-header button {
+    background: rgba(0,0,0,0.6);
+    color: #00ffcc;
+    border: 1px solid rgba(0,255,204,0.2);
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#wallet-header button:hover {
+    background: rgba(0,0,0,0.8);
+    box-shadow: 0 0 10px #00ffcc;
+}
+
+/* ===========================
+   🔹 WALLET BALANCE
+=========================== */
+#wallet-balance {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: #00ffcc;
+}
+
+/* ===========================
+   🔹 WALLET TRANSACTIONS
+=========================== */
+#wallet-transactions {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.wallet-transaction {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.wallet-transaction:hover {
+    background: rgba(0,255,204,0.1);
+}
+
+.wallet-transaction .tx-type {
+    font-weight: bold;
+}
+
+.wallet-transaction .tx-amount {
+    color: #00ffcc;
+}
+
+/* ===========================
+   🔹 WALLET BUTTONS
+=========================== */
+.wallet-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.wallet-buttons button {
+    flex: 1;
+    background: rgba(0,0,0,0.6);
+    color: #00ffcc;
+    border: 1px solid rgba(0,255,204,0.2);
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.wallet-buttons button:hover {
+    background: rgba(0,0,0,0.8);
+    box-shadow: 0 0 10px #00ffcc;
+    transform: scale(1.03);
+}
+
+/* ===========================
+   🔹 NOTIFICATIONS
+=========================== */
+.wallet-notifications {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 240px;
+    pointer-events: none;
+    z-index: 60;
+}
+
+.wallet-notification {
+    background: rgba(20,20,20,0.85);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    border-radius: 6px;
+    border-left: 4px solid #00ffcc;
+    font-size: 12px;
+    animation: walletFadeIn 0.3s ease;
+}
+
+/* ===========================
+   🔹 ANIMATIONS
+=========================== */
+@keyframes walletFadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===========================
+   🔹 SCROLLBAR
+=========================== */
+#wallet-transactions::-webkit-scrollbar,
+.wallet-notifications::-webkit-scrollbar {
+    width: 6px;
+}
+
+#wallet-transactions::-webkit-scrollbar-thumb,
+.wallet-notifications::-webkit-scrollbar-thumb {
+    background: #00ffcc;
+    border-radius: 3px;
+}
+
+/* ===========================
+   🔹 RESPONSIVE
+=========================== */
+@media (max-width: 768px) {
+    #wallet-container {
+        width: 90%;
+        top: 30px;
+        right: 5%;
+        font-size: 13px;
+        padding: 12px;
+    }
+
+    #wallet-header h2 {
+        font-size: 14px;
+    }
+
+    .wallet-buttons button {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+
+    .wallet-notifications {
+        width: 200px;
+    }
+  }
