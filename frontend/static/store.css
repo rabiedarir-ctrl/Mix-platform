@@ -1,0 +1,198 @@
+/* ===================================================
+   🔹 STORE CSS - MIX PLATFORM
+=================================================== */
+
+/* ===========================
+   🔹 STORE CONTAINER
+=========================== */
+#store-container {
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 1000px;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 20px;
+    color: #00ffcc;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 14px;
+    z-index: 50;
+    box-shadow: 0 0 25px rgba(0,255,204,0.3);
+}
+
+/* ===========================
+   🔹 STORE HEADER
+=========================== */
+#store-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#store-header h2 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#store-header button {
+    background: rgba(0,0,0,0.6);
+    color: #00ffcc;
+    border: 1px solid rgba(0,255,204,0.2);
+    border-radius: 8px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#store-header button:hover {
+    background: rgba(0,0,0,0.8);
+    box-shadow: 0 0 10px #00ffcc;
+}
+
+/* ===========================
+   🔹 STORE GRID
+=========================== */
+#store-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+/* ===========================
+   🔹 STORE ITEM CARD
+=========================== */
+.store-item {
+    background: rgba(0,0,0,0.6);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.store-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.store-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00ffcc;
+}
+
+.store-item h3 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+.store-item .price {
+    color: #00ffcc;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+/* ===========================
+   🔹 STORE BUTTONS
+=========================== */
+.store-item button {
+    background: rgba(0,0,0,0.6);
+    color: #00ffcc;
+    border: 1px solid rgba(0,255,204,0.2);
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.store-item button:hover {
+    background: rgba(0,0,0,0.85);
+    box-shadow: 0 0 10px #00ffcc;
+    transform: scale(1.05);
+}
+
+/* ===========================
+   🔹 STORE NOTIFICATIONS
+=========================== */
+.store-notifications {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 240px;
+    pointer-events: none;
+    z-index: 60;
+}
+
+.store-notification {
+    background: rgba(20,20,20,0.85);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    border-radius: 6px;
+    border-left: 4px solid #00ffcc;
+    font-size: 12px;
+    animation: storeFadeIn 0.3s ease;
+}
+
+/* ===========================
+   🔹 ANIMATIONS
+=========================== */
+@keyframes storeFadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===========================
+   🔹 SCROLLBAR
+=========================== */
+#store-grid::-webkit-scrollbar,
+.store-notifications::-webkit-scrollbar {
+    width: 6px;
+}
+
+#store-grid::-webkit-scrollbar-thumb,
+.store-notifications::-webkit-scrollbar-thumb {
+    background: #00ffcc;
+    border-radius: 3px;
+}
+
+/* ===========================
+   🔹 RESPONSIVE
+=========================== */
+@media (max-width: 768px) {
+    #store-container {
+        width: 95%;
+        padding: 16px;
+        font-size: 13px;
+    }
+
+    #store-grid {
+        gap: 10px;
+    }
+
+    .store-item h3 {
+        font-size: 13px;
+    }
+
+    .store-item .price {
+        font-size: 12px;
+    }
+
+    .store-item button {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    .store-notifications {
+        width: 200px;
+    }
+  }
