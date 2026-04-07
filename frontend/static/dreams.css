@@ -1,0 +1,143 @@
+/* ===================================================
+   🔹 DREAMS CSS - MIX PLATFORM
+=================================================== */
+
+/* ===========================
+   🔹 DREAM CONTAINER
+=========================== */
+#dream-container {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: linear-gradient(to bottom, #0a0a0a, #1a1a1a);
+    overflow: hidden;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===========================
+   🔹 DREAM SCENE
+=========================== */
+.dream-scene {
+    position: relative;
+    width: 95%;
+    height: 95%;
+    border-radius: 12px;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 204, 0.2);
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+    overflow: hidden;
+}
+
+/* ===========================
+   🔹 DREAM TITLE
+=========================== */
+.dream-scene h2 {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 18px;
+    color: #00ffcc;
+    text-align: center;
+    margin: 12px 0;
+}
+
+/* ===========================
+   🔹 DREAM CONTENT
+=========================== */
+.dream-content {
+    padding: 12px 16px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 14px;
+    color: #ffffff;
+    line-height: 1.5;
+    overflow-y: auto;
+    max-height: 80%;
+}
+
+/* ===========================
+   🔹 DREAM BUTTONS
+=========================== */
+.dream-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    gap: 10px;
+}
+
+.dream-buttons button {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    background: rgba(0, 0, 0, 0.6);
+    color: #00ffcc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dream-buttons button:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+}
+
+/* ===========================
+   🔹 DREAM ANIMATIONS
+=========================== */
+@keyframes dreamFadeIn {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes dreamFadeOut {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0.95); }
+}
+
+.dream-scene.show {
+    animation: dreamFadeIn 0.4s forwards;
+}
+
+.dream-scene.hide {
+    animation: dreamFadeOut 0.4s forwards;
+}
+
+/* ===========================
+   🔹 DREAM SCROLLBAR
+=========================== */
+.dream-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dream-content::-webkit-scrollbar-thumb {
+    background: #00ffcc;
+    border-radius: 3px;
+}
+
+/* ===========================
+   🔹 RESPONSIVE
+=========================== */
+@media (max-width: 768px) {
+    .dream-scene {
+        width: 95%;
+        height: 90%;
+    }
+
+    .dream-scene h2 {
+        font-size: 16px;
+    }
+
+    .dream-content {
+        font-size: 13px;
+    }
+
+    .dream-buttons button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+  }
