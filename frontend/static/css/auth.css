@@ -1,0 +1,173 @@
+/* ===================================================
+   🔹 AUTH.CSS - MIX PLATFORM
+   واجهات تسجيل الدخول، التسجيل، ونظام المصادقة
+=================================================== */
+
+/* ===========================
+   🔹 RESET & BASE
+=========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.auth-page {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ===========================
+   🔹 AUTH CONTAINER
+=========================== */
+.auth-container {
+    width: 360px;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 30px 25px;
+    box-shadow: 0 0 20px rgba(0,255,204,0.3);
+}
+
+/* ===========================
+   🔹 AUTH HEADER
+=========================== */
+.auth-container h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #00ffcc;
+}
+
+/* ===========================
+   🔹 FORM ELEMENTS
+=========================== */
+.auth-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-container label {
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: #00ffcc;
+}
+
+.auth-container input[type="text"],
+.auth-container input[type="email"],
+.auth-container input[type="password"] {
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1px solid rgba(0,255,204,0.3);
+    border-radius: 8px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    outline: none;
+    transition: 0.2s;
+}
+
+.auth-container input[type="text"]:focus,
+.auth-container input[type="email"]:focus,
+.auth-container input[type="password"]:focus {
+    border-color: #00ffcc;
+    box-shadow: 0 0 8px #00ffcc;
+}
+
+/* ===========================
+   🔹 AUTH BUTTONS
+=========================== */
+.auth-container button {
+    padding: 10px;
+    font-size: 14px;
+    background: #00ffcc;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.auth-container button:hover {
+    background: #00e6b8;
+    box-shadow: 0 0 10px #00ffcc;
+}
+
+/* ===========================
+   🔹 AUTH LINKS
+=========================== */
+.auth-container .auth-links {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.auth-container .auth-links a {
+    color: #00ffcc;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.auth-container .auth-links a:hover {
+    text-decoration: underline;
+}
+
+/* ===========================
+   🔹 ERROR & SUCCESS MESSAGES
+=========================== */
+.auth-message {
+    font-size: 13px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin-top: 6px;
+    display: none;
+}
+
+.auth-message.error {
+    background: rgba(255,0,0,0.6);
+    color: #fff;
+}
+
+.auth-message.success {
+    background: rgba(0,255,204,0.6);
+    color: #000;
+}
+
+/* ===========================
+   🔹 RESPONSIVE
+=========================== */
+@media (max-width: 480px) {
+    .auth-container {
+        width: 90%;
+        padding: 25px 20px;
+    }
+
+    .auth-container h1 {
+        font-size: 20px;
+    }
+
+    .auth-container input[type="text"],
+    .auth-container input[type="email"],
+    .auth-container input[type="password"] {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
+
+    .auth-container button {
+        font-size: 13px;
+        padding: 8px 0;
+    }
+
+    .auth-container .auth-links {
+        font-size: 11px;
+    }
+  }
