@@ -5,101 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mix Platform</title>
 
-<!-- أساسي -->
-<link rel="stylesheet" href="static/style.css">
-
-<!-- لوحات واجهة المستخدم -->
-<link rel="stylesheet" href="static/dashboard.css">
-<link rel="stylesheet" href="static/scene.css">
-<link rel="stylesheet" href="static/hud.css">
-<link rel="stylesheet" href="static/notifications.css">
-<link rel="stylesheet" href="static/buttons.css">
-
-<!-- محرك الأحلام والعوالم -->
-<link rel="stylesheet" href="static/dream_engine.css">
-<link rel="stylesheet" href="static/dreams.css">
-<link rel="stylesheet" href="static/games.css">
-<link rel="stylesheet" href="static/matrix.css">
-<link rel="stylesheet" href="static/world.css">
-
-<!-- خدمات المستخدم -->
-<link rel="stylesheet" href="static/wallet.css">
-<link rel="stylesheet" href="static/store.css">
-<link rel="stylesheet" href="static/social.css">
-<link rel="stylesheet" href="static/messages.css">
-
-<!-- المصادقة -->
-<link rel="stylesheet" href="static/auth.css">
-
-<!-- ملف موحد شامل (اختياري إذا استخدمت Theme.css) -->
-<!-- <link rel="stylesheet" href="static/Theme.css"> -->
-    
-    <link rel="manifest" href="manifest.json">
-
-    <!-- Favicon -->
-    <link rel="icon" href="assets/textures/sky.jpg" type="image/jpeg">
-
-    <!-- Scripts الرئيسية -->
-    <script type="module" src="engine.js" defer></script>
-    <script type="module" src="scene.js" defer></script>
-    <script type="module" src="dashboard.js" defer></script>
-
+    <!-- ===========================
+         🔹 ملفات CSS
+    =========================== -->
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="static/dashboard.css">
+    <link rel="stylesheet" href="static/scene.css">
+    <link rel="stylesheet" href="static/hud.css">
+    <link rel="stylesheet" href="static/notifications.css">
+    <link rel="stylesheet" href="static/buttons.css">
+    <link rel="stylesheet" href="static/dream_engine.css">
+    <link rel="stylesheet" href="static/dreams.css">
+    <link rel="stylesheet" href="static/games.css">
+    <link rel="stylesheet" href="static/matrix.css">
+    <link rel="stylesheet" href="static/world.css">
+    <link rel="stylesheet" href="static/wallet.css">
+    <link rel="stylesheet" href="static/store.css">
+    <link rel="stylesheet" href="static/social.css">
+    <link rel="stylesheet" href="static/messages.css">
+    <link rel="stylesheet" href="static/auth.css">
+    <!-- <link rel="stylesheet" href="static/Theme.css"> --> <!-- موحد شامل -->
 
 </head>
 <body>
-    <header>
-        <h1>مرحبًا بك في Mix Platform</h1>
-        <nav>
-            <a href="login.html">تسجيل الدخول</a>
-            <a href="dashboard.html">لوحة التحكم</a>
-            <a href="feed.html">التغذية</a>
-        </nav>
-    </header>
+    <!-- ===========================
+         🔹 حاوية اللعبة الرئيسية
+    =========================== -->
+    <div id="game-container"></div>
 
-    <main>
-        <section id="intro">
-            <h2>استكشاف عالم الطاقة والأحلام</h2>
-            <p>
-                Mix Platform هو نظام تفاعلي يجمع بين:
-                <ul>
-                    <li>العالم الافتراضي ثلاثي الأبعاد</li>
-                    <li>إدارة الطاقة والخلايا للمستخدم</li>
-                    <li>الألعاب والتحديات</li>
-                    <li>عالم الأحلام التفاعلي</li>
-                    <li>الدردشة والمراسلات</li>
-                </ul>
-            </p>
-            <button onclick="location.href='login.html'">ابدأ الآن</button>
-        </section>
+    <!-- ===========================
+         🔹 واجهة المستخدم
+    =========================== -->
+    <div id="ui-layer">
+        <div id="dashboard">
+            <span>اللاعب: <span id="player-name">غير معرف</span></span>
+            <span>الطاقة: <span id="player-energy">0</span></span>
+            <span>المستوى: <span id="player-level">1</span></span>
+        </div>
 
-        <section id="features">
-            <h2>المميزات الأساسية</h2>
-            <div class="feature-cards">
-                <div class="card">
-                    <h3>الأحلام</h3>
-                    <p>تفاعل مع عالم الأحلام الخاص بك وأضف أحداثًا ومشاهد تفاعلية.</p>
-                </div>
-                <div class="card">
-                    <h3>الألعاب</h3>
-                    <p>لعب ألعاب مثل BTC Game وتطوير الطاقة والنقاط.</p>
-                </div>
-                <div class="card">
-                    <h3>المجتمع</h3>
-                    <p>التفاعل مع منشورات المستخدمين، التعليقات، الرسائل والدردشة.</p>
-                </div>
-                <div class="card">
-                    <h3>العالم الافتراضي</h3>
-                    <p>استكشف Metaverse ثلاثي الأبعاد باستخدام محرك Three.js.</p>
-                </div>
-            </div>
-        </section>
-    </main>
+        <div class="notifications-container"></div>
 
-    <footer>
-        <p>© 2026 Mix Platform. جميع الحقوق محفوظة.</p>
-    </footer>
+        <div id="hud">
+            <span>FPS: <span id="fps-counter">0</span></span>
+        </div>
+
+        <button id="voice-toggle">تشغيل الصوت</button>
+    </div>
+
+    <!-- ===========================
+         🔹 شاشة التحميل
+    =========================== -->
+    <div id="loading-screen">جارٍ التحميل...</div>
+
+    <!-- ===========================
+         🔹 روابط ملفات JS
+    =========================== -->
+    <script src="static/helpers.js"></script>
+    <script src="static/constants.js"></script>
+
+    <script src="static/engine.js"></script>
+    <script src="static/gltfLoader.js"></script>
+    <script src="static/textureLoader.js"></script>
+
+    <script src="static/avatar.js"></script>
+    <script src="static/movement.js"></script>
+    <script src="static/controls.js"></script>
+
+    <script src="static/defaultWorld.js"></script>
+    <script src="static/dreamWorld.js"></script>
+    <script src="static/cityWorld.js"></script>
 
     <script src="static/main.js"></script>
-    <script src="static/api.js"></script>
+
+    <!-- ===========================
+         🔹 تهيئة عرض اللعبة
+    =========================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameContainer = document.getElementById('game-container');
+            const loadingScreen = document.getElementById('loading-screen');
+
+            // مثال لتحميل عالم افتراضي وعرضه
+            function initGame() {
+                loadingScreen.style.display = 'none';
+                // محرك اللعبة يبدأ هنا
+                Engine.init(gameContainer); // افتراضياً توجد دالة init في engine.js
+                DefaultWorld.load();       // تحميل العالم الافتراضي
+            }
+
+            // تبديل الصوت
+            const voiceBtn = document.getElementById('voice-toggle');
+            voiceBtn.addEventListener('click', () => {
+                Voice.toggle(); // افتراضياً توجد دالة toggle في ملفات الصوت
+            });
+
+            // بدء اللعبة بعد تحميل الصفحة
+            initGame();
+        });
+    </script>
 </body>
 </html>
