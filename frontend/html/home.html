@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Mix Platform</title>
+
+    <!-- 🔹 CSS -->
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="static/home.css">
+    <link rel="stylesheet" href="static/buttons.css">
+    <link rel="stylesheet" href="static/notifications.css">
+</head>
+
+<body>
+
+    <!-- 🔹 التحقق من تسجيل الدخول -->
+    <script>
+        const user = localStorage.getItem("currentUser");
+        if (!user) {
+            window.location.href = "login.html";
+        }
+    </script>
+
+    <!-- ===========================
+         🔹 HOME CONTAINER
+    =========================== -->
+    <div id="home-container">
+
+        <!-- ===========================
+             🔹 HEADER
+        =========================== -->
+        <div id="home-header">
+            <h1>Mix Platform</h1>
+
+            <div class="user-info">
+                👤 <span id="home-username">...</span>
+            </div>
+
+            <button class="home-btn" id="logout-btn">تسجيل الخروج</button>
+        </div>
+
+        <!-- ===========================
+             🔹 MAIN
+        =========================== -->
+        <div id="home-main">
+
+            <!-- 🔹 SIDEBAR -->
+            <div id="home-sidebar">
+                <div class="menu-item" data-section="dashboard">📊 لوحة التحكم</div>
+                <div class="menu-item" data-section="dreams">💭 الأحلام</div>
+                <div class="menu-item" data-section="world">🌍 العالم</div>
+                <div class="menu-item" data-section="games">🎮 الألعاب</div>
+                <div class="menu-item" data-section="store">🛒 المتجر</div>
+                <div class="menu-item" data-section="wallet">💰 المحفظة</div>
+                <div class="menu-item" data-section="social">🌐 المجتمع</div>
+                <div class="menu-item" data-section="messages">💬 الرسائل</div>
+            </div>
+
+            <!-- 🔹 CONTENT -->
+            <div id="home-content">
+
+                <div class="section" id="section-dashboard">
+                    <h2>📊 لوحة التحكم</h2>
+                    <div class="card">مرحبا بك في Mix Platform 🚀</div>
+                </div>
+
+                <div class="section" id="section-dreams" style="display:none;">
+                    <h2>💭 الأحلام</h2>
+                    <div class="card">لا توجد أحلام بعد</div>
+                </div>
+
+                <div class="section" id="section-world" style="display:none;">
+                    <h2>🌍 العالم</h2>
+                    <div class="card">جاري تحميل العالم...</div>
+                </div>
+
+                <div class="section" id="section-games" style="display:none;">
+                    <h2>🎮 الألعاب</h2>
+                    <div class="card">لا توجد ألعاب حالياً</div>
+                </div>
+
+                <div class="section" id="section-store" style="display:none;">
+                    <h2>🛒 المتجر</h2>
+                    <div class="card">المتجر قيد التطوير</div>
+                </div>
+
+                <div class="section" id="section-wallet" style="display:none;">
+                    <h2>💰 المحفظة</h2>
+                    <div class="card">رصيدك: 0</div>
+                </div>
+
+                <div class="section" id="section-social" style="display:none;">
+                    <h2>🌐 المجتمع</h2>
+                    <div class="card">لا توجد منشورات</div>
+                </div>
+
+                <div class="section" id="section-messages" style="display:none;">
+                    <h2>💬 الرسائل</h2>
+                    <div class="card">لا توجد رسائل</div>
+                </div>
+
+            </div>
+
+            <!-- 🔹 RIGHT PANEL -->
+            <div id="home-right">
+                <div class="card">⚡ الطاقة: <span id="home-energy">0</span></div>
+                <div class="card">⭐ المستوى: <span id="home-level">1</span></div>
+            </div>
+
+        </div>
+
+        <!-- 🔹 NOTIFICATIONS -->
+        <div id="home-notifications"></div>
+
+    </div>
+
+    <!-- ===========================
+         🔹 JS
+    =========================== -->
+    <script src="static/home.js"></script>
+
+    <!-- ===========================
+         🔹 LOGIC إضافي للواجهة
+    =========================== -->
+    <script>
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+        // عرض بيانات المستخدم
+        document.getElementById("home-username").innerText = currentUser.username || "Guest";
+        document.getElementById("home-energy").innerText = currentUser.energy || 0;
+        document.getElementById("home-level").innerText = currentUser.level || 1;
+
+        // تسجيل الخروج
+        document.getElementById("logout-btn").addEventListener("click", () => {
+            localStorage.removeItem("currentUser");
+            window.location.href = "login.html";
+        });
+
+        // التنقل بين الأقسام
+        const menuItems = document.querySelectorAll(".menu-item");
+        const sections = document.querySelectorAll(".section");
+
+        menuItems.forEach(item => {
+            item.addEventListener("click", () => {
+                const target = item.getAttribute("data-section");
+
+                sections.forEach(sec => sec.style.display = "none");
+
+                document.getElementById("section-" + target).style.display = "block";
+            });
+        });
+    </script>
+
+</body>
+</html>
