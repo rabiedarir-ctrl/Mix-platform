@@ -1,0 +1,175 @@
+/* ===================================================
+   🔹 WORLD CSS - MIX PLATFORM
+=================================================== */
+
+/* ===========================
+   🔹 WORLD CONTAINER
+=========================== */
+#world-container {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: linear-gradient(to top, #0a0a0a, #1a1a1a);
+    overflow: hidden;
+    z-index: 5;
+    perspective: 1000px;
+}
+
+/* ===========================
+   🔹 SKY
+=========================== */
+.sky {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: url('../assets/textures/sky.jpg') no-repeat center center;
+    background-size: cover;
+    z-index: 1;
+}
+
+/* ===========================
+   🔹 GROUND
+=========================== */
+.ground {
+    position: absolute;
+    width: 100%;
+    height: 200px;
+    bottom: 0;
+    left: 0;
+    background: url('../assets/textures/ground.png') repeat-x;
+    background-size: cover;
+    z-index: 2;
+}
+
+/* ===========================
+   🔹 OBJECTS
+=========================== */
+.world-object {
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.world-object.active {
+    opacity: 1;
+    transform: scale(1.05);
+    z-index: 3;
+}
+
+/* ===========================
+   🔹 AMBIENT LIGHT EFFECT
+=========================== */
+.ambient-light {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 255, 204, 0.05);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ===========================
+   🔹 HUD WORLD
+=========================== */
+#world-hud {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 280px;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 10px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 13px;
+    color: #00ffcc;
+    border: 1px solid rgba(0,255,204,0.2);
+    box-shadow: 0 0 15px rgba(0,255,204,0.2);
+}
+
+/* ===========================
+   🔹 NOTIFICATIONS IN WORLD
+=========================== */
+.world-notifications {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 260px;
+    pointer-events: none;
+}
+
+.world-notification {
+    background: rgba(20,20,20,0.85);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    border-left: 4px solid #00ffcc;
+    font-size: 13px;
+    animation: worldFadeIn 0.3s ease;
+}
+
+/* ===========================
+   🔹 ANIMATIONS
+=========================== */
+@keyframes worldFadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===========================
+   🔹 LOADING SCREEN WORLD
+=========================== */
+#world-loading {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    color: #00ffcc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: bold;
+    z-index: 9999;
+}
+
+/* ===========================
+   🔹 SCROLLBAR
+=========================== */
+#world-hud::-webkit-scrollbar,
+.world-notifications::-webkit-scrollbar {
+    width: 6px;
+}
+
+#world-hud::-webkit-scrollbar-thumb,
+.world-notifications::-webkit-scrollbar-thumb {
+    background: #00ffcc;
+    border-radius: 3px;
+}
+
+/* ===========================
+   🔹 RESPONSIVE
+=========================== */
+@media (max-width: 768px) {
+    #world-hud {
+        width: 200px;
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .world-notifications {
+        width: 220px;
+    }
+
+    .world-object {
+        transform: scale(0.95);
+    }
+  }
