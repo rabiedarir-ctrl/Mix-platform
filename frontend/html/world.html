@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metaverse - Mix Platform</title>
+    <link rel="stylesheet" href="static/style.css">
+    <style>
+        body, html { margin: 0; padding: 0; overflow: hidden; height: 100%; }
+        #worldContainer { width: 100%; height: 100vh; display: block; }
+        #hud { position: absolute; top: 10px; left: 10px; color: white; font-family: sans-serif; }
+    </style>
+</head>
+<body>
+    <div id="hud">
+        <button id="backBtn">العودة للوحة التحكم</button>
+        <span id="energyDisplay">⚡ الطاقة: 0</span>
+    </div>
+    <div id="worldContainer"></div>
+
+    <script src="static/api.js"></script>
+    <script src="static/matrix.js"></script>
+    <script src="static/world_sync.js"></script>
+    <script src="static/three/engine.js"></script>
+    <script src="static/dream_engine.js"></script>
+    <script>
+        const token = localStorage.getItem("mixToken");
+        if (!token) window.location.href = "login.html";
+
+        const backBtn = document.getElementById('backBtn');
+        backBtn.addEventListener('click', () => {
+            window.location.href = "dashboard.html";
+        });
+
+        const energyDisplay = document.getElementById('energyDisplay');
+
+        async function updateEnergy() {
+            try {
+                const res = await fetch(`${MIX_API_BASE}/users/me`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (res.ok && data.energy !== undefined) {
+                    energyDisplay.textContent = `⚡ الطاقة: ${data.energy}`;
+                }
+            } catch (err) {
+                console.error("تعذر تحديث الطاقة:", err);
+            }
+        }
+
+        // ===========================
+        // 🔹 إعداد محرك Three.js
+        // ===========================
+        const worldContainer = document.getElementById('worldContainer');
+        const worldEngine = new THREE.Engine(worldContainer);
+
+        // تحميل العوالم
+        worldEngine.loadWorld('defaultWorld'); // يمكن لاحقًا 'cityWorld' أو 'dreamWorld'
+
+        // بدء الحلقة الرئيسية
+        worldEngine.start();
+
+        // ===========================
+        // 🔹 مزامنة المستخدم و Backend
+        // ===========================
+        const sync = new WorldSync(token, worldEngine);
+        sync.start();
+
+        // ===========================
+        // 🔹 تحديث الطاقة بشكل دوري
+        // ===========================
+        setInterval(updateEnergy, 5000);
+
+        // ===========================
+        // 🔹 دمج Dream Engine
+        // ===========================
+        const dreamEngine = new DreamEngine(worldEngine, token);
+        dreamEngine.init();
+    </script>
+</body>
+</html>
+
+import QuestsSystem from "./static/modules/metaverse/quests_system.js";
+
+// اللاعب
+const player = {
+    position: {x: 0, z: 0},
+    energy: 100,
+    coins: 0
+};
+
+// إنشاء النظام
+const quests = new QuestsSystem(player);
+
+// إضافة مهمة
+quests.addQuest("quest_1", "قم بزيارة NPC 1 في العالم", {x: 10, z: 5}, {energy: 10, coins: 50});
+quests.startQuest("quest_1");
+
+// داخل Loop اللعبة
+worldEngine.onUpdate(() => {
+    quests.update();
+});
+
+import NPCAI from "./static/modules/metaverse/npc_ai.js";
+
+// إنشاء النظام
+const npcSystem = new NPCAI(worldEngine.scene);
+
+// إنشاء NPC
+const npcMesh = worldEngine.createNPCMesh(); // تحتاج إضافتها
+npcSystem.createNPC("npc_1", npcMesh);
+
+// داخل loop
+worldEngine.onUpdate((delta) => {
+    npcSystem.update(delta, playerMesh.position);
+});
