@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الألعاب - Mix Platform</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <header>
+        <h1>الألعاب</h1>
+        <nav>
+            <a href="dashboard.html">لوحة التحكم</a>
+            <a href="feed.html">التغذية</a>
+            <a href="messages.html">الرسائل</a>
+            <a href="store.html">المتجر</a>
+            <a href="dream_world.html">عالم الأحلام</a>
+            <button id="logoutBtn">تسجيل الخروج</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="games-section">
+            <h2>قائمة الألعاب</h2>
+            <div id="gamesContainer">
+                <p>جارٍ تحميل الألعاب...</p>
+            </div>
+        </section>
+
+        <section id="game-play-section" style="display:none;">
+            <h2 id="gameTitle">لعبة</h2>
+            <div id="gameContainer">
+                <!-- اللعبة ستُحمّل هنا -->
+            </div>
+            <button id="backBtn">العودة إلى قائمة الألعاب</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Mix Platform. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script src="static/api.js"></script>
+    <script src="static/games.js"></script>
+    <script>
+        const token = localStorage.getItem("mixToken");
+        if (!token) window.location.href = "login.html";
+
+        const logoutBtn = document.getElementById('logoutBtn');
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem("mixToken");
+            window.location.href = "login.html";
+        });
+
+        const gamesContainer = document.getElementById("gamesContainer");
+        const gamePlaySection = document.getElementById("game-play-section");
+        const gamesSection = document.getElementById("games-section");
+        const gameTitle = document.getElementById("gameTitle");
+        const gameContainer = document.getElementById("gameContainer");
+        const backBtn = document.getElementById("backBtn");
+
+        // تحميل قائمة الألعاب
+        async function loadGames() {
+            try {
+                const res = await fetch(`${MIX_API_BASE}/games/list`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    gamesContainer.innerHTML = '';
+                    if (data.length === 0) {
+                        gamesContainer.innerHTML = '<p>لا توجد ألعاب متاحة حاليًا.</p>';
+                    } else {
+                        data.forEach(game => {
+                            const div = document.createElement('div');
+                            div.className = 'game-card';
+                            div.innerHTML = `
+                                <h3>${game.name}</h3>
+                                <p>${game.description}</p>
+                                <button onclick="startGame('${game.id}', '${game.name}')">تشغيل اللعبة</button>
+                            `;
+                            gamesContainer.appendChild(div);
+                        });
+                    }
+                } else {
+                    gamesContainer.innerHTML = `<p>خطأ في تحميل الألعاب: ${data.message}</p>`;
+                }
+            } catch (err) {
+                gamesContainer.innerHTML = '<p>تعذر الاتصال بالخادم</p>';
+                console.error(err);
+            }
+        }
+
+        // بدء اللعبة
+        function startGame(gameId, name) {
+            gamesSection.style.display = 'none';
+            gamePlaySection.style.display = 'block';
+            gameTitle.textContent = name;
+            gameContainer.innerHTML = `<p>جارٍ تحميل اللعبة...</p>`;
+
+            // مثال بسيط لربط btc_game.js
+            if (gameId === "btc_game") {
+                import('./static/modules/games/btc_game.js').then(module => {
+                    module.startBTCGame(gameContainer, token);
+                }).catch(err => {
+                    gameContainer.innerHTML = '<p>تعذر تحميل اللعبة</p>';
+                    console.error(err);
+                });
+            } else {
+                gameContainer.innerHTML = '<p>اللعبة غير مدعومة بعد.</p>';
+            }
+        }
+
+        backBtn.addEventListener('click', () => {
+            gamePlaySection.style.display = 'none';
+            gamesSection.style.display = 'block';
+            gameContainer.innerHTML = '';
+        });
+
+        loadGames();
+    </script>
+</body>
+                                  </html>
