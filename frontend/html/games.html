@@ -101,7 +101,7 @@
 
             // مثال بسيط لربط btc_game.js
             if (gameId === "btc_game") {
-                import('./static/modules/games/btc_game.js').then(module => {
+                import('../static/modules/games/btc_game.js').then(module => {
                     module.startBTCGame(gameContainer, token);
                 }).catch(err => {
                     gameContainer.innerHTML = '<p>تعذر تحميل اللعبة</p>';
