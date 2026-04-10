@@ -71,7 +71,7 @@ button:hover {
 <body>
 <div class="dashboard">
     <h1>لوحة تحكم المناطق</h1>
-    <div class="zones-container" id="zonesContainer">
+    <div id="zones-container" id="zonesContainer">
         <!-- سيتم ملؤها ديناميكيًا عبر JS -->
     </div>
 </div>
@@ -95,9 +95,9 @@ function createZoneCard(zoneId, zoneData) {
     card.innerHTML = `
         <h2>${zoneData.name} (${zoneId})</h2>
         <div class="zone-status">
-            <strong>الطاقة:</strong> <span class="energy">${zoneData.energy.toFixed(2)}</span><br>
-            <strong>نوى+:</strong> <span class="nplus">${zoneData.nplus.toFixed(2)}</span><br>
-            <strong>نوى-:</strong> <span class="nminus">${zoneData.nminus.toFixed(2)}</span>
+            <strong>الطاقة:<../strong> <span class="energy">${zoneData.energy.toFixed(2)}</span><br>
+            <strong>نوى+:<../strong> <span class="nplus">${zoneData.nplus.toFixed(2)}</span><br>
+            <strong>نوى-:<../strong> <span class="nminus">${zoneData.nminus.toFixed(2)}</span>
         </div>
         <button class="direct" onclick="activateZone('${zoneId}', 'direct')">تفعيل مباشر</button>
         <button class="indirect" onclick="activateZone('${zoneId}', 'indirect')">تفعيل غير مباشر</button>
