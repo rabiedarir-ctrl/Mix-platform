@@ -1,4 +1,4 @@
-import { GamesAPI, UsersAPI } from "./api.js";
+import { GamesAPI, UsersAPI } from "../api.js";
 
 // ===========================
 // 🔹 عناصر DOM
