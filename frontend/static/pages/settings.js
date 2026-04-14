@@ -69,7 +69,7 @@ const Settings = {
         autoSave: true,
         saveInterval: 30000, // milliseconds
         cacheEnabled: true,
-        cacheFolder: "storage/cache/"
+        cacheFolder: "storage/cache/.."
     },
 
     // ===========================
