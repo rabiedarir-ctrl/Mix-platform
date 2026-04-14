@@ -7,7 +7,7 @@ const token = localStorage.getItem("mixToken");
 // ===========================
 // 🔹 إعادة توجيه المستخدم إذا لم يكن مسجلاً
 // ===========================
-if (!token && window.location.pathname !== "/login.html") {
+if (!token && window.location.pathname !== "../login.html") {
     window.location.href = "login.html";
 }
 
@@ -61,7 +61,7 @@ async function updateEnergy() {
     const energyElem = document.getElementById("energyDisplay");
     if (!energyElem) return;
 
-    const data = await apiGet("/users/me");
+    const data = await apiGet("../users/me");
     if (data && data.energy !== undefined) {
         energyElem.textContent = `⚡ الطاقة: ${data.energy}`;
     }
@@ -79,7 +79,7 @@ async function loadNotifications() {
     const notifElem = document.getElementById("notifications");
     if (!notifElem) return;
 
-    const data = await apiGet("/users/notifications");
+    const data = await apiGet("../users/notifications");
     if (data && Array.isArray(data)) {
         notifElem.innerHTML = data.map(n => `<li>${n.message}</li>`).join('');
     }
