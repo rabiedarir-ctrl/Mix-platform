@@ -1,4 +1,4 @@
-import { StoreAPI, WalletAPI } from "./api.js";
+import { StoreAPI, WalletAPI } from "../api.js";
 
 // ===========================
 // 🔹 عناصر DOM الأساسية
