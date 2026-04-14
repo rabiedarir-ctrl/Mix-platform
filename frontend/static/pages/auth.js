@@ -1,7 +1,7 @@
 // ===========================
 // 🔹 إعدادات أساسية
 // ===========================
-import { UsersAPI } from "./api.js";
+import { UsersAPI } from "../api.js";
 
 const loginForm = document.getElementById("loginForm");
 const tokenKey = "mixToken";
@@ -13,7 +13,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem(tokenKey);
 
     // إذا كان في صفحة غير login.html والتحقق فشل
-    if (!token && window.location.pathname !== "/login.html") {
+    if (!token && window.location.pathname !== "../login.html") {
         window.location.href = "login.html";
         return;
     }
