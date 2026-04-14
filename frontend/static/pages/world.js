@@ -2,10 +2,10 @@
 // 🔹 World Engine Integration
 // ===========================
 
-import * as THREE from "./three/engine.js";
-import EventsSystem from "./modules/metaverse/events_system.js";
-import QuestsSystem from "./modules/metaverse/quests_system.js";
-import VoiceChat from "./voice_chat.js";
+import * as THREE from "../three/engine.js";
+import EventsSystem from "../modules/metaverse/events_system.js";
+import QuestsSystem from "../modules/metaverse/quests_system.js";
+import VoiceChat from "../voice_chat.js";
 
 // ===========================
 // 🔹 إعداد اللاعب والمحفظة
@@ -65,7 +65,7 @@ events.addEvent(
     (player) => {
         console.log("🎁 لقد وجدت صندوقًا غامضًا!");
         wallet.addTransaction({ type: "event_reward", coins: 100, energy: 20 });
-        voice.sendVoice("/audio/event_mysterious_box.mp3");
+        voice.sendVoice("../audio/event_mysterious_box.mp3");
     }
 );
 
