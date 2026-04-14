@@ -1,0 +1,64 @@
+// Cells Engine - وحدة الخلايا
+
+class Cell {
+  constructor(id) {
+    this.id = id;
+    this.energy = 1;
+    this.resistance = Math.random() * 0.5 + 0.5; // 0.5 → 1
+    this.state = "stable";
+  }
+
+  // امتصاص طاقة
+  absorb(amount) {
+    this.energy += amount * this.resistance;
+    if (this.energy > 2) this.energy = 2;
+  }
+
+  // استهلاك
+  consume(amount) {
+    this.energy -= amount;
+    if (this.energy < 0) this.energy = 0;
+  }
+
+  // تحديث الحالة
+  updateState() {
+    if (this.energy < 0.3) this.state = "weak";
+    else if (this.energy < 1.2) this.state = "stable";
+    else this.state = "overload";
+  }
+}
+
+class CellsEngine {
+  constructor(size = 10) {
+    this.cells = [];
+    for (let i = 0; i < size; i++) {
+      this.cells.push(new Cell(i));
+    }
+  }
+
+  distributeEnergy(totalEnergy) {
+    const perCell = totalEnergy / this.cells.length;
+
+    this.cells.forEach(cell => {
+      cell.absorb(perCell);
+      cell.updateState();
+    });
+  }
+
+  consumeEnergy(amount) {
+    this.cells.forEach(cell => {
+      cell.consume(amount);
+      cell.updateState();
+    });
+  }
+
+  getStatus() {
+    return this.cells.map(c => ({
+      id: c.id,
+      energy: c.energy,
+      state: c.state
+    }));
+  }
+}
+
+module.exports = CellsEngine;
