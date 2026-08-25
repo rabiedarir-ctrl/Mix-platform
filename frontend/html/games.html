@@ -3,37 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="الألعاب التفاعلية في منصة Mix Platform - العب وحقق النقاط">
     <title>الألعاب - Mix Platform</title>
     <link rel="stylesheet" href="../static/style.css">
+    <style>
+        .error-message {
+            color: #e74c3c;
+            padding: 12px;
+            background-color: #fadbd8;
+            border-radius: 4px;
+            margin: 12px 0;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>الألعاب</h1>
         <nav>
-            <a href="html/dashboard.html">لوحة التحكم</a>
-            <a href="html/feed.html">التغذية</a>
-            <a href="html/messages.html">الرسائل</a>
-            <a href="html/store.html">المتجر</a>
-            <a href="html/dream_world.html">عالم الأحلام</a>
-            <button id="logoutBtn">تسجيل الخروج</button>
+            <ul>
+                <li><a href="dashboard.html">لوحة التحكم</a></li>
+                <li><a href="feed.html">التغذية</a></li>
+                <li><a href="messages.html">الرسائل</a></li>
+                <li><a href="store.html">المتجر</a></li>
+                <li><a href="dream_world.html">عالم الأحلام</a></li>
+                <li><button id="logoutBtn" type="button">تسجيل الخروج</button></li>
+            </ul>
         </nav>
     </header>
 
     <main>
-        <section class="games-section">
+        <section class="games-section" id="gamesSection">
             <h2>قائمة الألعاب</h2>
             <div id="gamesContainer">
                 <p>جارٍ تحميل الألعاب...</p>
             </div>
         </section>
 
-        <section class="game-play-section" style="display:none;">
+        <section class="game-play-section" id="gamePlaySection" style="display:none;">
             <h2 id="gameTitle">لعبة</h2>
             <div id="gameContainer">
                 <!-- اللعبة ستُحمّل هنا -->
             </div>
-            <button id="backBtn">العودة إلى قائمة الألعاب</button>
+            <button id="backBtn" type="button">العودة إلى قائمة الألعاب</button>
         </section>
+
+        <div id="errorContainer" role="alert" aria-live="polite"></div>
     </main>
 
     <footer>
@@ -41,23 +55,34 @@
     </footer>
 
     <script src="../static/api.js"></script>
-    <script src=../static/games.js"></script>
+    <script src="../static/games.js"></script>
     <script>
         const token = localStorage.getItem("mixToken");
-        if (!token) window.location.href = "login.html";
+        if (!token) {
+            window.location.href = "login.html";
+        }
 
         const logoutBtn = document.getElementById('logoutBtn');
+        const gamesContainer = document.getElementById("gamesContainer");
+        const gamePlaySection = document.getElementById("gamePlaySection");
+        const gamesSection = document.getElementById("gamesSection");
+        const gameTitle = document.getElementById("gameTitle");
+        const gameContainer = document.getElementById("gameContainer");
+        const backBtn = document.getElementById("backBtn");
+        const errorContainer = document.getElementById("errorContainer");
+
+        // تسجيل الخروج
         logoutBtn.addEventListener('click', () => {
             localStorage.removeItem("mixToken");
             window.location.href = "login.html";
         });
 
-        const gamesContainer = document.getElementById("gamesContainer");
-        const gamePlaySection = document.getElementById("game-play-section");
-        const gamesSection = document.getElementById("games-section");
-        const gameTitle = document.getElementById("gameTitle");
-        const gameContainer = document.getElementById("gameContainer");
-        const backBtn = document.getElementById("backBtn");
+        // العودة من اللعبة
+        backBtn.addEventListener('click', () => {
+            gamePlaySection.style.display = 'none';
+            gamesSection.style.display = 'block';
+            gameContainer.innerHTML = '';
+        });
 
         // تحميل قائمة الألعاب
         async function loadGames() {
@@ -69,56 +94,73 @@
 
                 if (res.ok) {
                     gamesContainer.innerHTML = '';
-                    if (data.length === 0) {
+                    if (!Array.isArray(data) || data.length === 0) {
                         gamesContainer.innerHTML = '<p>لا توجد ألعاب متاحة حاليًا.</p>';
                     } else {
                         data.forEach(game => {
                             const div = document.createElement('div');
                             div.className = 'game-card';
                             div.innerHTML = `
-                                <h3>${game.name}</h3>
-                                <p>${game.description}</p>
-                                <button onclick="startGame('${game.id}', '${game.name}')">تشغيل اللعبة</button>
+                                <h3>${escapeHtml(game.name)}</h3>
+                                <p>${escapeHtml(game.description)}</p>
+                                <button type="button" class="play-game-btn" data-game-id="${escapeHtml(game.id)}" data-game-name="${escapeHtml(game.name)}">تشغيل اللعبة</button>
                             `;
+                            
+                            const playBtn = div.querySelector('.play-game-btn');
+                            playBtn.addEventListener('click', () => {
+                                startGame(game.id, game.name);
+                            });
+                            
                             gamesContainer.appendChild(div);
                         });
                     }
                 } else {
-                    gamesContainer.innerHTML = `<p>خطأ في تحميل الألعاب: ${data.message}</p>`;
+                    gamesContainer.innerHTML = `<p class="error-message">خطأ في تحميل الألعاب: ${data.message}</p>`;
                 }
             } catch (err) {
-                gamesContainer.innerHTML = '<p>تعذر الاتصال بالخادم</p>';
+                gamesContainer.innerHTML = '<p class="error-message">❌ تعذر الاتصال بالخادم</p>';
                 console.error(err);
             }
         }
 
+        // دالة آمنة لتحويل نص إلى HTML آمن
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         // بدء اللعبة
         function startGame(gameId, name) {
+            if (!gameId || !name) {
+                errorContainer.innerHTML = '<div class="error-message">❌ خطأ: بيانات اللعبة غير صحيحة</div>';
+                return;
+            }
+
             gamesSection.style.display = 'none';
             gamePlaySection.style.display = 'block';
-            gameTitle.textContent = name;
+            gameTitle.textContent = escapeHtml(name);
             gameContainer.innerHTML = `<p>جارٍ تحميل اللعبة...</p>`;
 
             // مثال بسيط لربط btc_game.js
             if (gameId === "btc_game") {
                 import('../static/modules/games/btc_game.js').then(module => {
-                    module.startBTCGame(gameContainer, token);
+                    if (module && module.startBTCGame) {
+                        module.startBTCGame(gameContainer, token);
+                    } else {
+                        gameContainer.innerHTML = '<p class="error-message">❌ خطأ في تحميل اللعبة</p>';
+                    }
                 }).catch(err => {
-                    gameContainer.innerHTML = '<p>تعذر تحميل اللعبة</p>';
+                    gameContainer.innerHTML = '<p class="error-message">❌ تعذر تحميل اللعبة</p>';
                     console.error(err);
                 });
             } else {
-                gameContainer.innerHTML = '<p>اللعبة غير مدعومة بعد.</p>';
+                gameContainer.innerHTML = '<p class="error-message">❌ اللعبة غير مدعومة بعد.</p>';
             }
         }
 
-        backBtn.addEventListener('click', () => {
-            gamePlaySection.style.display = 'none';
-            gamesSection.style.display = 'block';
-            gameContainer.innerHTML = '';
-        });
-
+        // تحميل الألعاب عند فتح الصفحة
         loadGames();
     </script>
 </body>
-                                  </html>
+</html>
