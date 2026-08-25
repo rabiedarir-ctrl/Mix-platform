@@ -3,36 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="التغذية الاجتماعية في منصة Mix Platform - شارك وتفاعل مع المستخدمين">
     <title>التغذية - Mix Platform</title>
     <link rel="stylesheet" href="../static/style.css">
+    <style>
+        .error-message {
+            color: #e74c3c;
+            padding: 12px;
+            background-color: #fadbd8;
+            border-radius: 4px;
+            margin: 12px 0;
+        }
+        .success-message {
+            color: #27ae60;
+            padding: 12px;
+            background-color: #d5f4e6;
+            border-radius: 4px;
+            margin: 12px 0;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>التغذية الاجتماعية</h1>
         <nav>
-            <a href="html/dashboard.html">لوحة التحكم</a>
-            <a href="html/messages.html">الرسائل</a>
-            <a href="html/games.html">الألعاب</a>
-            <a href="html/dream_world.html">عالم الأحلام</a>
-            <button id="logoutBtn">تسجيل الخروج</button>
+            <ul>
+                <li><a href="dashboard.html">لوحة التحكم</a></li>
+                <li><a href="messages.html">الرسائل</a></li>
+                <li><a href="games.html">الألعاب</a></li>
+                <li><a href="dream_world.html">عالم الأحلام</a></li>
+                <li><button id="logoutBtn" type="button">تسجيل الخروج</button></li>
+            </ul>
         </nav>
     </header>
 
     <main>
+        <section class="new-post-section">
+            <h2>إنشاء منشور جديد</h2>
+            <form id="postForm" novalidate>
+                <div class="form-group">
+                    <label for="postContent">محتوى المنشور</label>
+                    <textarea 
+                        id="postContent" 
+                        placeholder="اكتب شيئًا..." 
+                        required
+                        maxlength="1000"
+                        aria-required="true"
+                        aria-describedby="postContent-error"></textarea>
+                    <small id="charCount">0 / 1000</small>
+                    <span id="postContent-error" class="error-message" role="alert"></span>
+                </div>
+                <button type="submit" id="postSubmitBtn">نشر</button>
+            </form>
+            <div id="postFeedback" role="alert" aria-live="polite"></div>
+        </section>
+
         <section class="posts-section">
             <h2>المنشورات</h2>
             <div id="postsContainer">
                 <p>جارٍ تحميل المنشورات...</p>
             </div>
-        </section>
-
-        <section class="new-post-section">
-            <h2>إنشاء منشور جديد</h2>
-            <form id="postForm">
-                <textarea id="postContent" placeholder="اكتب شيئًا..." required></textarea>
-                <button type="submit">نشر</button>
-            </form>
-            <p id="postFeedback" style="color:red;"></p>
         </section>
     </main>
 
@@ -43,14 +73,25 @@
     <script src="../static/api.js"></script>
     <script>
         const token = localStorage.getItem("mixToken");
-        if (!token) window.location.href = "login.html";
+        if (!token) {
+            window.location.href = "login.html";
+        }
 
         const postsContainer = document.getElementById("postsContainer");
         const postForm = document.getElementById("postForm");
         const postFeedback = document.getElementById("postFeedback");
+        const postContent = document.getElementById("postContent");
+        const postSubmitBtn = document.getElementById("postSubmitBtn");
+        const charCount = document.getElementById("charCount");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        // عداد الأحرف
+        postContent.addEventListener('input', () => {
+            charCount.textContent = `${postContent.value.length} / 1000`;
+        });
 
         // تسجيل الخروج
-        document.getElementById('logoutBtn').addEventListener('click', () => {
+        logoutBtn.addEventListener('click', () => {
             localStorage.removeItem("mixToken");
             window.location.href = "login.html";
         });
@@ -65,35 +106,63 @@
 
                 if (res.ok) {
                     postsContainer.innerHTML = '';
-                    if (data.length === 0) {
+                    if (Array.isArray(data) && data.length === 0) {
                         postsContainer.innerHTML = '<p>لا توجد منشورات بعد.</p>';
-                    } else {
+                    } else if (Array.isArray(data)) {
                         data.forEach(post => {
                             const div = document.createElement('div');
                             div.className = 'post-card';
+                            const postDate = new Date(post.createdAt).toLocaleString('ar-SA');
                             div.innerHTML = `
-                                <p><strong>${post.user}</strong> - ${new Date(post.createdAt).toLocaleString()}</p>
-                                <p>${post.content}</p>
-                                <p>💬 ${post.comments.length} | 👍 ${post.likes}</p>
+                                <div class="post-header">
+                                    <strong>${escapeHtml(post.user)}</strong>
+                                    <time>${postDate}</time>
+                                </div>
+                                <p>${escapeHtml(post.content)}</p>
+                                <div class="post-stats">
+                                    <span>💬 ${post.comments ? post.comments.length : 0}</span>
+                                    <span>👍 ${post.likes || 0}</span>
+                                </div>
                             `;
                             postsContainer.appendChild(div);
                         });
+                    } else {
+                        postsContainer.innerHTML = '<p>خطأ في تنسيق البيانات</p>';
                     }
                 } else {
-                    postsContainer.innerHTML = `<p>خطأ في تحميل المنشورات: ${data.message}</p>`;
+                    postsContainer.innerHTML = `<p class="error-message">خطأ في تحميل المنشورات: ${data.message}</p>`;
                 }
             } catch (err) {
-                postsContainer.innerHTML = '<p>تعذر الاتصال بالخادم</p>';
+                postsContainer.innerHTML = '<p class="error-message">تعذر الاتصال بالخادم. تحقق من اتصالك بالإنترنت.</p>';
                 console.error(err);
             }
+        }
+
+        // دالة آمنة لتحويل نص إلى HTML آمن
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         // إنشاء منشور جديد
         postForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            postFeedback.textContent = '';
-            const content = document.getElementById('postContent').value.trim();
-            if (!content) return;
+            postFeedback.innerHTML = '';
+            const content = postContent.value.trim();
+
+            if (!content) {
+                postFeedback.innerHTML = '<div class="error-message">الرجاء كتابة محتوى المنشور</div>';
+                return;
+            }
+
+            if (content.length > 1000) {
+                postFeedback.innerHTML = '<div class="error-message">محتوى المنشور طويل جداً (أقصى 1000 حرف)</div>';
+                return;
+            }
+
+            postSubmitBtn.disabled = true;
+            postSubmitBtn.textContent = 'جاري النشر...';
 
             try {
                 const res = await fetch(`${MIX_API_BASE}/social/posts`, {
@@ -107,18 +176,24 @@
 
                 const data = await res.json();
                 if (res.ok) {
-                    document.getElementById('postContent').value = '';
+                    postContent.value = '';
+                    charCount.textContent = '0 / 1000';
+                    postFeedback.innerHTML = '<div class="success-message">تم نشر المنشور بنجاح!</div>';
                     loadPosts();
                 } else {
-                    postFeedback.textContent = data.message || "خطأ في النشر";
+                    postFeedback.innerHTML = `<div class="error-message">${data.message || "خطأ في النشر"}</div>`;
                 }
             } catch (err) {
-                postFeedback.textContent = "تعذر الاتصال بالخادم";
+                postFeedback.innerHTML = '<div class="error-message">تعذر الاتصال بالخادم</div>';
                 console.error(err);
+            } finally {
+                postSubmitBtn.disabled = false;
+                postSubmitBtn.textContent = 'نشر';
             }
         });
 
+        // تحميل المنشورات عند فتح الصفحة
         loadPosts();
     </script>
 </body>
-                                  </html>
+</html>
