@@ -3,35 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="صفحة تسجيل الدخول إلى منصة Mix Platform - عالم افتراضي تفاعلي">
     <title>تسجيل الدخول - Mix Platform</title>
     <link rel="stylesheet" href="../static/style.css">
+    <style>
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 8px;
+            padding: 10px;
+            background-color: #fadbd8;
+            border-radius: 4px;
+            display: none;
+        }
+        .error-message.show {
+            display: block;
+        }
+        .success-message {
+            color: #27ae60;
+            font-size: 14px;
+            padding: 10px;
+            background-color: #d5f4e6;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
     <header>
-     <h1>تسجيل الدخول إلى Mix Platform</h1>
+        <h1>تسجيل الدخول إلى Mix Platform</h1>
     </header>
 
     <main>
-        <section id="login-section">
-            <form id="loginForm">
+        <section class="login-section">
+            <form id="loginForm" novalidate>
                 <div class="form-group">
                     <label for="email">البريد الإلكتروني</label>
-                    <input type="email" id="email" name="email" required placeholder="أدخل بريدك الإلكتروني">
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        placeholder="أدخل بريدك الإلكتروني"
+                        aria-required="true"
+                        aria-describedby="email-error">
+                    <span id="email-error" class="error-message" role="alert"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="password">كلمة المرور</label>
-                    <input type="password" id="password" name="password" required placeholder="أدخل كلمة المرور">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        minlength="6"
+                        placeholder="أدخل كلمة المرور"
+                        aria-required="true"
+                        aria-describedby="password-error">
+                    <span id="password-error" class="error-message" role="alert"></span>
                 </div>
 
-                <button type="submit">تسجيل الدخول</button>
+                <button type="submit" id="submitBtn">تسجيل الدخول</button>
             </form>
 
-            <p>لا تملك حسابًا؟ <a href="../register.html">أنشئ حسابك هنا</a></p>
-        </section>
-
-        <section id="login-feedback">
-            <p id="feedback" style="color:red;"></p>
+            <div id="feedback" role="alert" aria-live="polite"></div>
+            <p>لا تملك حسابًا؟ <a href="register.html">أنشئ حسابك هنا</a></p>
         </section>
     </main>
 
@@ -43,14 +79,73 @@
     <script>
         const loginForm = document.getElementById('loginForm');
         const feedback = document.getElementById('feedback');
+        const submitBtn = document.getElementById('submitBtn');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const emailError = document.getElementById('email-error');
+        const passwordError = document.getElementById('password-error');
 
+        // التحقق من صحة البريد الإلكتروني
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // إخفاء الأخطاء عند التركيز على الحقل
+        emailInput.addEventListener('focus', () => {
+            emailError.classList.remove('show');
+        });
+
+        passwordInput.addEventListener('focus', () => {
+            passwordError.classList.remove('show');
+        });
+
+        // معالج الإرسال
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // تنظيف الأخطاء السابقة
+            emailError.textContent = '';
+            emailError.classList.remove('show');
+            passwordError.textContent = '';
+            passwordError.classList.remove('show');
+            feedback.innerHTML = '';
+            
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
 
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
+            // التحقق من الحقول
+            let isValid = true;
+            if (!email) {
+                emailError.textContent = 'البريد الإلكتروني مطلوب';
+                emailError.classList.add('show');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                emailError.textContent = 'صيغة البريد الإلكتروني غير صحيحة';
+                emailError.classList.add('show');
+                isValid = false;
+            }
+
+            if (!password) {
+                passwordError.textContent = 'كلمة المرور مطلوبة';
+                passwordError.classList.add('show');
+                isValid = false;
+            } else if (password.length < 6) {
+                passwordError.textContent = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                passwordError.classList.add('show');
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'جاري المعالجة...';
 
             try {
+                if (!window.MIX_API_BASE) {
+                    throw new Error('API Base URL غير محددة');
+                }
+
                 const response = await fetch(`${MIX_API_BASE}/users/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -60,19 +155,22 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // حفظ التوكن في localStorage
                     localStorage.setItem("mixToken", data.token);
-                    window.location.href = "dashboard.html";
-                   // بعد التحقق من المستخدم
-                    window.location.href = 'index.html'; // 
+                    feedback.innerHTML = '<div class="success-message">✓ تم تسجيل الدخول بنجاح! جاري التحويل...</div>';
+                    setTimeout(() => {
+                        window.location.href = "dashboard.html";
+                    }, 1500);
                 } else {
-                    feedback.textContent = data.message || "خطأ في تسجيل الدخول";
+                    feedback.innerHTML = `<div class="error-message">${data.message || "خطأ في تسجيل الدخول"}</div>`;
                 }
             } catch (err) {
-                feedback.textContent = "تعذر الاتصال بالخادم";
+                feedback.innerHTML = '<div class="error-message">❌ تعذر الاتصال بالخادم. تحقق من اتصالك بالإنترنت.</div>';
                 console.error(err);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'تسجيل الدخول';
             }
         });
     </script>
 </body>
-  </html>
+</html>
