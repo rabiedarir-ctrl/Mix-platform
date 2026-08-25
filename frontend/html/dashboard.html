@@ -3,34 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="لوحة التحكم الخاصة بك في منصة Mix Platform">
     <title>لوحة التحكم - Mix Platform</title>
     <link rel="stylesheet" href="../static/style.css">
+    <style>
+        .error-message {
+            color: #e74c3c;
+            padding: 12px;
+            background-color: #fadbd8;
+            border-radius: 4px;
+            margin: 12px 0;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>لوحة التحكم الخاصة بك</h1>
         <nav>
-            <a href="../feed.html">التغذية</a>
-            <a href="../messages.html">الرسائل</a>
-            <a href="../games.html">الألعاب</a>
-            <a href="../dream_world.html">عالم الأحلام</a>
-            <button id="logoutBtn">تسجيل الخروج</button>
+            <ul>
+                <li><a href="feed.html">التغذية</a></li>
+                <li><a href="messages.html">الرسائل</a></li>
+                <li><a href="games.html">الألعاب</a></li>
+                <li><a href="dream_world.html">عالم الأحلام</a></li>
+                <li><button id="logoutBtn" type="button">تسجيل الخروج</button></li>
+            </ul>
         </nav>
     </header>
 
     <main>
         <section class="user-stats">
             <h2>الطاقة والخلايا</h2>
-            <div id="stats-cards">
-                <div id="card">
+            <div class="stats-cards">
+                <div class="card">
                     <h3>الطاقة</h3>
                     <p id="energy">جارٍ التحميل...</p>
                 </div>
-                <div id="card">
+                <div class="card">
                     <h3>الخلايا</h3>
                     <p id="cells">جارٍ التحميل...</p>
                 </div>
-                <div id="card">
+                <div class="card">
                     <h3>النقاط</h3>
                     <p id="score">جارٍ التحميل...</p>
                 </div>
@@ -46,13 +58,15 @@
 
         <section class="dream-world-preview">
             <h2>عالم الأحلام</h2>
-            <button onclick="location.href='dream_world.html'">استكشف عالم الأحلام</button>
+            <button id="dreamWorldBtn" type="button">استكشف عالم الأحلام</button>
         </section>
 
         <section class="games-preview">
             <h2>الألعاب</h2>
-            <button onclick="location.href='games.html'">ابدأ اللعب</button>
+            <button id="gamesBtn" type="button">ابدأ اللعب</button>
         </section>
+
+        <div id="errorContainer" role="alert" aria-live="polite"></div>
     </main>
 
     <footer>
@@ -62,17 +76,34 @@
     <script src="../static/api.js"></script>
     <script src="../static/dashboard.js"></script>
     <script>
-        // تسجيل الخروج
         const logoutBtn = document.getElementById('logoutBtn');
+        const dreamWorldBtn = document.getElementById('dreamWorldBtn');
+        const gamesBtn = document.getElementById('gamesBtn');
+        const errorContainer = document.getElementById('errorContainer');
+
+        // تسجيل الخروج
         logoutBtn.addEventListener('click', () => {
             localStorage.removeItem("mixToken");
             window.location.href = "login.html";
         });
 
+        // الانتقال إلى عالم الأحلام
+        dreamWorldBtn.addEventListener('click', () => {
+            window.location.href = 'dream_world.html';
+        });
+
+        // الانتقال إلى الألعاب
+        gamesBtn.addEventListener('click', () => {
+            window.location.href = 'games.html';
+        });
+
         // تحميل بيانات المستخدم
         async function loadUserData() {
             const token = localStorage.getItem("mixToken");
-            if (!token) return window.location.href = "login.html";
+            if (!token) {
+                window.location.href = "login.html";
+                return;
+            }
 
             try {
                 const response = await fetch(`${MIX_API_BASE}/users/me`, {
@@ -81,9 +112,9 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    document.getElementById('energy').textContent = data.energy;
-                    document.getElementById('cells').textContent = data.cells;
-                    document.getElementById('score').textContent = data.score;
+                    document.getElementById('energy').textContent = data.energy || 0;
+                    document.getElementById('cells').textContent = data.cells || 0;
+                    document.getElementById('score').textContent = data.score || 0;
 
                     const notifList = document.getElementById('notificationsList');
                     notifList.innerHTML = '';
@@ -97,14 +128,17 @@
                         notifList.innerHTML = '<li>لا توجد إشعارات حالياً</li>';
                     }
                 } else {
+                    errorContainer.innerHTML = `<div class="error-message">خطأ: ${data.message}</div>`;
                     console.error(data.message);
                 }
             } catch (err) {
+                errorContainer.innerHTML = '<div class="error-message">تعذر تحميل بيانات المستخدم. تحقق من اتصالك.</div>';
                 console.error("خطأ في تحميل بيانات المستخدم", err);
             }
         }
 
+        // تحميل البيانات عند فتح الصفحة
         loadUserData();
     </script>
 </body>
-          </html>
+</html>
