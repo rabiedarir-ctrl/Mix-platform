@@ -3,151 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Mix Platform</title>
+    <meta name="description" content="الرئيسية - لوحة تحكم شاملة في منصة Mix Platform">
+    <title>الرئيسية - Mix Platform</title>
 
-    <!-- 🔹 CSS -->
+    <!-- CSS -->
     <link rel="stylesheet" href="../static/style.css">
     <link rel="stylesheet" href="../static/home.css">
     <link rel="stylesheet" href="../static/buttons.css">
     <link rel="stylesheet" href="../static/notifications.css">
+    
+    <style>
+        .error-message {
+            color: #e74c3c;
+            padding: 12px;
+            background-color: #fadbd8;
+            border-radius: 4px;
+            margin: 12px 0;
+        }
+    </style>
 </head>
 
 <body>
+    <!-- HOME CONTAINER -->
+    <div id="homeContainer">
 
-    <!-- 🔹 التحقق من تسجيل الدخول -->
-    <script>
-        const user = localStorage.getItem("currentUser");
-        if (!user) {
-            window.location.href = "login.html";
-        }
-    </script>
-
-    <!-- ===========================
-         🔹 HOME CONTAINER
-    =========================== -->
-    <div id="home-container">
-
-        <!-- ===========================
-             🔹 HEADER
-        =========================== -->
-        <div id="home-header">
+        <!-- HEADER -->
+        <div id="homeHeader">
             <h1>Mix Platform</h1>
 
-            <div id="user-info">
-                👤 <span id="home-username">...</span>
+            <div id="userInfo">
+                👤 <span id="homeUsername">...</span>
             </div>
 
-            <button id="home-btn" id="logout-btn">تسجيل الخروج</button>
+            <button id="logoutBtn" type="button">تسجيل الخروج</button>
         </div>
 
-        <!-- ===========================
-             🔹 MAIN
-        =========================== -->
-        <div id="home-main">
+        <!-- MAIN -->
+        <div id="homeMain">
 
-            <!-- 🔹 SIDEBAR -->
-            <div id="home-sidebar">
-                <div id="menu-item" data-section="dashboard">📊 لوحة التحكم</div>
-                <div id="menu-item" data-section="dreams">💭 الأحلام</div>
-                <div id="menu-item" data-section="world">🌍 العالم</div>
-                <div id="menu-item" data-section="games">🎮 الألعاب</div>
-                <div id="menu-item" data-section="store">🛒 المتجر</div>
-                <div id="menu-item" data-section="wallet">💰 المحفظة</div>
-                <div id="menu-item" data-section="social">🌐 المجتمع</div>
-                <div id="menu-item" data-section="messages">💬 الرسائل</div>
+            <!-- SIDEBAR -->
+            <div id="homeSidebar">
+                <div class="menuItem" data-section="dashboard">📊 لوحة التحكم</div>
+                <div class="menuItem" data-section="dreams">💭 الأحلام</div>
+                <div class="menuItem" data-section="world">🌍 العالم</div>
+                <div class="menuItem" data-section="games">🎮 الألعاب</div>
+                <div class="menuItem" data-section="store">🛒 المتجر</div>
+                <div class="menuItem" data-section="wallet">💰 المحفظة</div>
+                <div class="menuItem" data-section="social">🌐 المجتمع</div>
+                <div class="menuItem" data-section="messages">💬 الرسائل</div>
             </div>
 
-            <!-- 🔹 CONTENT -->
-            <div id="home-content">
+            <!-- CONTENT -->
+            <div id="homeContent">
 
-                <div id="section" id="section-dashboard">
+                <div class="section" id="sectionDashboard">
                     <h2>📊 لوحة التحكم</h2>
-                    <div id="card">مرحبا بك في Mix Platform 🚀</div>
+                    <div class="card">مرحبا بك في Mix Platform 🚀</div>
                 </div>
 
-                <div id="section" id="section-dreams" style="display:none;">
+                <div class="section" id="sectionDreams" style="display:none;">
                     <h2>💭 الأحلام</h2>
-                    <div id="card">لا توجد أحلام بعد</div>
+                    <div class="card">لا توجد أحلام بعد</div>
                 </div>
 
-                <div id="section" id="section-world" style="display:none;">
+                <div class="section" id="sectionWorld" style="display:none;">
                     <h2>🌍 العالم</h2>
-                    <div id="card">جاري تحميل العالم...</div>
+                    <div class="card">جاري تحميل العالم...</div>
                 </div>
 
-                <div id="section" id="section-games" style="display:none;">
+                <div class="section" id="sectionGames" style="display:none;">
                     <h2>🎮 الألعاب</h2>
-                    <div id="card">لا توجد ألعاب حالياً</div>
+                    <div class="card">لا توجد ألعاب حالياً</div>
                 </div>
 
-                <div id="section" id="section-store" style="display:none;">
+                <div class="section" id="sectionStore" style="display:none;">
                     <h2>🛒 المتجر</h2>
-                    <div id="card">المتجر قيد التطوير</div>
+                    <div class="card">المتجر قيد التطوير</div>
                 </div>
 
-                <div id="section" id="section-wallet" style="display:none;">
+                <div class="section" id="sectionWallet" style="display:none;">
                     <h2>💰 المحفظة</h2>
-                    <div id="card">رصيدك: 0</div>
+                    <div class="card">رصيدك: <span id="walletBalance">0</span></div>
                 </div>
 
-                <div id="section" id="section-social" style="display:none;">
+                <div class="section" id="sectionSocial" style="display:none;">
                     <h2>🌐 المجتمع</h2>
-                    <div id="card">لا توجد منشورات</div>
+                    <div class="card">لا توجد منشورات</div>
                 </div>
 
-                <div id="section" id="section-messages" style="display:none;">
+                <div class="section" id="sectionMessages" style="display:none;">
                     <h2>💬 الرسائل</h2>
-                    <div id="card">لا توجد رسائل</div>
+                    <div class="card">لا توجد رسائل</div>
                 </div>
 
             </div>
 
-            <!-- 🔹 RIGHT PANEL -->
-            <div id="home-right">
-                <div id="card">⚡ الطاقة: <span id="home-energy">0</span></div>
-                <div id="card">⭐ المستوى: <span id="home-level">1</span></div>
+            <!-- RIGHT PANEL -->
+            <div id="homeRight">
+                <div class="card">⚡ الطاقة: <span id="homeEnergy">0</span></div>
+                <div class="card">⭐ المستوى: <span id="homeLevel">1</span></div>
             </div>
 
         </div>
 
-        <!-- 🔹 NOTIFICATIONS -->
-        <div id="home-notifications"></div>
+        <!-- NOTIFICATIONS -->
+        <div id="homeNotifications" role="alert" aria-live="polite" aria-atomic="true"></div>
+
+        <!-- ERROR CONTAINER -->
+        <div id="errorContainer" role="alert" aria-live="polite"></div>
 
     </div>
 
-    <!-- ===========================
-         🔹 JS
-    =========================== -->
+    <!-- SCRIPTS -->
     <script src="../static/home.js"></script>
-
-    <!-- ===========================
-         🔹 LOGIC إضافي للواجهة
-    =========================== -->
     <script>
-        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        // دالة للتحقق من صحة البيانات
+        function validateUserData(data) {
+            return data && 
+                   typeof data.username === 'string' && 
+                   (typeof data.energy === 'number' || typeof data.energy === 'undefined') && 
+                   (typeof data.level === 'number' || typeof data.level === 'undefined');
+        }
 
-        // عرض بيانات المستخدم
-        document.getElementById("home-username").innerText = currentUser.username || "Guest";
-        document.getElementById("home-energy").innerText = currentUser.energy || 0;
-        document.getElementById("home-level").innerText = currentUser.level || 1;
+        // تحميل بيانات المستخدم من localStorage
+        const currentUserStr = localStorage.getItem("currentUser");
+        if (!currentUserStr) {
+            window.location.href = "login.html";
+        } else {
+            try {
+                const currentUser = JSON.parse(currentUserStr);
+                
+                if (!validateUserData(currentUser)) {
+                    throw new Error('بيانات المستخدم غير صحيحة');
+                }
 
-        // تسجيل الخروج
-        document.getElementById("logout-btn").addEventListener("click", () => {
+                // عرض بيانات المستخدم
+                document.getElementById("homeUsername").textContent = currentUser.username || "Guest";
+                document.getElementById("homeEnergy").textContent = currentUser.energy || 0;
+                document.getElementById("homeLevel").textContent = currentUser.level || 1;
+                document.getElementById("walletBalance").textContent = currentUser.wallet || 0;
+
+            } catch (error) {
+                const errorContainer = document.getElementById("errorContainer");
+                errorContainer.innerHTML = '<div class="error-message">⚠️ خطأ في تحميل بيانات المستخدم. جاري التحويل للصفحة الرئيسية...</div>';
+                localStorage.removeItem("currentUser");
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 2000);
+            }
+        }
+
+        // معالج تسجيل الخروج
+        document.getElementById("logoutBtn").addEventListener("click", () => {
             localStorage.removeItem("currentUser");
             window.location.href = "login.html";
         });
 
         // التنقل بين الأقسام
-        const menuItems = document.querySelectorAll(".menu-item");
+        const menuItems = document.querySelectorAll(".menuItem");
         const sections = document.querySelectorAll(".section");
 
         menuItems.forEach(item => {
             item.addEventListener("click", () => {
                 const target = item.getAttribute("data-section");
 
+                // إخفاء جميع الأقسام
                 sections.forEach(sec => sec.style.display = "none");
 
-                document.getElementById("section-" + target).style.display = "block";
+                // عرض القسم المختار
+                const targetSection = document.getElementById("section" + target.charAt(0).toUpperCase() + target.slice(1));
+                if (targetSection) {
+                    targetSection.style.display = "block";
+                }
             });
         });
     </script>
