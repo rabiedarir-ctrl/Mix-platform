@@ -3,72 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="عالم الأحلام التفاعلي في منصة Mix Platform - استكشف عالماً ثلاثي الأبعاد">
     <title>عالم الأحلام - Mix Platform</title>
     <link rel="stylesheet" href="../static/style.css">
     <style>
-        body, html { margin: 0; padding: 0; overflow: hidden; height: 100%; }
-        #dreamContainer { width: 100%; height: 100vh; display: block; background: black; }
-        #hud { position: absolute; top: 10px; left: 10px; color: white; font-family: sans-serif; }
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            overflow: hidden; 
+            height: 100%; 
+        }
+        #dreamContainer { 
+            width: 100%; 
+            height: 100vh; 
+            display: block; 
+            background: #000; 
+        }
+        #hud { 
+            position: absolute; 
+            top: 10px; 
+            left: 10px; 
+            color: #fff; 
+            font-family: sans-serif;
+            z-index: 100;
+        }
+        #backBtn {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        #backBtn:hover {
+            background-color: #2980b9;
+        }
+        #dreamStatus {
+            display: inline-block;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 4px;
+        }
+        .error-message {
+            color: #e74c3c;
+            padding: 12px;
+            background-color: #fadbd8;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
-    <div id="hud">
-        <button id="backBtn">العودة للوحة التحكم</button>
+    <div id="hud" role="status" aria-live="polite">
+        <button id="backBtn" type="button">العودة للوحة التحكم</button>
         <span id="dreamStatus">جاري تحميل الأحلام...</span>
     </div>
     <div id="dreamContainer"></div>
+    <div id="errorContainer" role="alert" aria-live="polite"></div>
 
     <script src="../static/api.js"></script>
     <script src="../static/three/engine.js"></script>
     <script src="../static/dream_engine.js"></script>
     <script>
         const token = localStorage.getItem("mixToken");
-        if (!token) window.location.href = "login.html";
+        if (!token) {
+            window.location.href = "login.html";
+        }
 
         const backBtn = document.getElementById('backBtn');
+        const dreamContainer = document.getElementById('dreamContainer');
+        const dreamStatus = document.getElementById('dreamStatus');
+        const errorContainer = document.getElementById('errorContainer');
+
+        // معالج زر العودة
         backBtn.addEventListener('click', () => {
             window.location.href = "dashboard.html";
         });
 
-        const dreamContainer = document.getElementById('dreamContainer');
-        const dreamStatus = document.getElementById('dreamStatus');
-
         // ===========================
-        // 🔹 إعداد محرك Three.js
+        // إعداد محرك Three.js
         // ===========================
-        const dreamEngine = new THREE.Engine(dreamContainer);
-
-        // تحميل عالم الأحلام
-        dreamEngine.loadWorld('dreamWorld');
-
-        // بدء الحلقة الرئيسية
-        dreamEngine.start();
-
-        // ===========================
-        // 🔹 دمج Dream Engine مع Backend
-        // ===========================
-        const dreamManager = new DreamEngine(dreamEngine, token);
-        window.dreamEngineInstance = dreamManager;
-      
-        async function loadDreams() {
-            try {
-                await dreamManager.init();
-                dreamStatus.textContent = 'الأحلام جاهزة للعرض';
-            } catch (err) {
-                dreamStatus.textContent = 'تعذر تحميل الأحلام';
-                console.error(err);
+        try {
+            if (!window.THREE) {
+                throw new Error('مكتبة Three.js غير محملة');
             }
+
+            const dreamEngine = new THREE.Engine(dreamContainer);
+
+            // تحميل عالم الأحلام
+            if (typeof dreamEngine.loadWorld === 'function') {
+                dreamEngine.loadWorld('dreamWorld');
+            }
+
+            // بدء الحلقة الرئيسية
+            if (typeof dreamEngine.start === 'function') {
+                dreamEngine.start();
+            }
+
+            // ===========================
+            // دمج Dream Engine مع Backend
+            // ===========================
+            if (!window.DreamEngine) {
+                throw new Error('DreamEngine غير محملة');
+            }
+
+            const dreamManager = new DreamEngine(dreamEngine, token);
+            window.dreamEngineInstance = dreamManager;
+          
+            async function loadDreams() {
+                try {
+                    if (typeof dreamManager.init === 'function') {
+                        await dreamManager.init();
+                        dreamStatus.textContent = '✓ الأحلام جاهزة للعرض';
+                    }
+                } catch (err) {
+                    dreamStatus.textContent = '❌ تعذر تحميل الأحلام';
+                    errorContainer.innerHTML = '<div class="error-message">خطأ في تحميل محرك الأحلام</div>';
+                    console.error(err);
+                }
+            }
+
+            loadDreams();
+
+            // ===========================
+            // التحديث الدوري للأحلام والتفاعلات
+            // ===========================
+            const updateInterval = setInterval(() => {
+                if (typeof dreamManager.update === 'function') {
+                    dreamManager.update();
+                }
+            }, 1000);
+
+            // تنظيف الموارد عند إغلاق الصفحة
+            window.addEventListener('beforeunload', () => {
+                clearInterval(updateInterval);
+                if (typeof dreamEngine.dispose === 'function') {
+                    dreamEngine.dispose();
+                }
+            });
+
+        } catch (err) {
+            errorContainer.innerHTML = `<div class="error-message">❌ خطأ في تحميل عالم الأحلام: ${err.message}</div>`;
+            dreamStatus.textContent = '❌ خطأ في تحميل الأحلام';
+            console.error(err);
         }
-
-        loadDreams();
-
-        // ===========================
-        // 🔹 التحديث الدوري للأحلام والتفاعلات
-        // ===========================
-        setInterval(() => {
-            dreamManager.update();
-        }, 1000);
-
     </script>
 </body>
 </html>
