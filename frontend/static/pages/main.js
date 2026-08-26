@@ -1,7 +1,7 @@
 // ===========================
-// 🔹 إعدادات أساسية للمنصة
-// ===========================
+//   
 const MIX_API_BASE = "http://localhost:3000/api"; // يمكن تغييره إلى الإنتاج لاحقًا
+window.MIX_API_BASE = MIX_API_BASE; // expose globally so pages using window.MIX_API_BASE don't fail
 const token = localStorage.getItem("mixToken");
 
 // ===========================
@@ -10,6 +10,8 @@ const token = localStorage.getItem("mixToken");
 if (!token && window.location.pathname !== "../login.html") {
     window.location.href = "login.html";
 }
+
+// (باقي الملف كما هو)
 
 // ===========================
 // 🔹 تسجيل الخروج
