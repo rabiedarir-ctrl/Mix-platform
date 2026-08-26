@@ -1,3 +1,463 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="صفحة إنشاء حساب جديد في منصة Mix Platform - عالم افتراضي تفاعلي">
+    <title>إنشاء حساب جديد - Mix Platform</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <style>
+        .register-section {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .register-section h2 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #fff;
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        .error-message {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 6px;
+            padding: 8px 12px;
+            background-color: rgba(255, 107, 107, 0.1);
+            border-radius: 4px;
+            border-left: 3px solid #ff6b6b;
+            display: none;
+        }
+        .error-message.show {
+            display: block;
+        }
+        .success-message {
+            color: #51cf66;
+            font-size: 13px;
+            padding: 10px;
+            background-color: rgba(81, 207, 102, 0.1);
+            border-radius: 4px;
+            border-left: 3px solid #51cf66;
+            display: none;
+        }
+        .success-message.show {
+            display: block;
+        }
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #ff6b6b;
+            transition: all 0.3s ease;
+        }
+        .password-strength-bar.weak {
+            width: 33%;
+            background-color: #ff6b6b;
+        }
+        .password-strength-bar.medium {
+            width: 66%;
+            background-color: #ffd43b;
+        }
+        .password-strength-bar.strong {
+            width: 100%;
+            background-color: #51cf66;
+        }
+        .password-strength-text {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #fff;
+            color: #667eea;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover:not(:disabled) {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #fff;
+        }
+        .login-link a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 2px solid #fff;
+        }
+        .login-link a:hover {
+            opacity: 0.8;
+        }
+        .feedback {
+            margin-top: 20px;
+            min-height: 50px;
+        }
+        .terms-checkbox {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            color: #fff;
+            font-size: 13px;
+        }
+        .terms-checkbox input {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .terms-checkbox a {
+            color: #fff;
+            text-decoration: underline;
+        }
+        .terms-checkbox a:hover {
+            opacity: 0.8;
+        }
+        /* Responsive */
+        @media (max-width: 600px) {
+            .register-section {
+                margin: 20px;
+                padding: 20px;
+            }
+            .register-section h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>إنشاء حساب جديد في Mix Platform</h1>
+    </header>
+    <main>
+        <section class="register-section">
+            <h2>🌟 انضم إلينا الآن</h2>
+            
+            <form id="registerForm" novalidate>
+                <!-- البريد الإلكتروني -->
+                <div class="form-group">
+                    <label for="email">البريد الإلكتروني</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        placeholder="أدخل بريدك الإلكتروني"
+                        aria-required="true"
+                        aria-describedby="email-error">
+                    <span id="email-error" class="error-message" role="alert"></span>
+                </div>
+                <!-- اسم المستخدم -->
+                <div class="form-group">
+                    <label for="username">اسم المستخدم</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        required 
+                        minlength="3"
+                        maxlength="30"
+                        placeholder="اختر اسم مستخدم (3-30 أحرف)"
+                        aria-required="true"
+                        aria-describedby="username-error">
+                    <span id="username-error" class="error-message" role="alert"></span>
+                </div>
+                <!-- الاسم الكامل -->
+                <div class="form-group">
+                    <label for="fullname">الاسم الكامل</label>
+                    <input 
+                        type="text" 
+                        id="fullname" 
+                        name="fullname" 
+                        required 
+                        placeholder="أدخل اسمك الكامل"
+                        aria-required="true"
+                        aria-describedby="fullname-error">
+                    <span id="fullname-error" class="error-message" role="alert"></span>
+                </div>
+                <!-- كلمة المرور -->
+                <div class="form-group">
+                    <label for="password">كلمة المرور</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        minlength="8"
+                        placeholder="كلمة مرور قوية (8 أحرف على الأقل)"
+                        aria-required="true"
+                        aria-describedby="password-error">
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="strengthBar"></div>
+                    </div>
+                    <div class="password-strength-text" id="strengthText"></div>
+                    <span id="password-error" class="error-message" role="alert"></span>
+                </div>
+                <!-- تأكيد كلمة المرور -->
+                <div class="form-group">
+                    <label for="confirmPassword">تأكيد كلمة المرور</label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        name="confirmPassword" 
+                        required 
+                        placeholder="أعد إدخال كلمة المرور"
+                        aria-required="true"
+                        aria-describedby="confirmPassword-error">
+                    <span id="confirmPassword-error" class="error-message" role="alert"></span>
+                </div>
+                <!-- الهاتف (اختياري) -->
+                <div class="form-group">
+                    <label for="phone">رقم الهاتف (اختياري)</label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        placeholder="+966 50 1234567"
+                        aria-describedby="phone-error">
+                    <span id="phone-error" class="error-message" role="alert"></span>
+                </div>
+                <!-- شروط الخدمة -->
+                <div class="terms-checkbox">
+                    <input 
+                        type="checkbox" 
+                        id="terms" 
+                        name="terms" 
+                        required 
+                        aria-required="true"
+                        aria-describedby="terms-error">
+                    <label for="terms">أوافق على <a href="#" target="_blank">شروط الخدمة</a> و<a href="#" target="_blank">سياسة الخصوصية</a></label>
+                    <span id="terms-error" class="error-message" role="alert"></span>
+                </div>
+                <!-- زر الإرسال -->
+                <button type="submit" id="submitBtn" class="register-btn">إنشاء حسابي</button>
+            </form>
+            <!-- رسائل التغذية الراجعة -->
+            <div id="feedback" role="alert" aria-live="polite" class="feedback"></div>
+            <!-- رابط تسجيل الدخول -->
+            <div class="login-link">
+                هل تملك حسابًا بالفعل؟ <a href="login.html">تسجيل الدخول</a>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>© 2026 Mix Platform. جميع الحقوق محفوظة.</p>
+    </footer>
+    <script src="../static/api.js"></script>
+    <script>
+        const registerForm = document.getElementById('registerForm');
+        const feedback = document.getElementById('feedback');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        // الحقول
+        const emailInput = document.getElementById('email');
+        const usernameInput = document.getElementById('username');
+        const fullnameInput = document.getElementById('fullname');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const phoneInput = document.getElementById('phone');
+        const termsCheckbox = document.getElementById('terms');
+        
+        // رسائل الأخطاء
+        const emailError = document.getElementById('email-error');
+        const usernameError = document.getElementById('username-error');
+        const fullnameError = document.getElementById('fullname-error');
+        const passwordError = document.getElementById('password-error');
+        const confirmPasswordError = document.getElementById('confirmPassword-error');
+        const phoneError = document.getElementById('phone-error');
+        const termsError = document.getElementById('terms-error');
+        // مؤشر قوة كلمة المرور
+        const strengthBar = document.getElementById('strengthBar');
+        const strengthText = document.getElementById('strengthText');
+        // التحقق من صحة البريد الإلكتروني
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        // التحقق من قوة كلمة المرور
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            let text = 'ضعيفة جداً';
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[!@#$%^&*]/.test(password)) strength++;
+            if (strength < 2) {
+                strengthBar.className = 'password-strength-bar weak';
+                text = 'ضعيفة جداً ❌';
+            } else if (strength < 4) {
+                strengthBar.className = 'password-strength-bar medium';
+                text = 'متوسطة ⚠️';
+            } else {
+                strengthBar.className = 'password-strength-bar strong';
+                text = 'قوية جداً ✅';
+            }
+            strengthText.textContent = text;
+            return strength;
+        }
+        // مراقبة قوة كلمة المرور
+        passwordInput.addEventListener('input', () => {
+            if (passwordInput.value) {
+                checkPasswordStrength(passwordInput.value);
+            } else {
+                strengthBar.className = 'password-strength-bar';
+                strengthText.textContent = '';
+            }
+        });
+        // إخفاء الأخطاء عند التركيز
+        [emailInput, usernameInput, fullnameInput, passwordInput, confirmPasswordInput, phoneInput, termsCheckbox].forEach(input => {
+            input.addEventListener('focus', () => {
+                const errorId = input.id + '-error';
+                const errorElement = document.getElementById(errorId);
+                if (errorElement) {
+                    errorElement.classList.remove('show');
+                }
+            });
+        });
+        // معالج الإرسال
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // تنظيف الأخطاء السابقة
+            [emailError, usernameError, fullnameError, passwordError, confirmPasswordError, phoneError, termsError].forEach(err => {
+                err.textContent = '';
+                err.classList.remove('show');
+            });
+            feedback.innerHTML = '';
+            
+            const email = emailInput.value.trim();
+            const username = usernameInput.value.trim();
+            const fullname = fullnameInput.value.trim();
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const phone = phoneInput.value.trim();
+            const termsAccepted = termsCheckbox.checked;
+            // التحقق من الحقول
+            let isValid = true;
+            // التحقق من البريد الإلكتروني
+            if (!email) {
+                emailError.textContent = 'البريد الإلكتروني مطلوب';
+                emailError.classList.add('show');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                emailError.textContent = 'صيغة البريد الإلكتروني غير صحيحة (مثال: user@example.com)';
+                emailError.classList.add('show');
+                isValid = false;
+            }
+            // التحقق من اسم المستخدم
+            if (!username) {
+                usernameError.textContent = 'اسم المستخدم مطلوب';
+                usernameError.classList.add('show');
+                isValid = false;
+            } else if (username.length < 3) {
+                usernameError.textContent = 'اسم المستخدم يجب أن يكون 3 أحرف على الأقل';
+                usernameError.classList.add('show');
+                isValid = false;
+            } else if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+                usernameError.textContent = 'اسم المستخدم يمكن أن يحتوي على أحرف وأرقام والشرطات فقط';
+                usernameError.classList.add('show');
+                isValid = false;
+            }
+            // التحقق من الاسم الكامل
+            if (!fullname) {
+                fullnameError.textContent = 'الاسم الكامل مطلوب';
+                fullnameError.classList.add('show');
+                isValid = false;
+            }
+            // التحقق من كلمة المرور
+            if (!password) {
+                passwordError.textContent = 'كلمة المرور مطلوبة';
+                passwordError.classList.add('show');
+                isValid = false;
+            } else if (password.length < 8) {
+                passwordError.textContent = 'كلمة المرور يجب أن تكون 8 أحرف على الأقل';
+                passwordError.classList.add('show');
+                isValid = false;
+            }
+            // التحقق من تطابق كلمات المرور
+            if (password && confirmPassword && password !== confirmPassword) {
+                confirmPasswordError.textContent = 'كلمات المرور غير متطابقة';
+                confirmPasswordError.classList.add('show');
+                isValid = false;
+            } else if (!confirmPassword && password) {
+                confirmPasswordError.textContent = 'تأكيد كلمة المرور مطلوب';
+                confirmPasswordError.classList.add('show');
+                isValid = false;
+            }
+            // التحقق من رقم الهاتف (إذا تم إدخاله)
+            if (phone && !/^[\d+\s\-()]+$/.test(phone)) {
+                phoneError.textContent = 'صيغة رقم الهاتف غير صحيحة';
+                phoneError.classList.add('show');
+                isValid = false;
+            }
+            // التحقق من شروط الخدمة
+            if (!termsAccepted) {
+                termsError.textContent = 'يجب أن توافق على شروط الخدمة وسياسة الخصوصية';
+                termsError.classList.add('show');
+                isValid = false;
+            }
+            if (!isValid) return;
+            // إرسال البيانات إلى الخادم
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'جاري الإنشاء...';
+            try {
+                if (!window.MIX_API_BASE) {
+                    throw new Error('API Base URL غير محددة');
+                }
                 const response = await fetch(`${MIX_API_BASE}/users/register`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -11,3 +471,19 @@
                         phone: phone || null 
                     })
                 });
+                const data = await response.json();
+                if (response.ok) {
+                    feedback.innerHTML = '<div class="success-message">✅ تم إنشاء الحساب بنجاح! جاري التحويل إلى تسجيل الدخول...</div>';
+                    setTimeout(() => {
+                        window.location.href = "login.html";
+                    }, 2000);
+                } else {
+                    const errorMsg = data.message || "خطأ في إنشاء الحساب";
+                    feedback.innerHTML = `<div class="error-message">❌ ${errorMsg}</div>`;
+                }
+            } catch (err) {
+                feedback.innerHTML = '<div class="error-message">❌ تعذر الاتصال بالخادم. تحقق من اتصالك بالإنترنت أو تواصل مع الدعم الفني.</div>';
+                console.error('خطأ في التسجيل:', err);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'إن
