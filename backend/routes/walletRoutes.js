@@ -4,7 +4,7 @@ const Transaction = require('../models/Transaction');
 const User = require('../models/User');
 const { authenticateToken } = require('../core/auth');
 
-// -------------------------------
+// ------------------------------
 // 🔹 جلب رصيد المستخدم
 router.get('/:userId/balance', authenticateToken, async (req, res) => {
     try {
