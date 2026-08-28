@@ -51,15 +51,23 @@ router.post('/:userId/transaction', authenticateToken, async (req, res) => {
 
 // -------------------------------
 // 🔹 جلب جميع المعاملات الخاصة بالمستخدم
-router.get('/:userId/transactions', authenticateToken, async (req, res) => {
-    try {
-        const { userId } = req.params;
-        const transactions = await Transaction.find({ userId }).sort({ createdAt: -1 });
-        res.json(transactions);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
+router.get('/:userId/transactions', authenticateToken, var  express  =  require ( 'express' ) ; 
+var  app  =  express ( ) ;
+
+// إعداد مُحدد معدل الطلبات: بحد أقصى خمسة طلبات في الدقيقة 
+var  RateLimit  =  require ( 'express-rate-limit' ) ; 
+var  limiter  =  RateLimit ( { 
+  windowMs : 15  *  60  *  1000 ,  // 15 دقيقة 
+  max : 100 ,  // بحد أقصى 100 طلب لكل windowMs 
+} ) ;
+
+
+// تطبيق محدد معدل الطلبات على جميع الطلبات app.use ( limiter ) ;
+
+app.get ( ' / : path ' , function ( req , res ) { let path = req.params.path ; if ( isValidPath ( path ) ) res.sendFile ( path ) ; } ) ;   
+     
+   
+
 
 // -------------------------------
 // 🔹 تحديث حالة المعاملة
@@ -69,7 +77,7 @@ var  app  =  express ( ) ;
 // إعداد مُحدد معدل الطلبات: بحد أقصى خمسة طلبات في الدقيقة 
 var  RateLimit  =  require ( 'express-rate-limit' ) ; 
 var  limiter  =  RateLimit ( { 
-  windowMs : 15  *  60  *  1000 ,  // 15 دقيقة 
+  windowMs : 15  *  60  *  1000 ,  // 15 دقيقة
   max : 100 ,  // بحد أقصى 100 طلب لكل windowMs 
 } ) ;
 
