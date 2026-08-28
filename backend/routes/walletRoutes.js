@@ -63,22 +63,21 @@ router.get('/:userId/transactions', authenticateToken, async (req, res) => {
 
 // -------------------------------
 // 🔹 تحديث حالة المعاملة
-router.put('/transaction/:transactionId/status', authenticateToken, async (req, res) => {
-    try {
-        const { transactionId } = req.params;
-        const { status } = req.body;
+var  express  =  require ( 'express' ) ; 
+var  app  =  express ( ) ;
 
-        const transaction = await Transaction.findById(transactionId);
-        if (!transaction) return res.status(404).json({ message: 'المعاملة غير موجودة' });
+// إعداد مُحدد معدل الطلبات: بحد أقصى خمسة طلبات في الدقيقة 
+var  RateLimit  =  require ( 'express-rate-limit' ) ; 
+var  limiter  =  RateLimit ( { 
+  windowMs : 15  *  60  *  1000 ,  // 15 دقيقة 
+  max : 100 ,  // بحد أقصى 100 طلب لكل windowMs 
+} ) ;
 
-        transaction.updateStatus(status);
-        await transaction.save();
 
-        res.json({ message: 'تم تحديث حالة المعاملة', transaction });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
+// تطبيق محدد معدل الطلبات على جميع الطلبات app.use ( limiter ) ;
+
+app.get ( ' / : path ' , function ( req , res ) { let path = req.params.path ; if ( isValidPath ( path ) ) res.sendFile ( path ) ; } ) ;   
+     
 
 // -------------------------------
 // 🔹 التصدير
