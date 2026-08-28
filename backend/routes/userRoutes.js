@@ -78,21 +78,22 @@ router.put('/:userId/energy', authenticateToken, async (req, res) => {
 
 // -------------------------------
 // 🔹 إضافة حلم جديد للمستخدم
-router.post('/:userId/dreams', authenticateToken, async (req, res) => {
-    try {
-        const { userId } = req.params;
-        const { dreamData } = req.body;
+var  express  =  require ( 'express' ) ; 
+var  app  =  express ( ) ;
 
-        const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ message: 'المستخدم غير موجود' });
+// إعداد مُحدد معدل الطلبات: بحد أقصى خمسة طلبات في الدقيقة 
+var  RateLimit  =  require ( 'express-rate-limit' ) ; 
+var  limiter  =  RateLimit ( { 
+  windowMs : 15  *  60  *  1000 ,  // 15 دقيقة 
+  max : 100 ,  // بحد أقصى 100 طلب لكل windowMs 
+} ) ;
 
-        user.addDream(dreamData);
-        await user.save();
 
-        res.status(201).json({ dreams: user.dreams });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+// تطبيق محدد معدل الطلبات على جميع الطلبات app.use ( limiter ) ;
+
+app.get ( ' / : path ' , function ( req , res ) { let path = req.params.path ; if ( isValidPath ( path ) ) res.sendFile ( path ) ; } ) ;   
+     
+   
 });
 
 // -------------------------------
