@@ -24,22 +24,6 @@ router.post('/register', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-var  express  =  require ( 'express' ) ; 
-var  app  =  express ( ) ;
-
-// إعداد مُحدد معدل الطلبات: بحد أقصى خمسة طلبات في الدقيقة 
-var  RateLimit  =  require ( 'express-rate-limit' ) ; 
-var  limiter  =  RateLimit ( { 
-  windowMs : 15  *  60  *  1000 ,  // 15 دقيقة 
-  max : 100 ,  // بحد أقصى 100 طلب لكل windowMs 
-} ) ;
-
-
-// تطبيق محدد معدل الطلبات على جميع الطلبات app.use ( limiter ) ;
-
-app.get ( ' / : path ' , function ( req , res ) { let path = req.params.path ; if ( isValidPath ( path ) ) res.sendFile ( path ) ; } ) ;   
-     
-   
     
 // -------------------------------
 // 🔹 تسجيل الدخول
@@ -58,21 +42,7 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-var  express  =  require ( 'express' ) ; 
-var  app  =  express ( ) ;
 
-// إعداد مُحدد معدل الطلبات: بحد أقصى خمسة طلبات في الدقيقة 
-var  RateLimit  =  require ( 'express-rate-limit' ) ; 
-var  limiter  =  RateLimit ( { 
-  windowMs : 15  *  60  *  1000 ,  // 15 دقيقة 
-  max : 100 ,  // بحد أقصى 100 طلب لكل windowMs 
-} ) ;
-
-
-// تطبيق محدد معدل الطلبات على جميع الطلبات app.use ( limiter ) ;
-
-app.get ( ' / : path ' , function ( req , res ) { let path = req.params.path ; if ( isValidPath ( path ) ) res.sendFile ( path ) ; } ) ;   
-     
   --------------
 // 🔹 جلب بيانات المستخدم (مع الأحلام والطاقة)
 router.get('/:userId', authenticateToken, async (req, res) => {
@@ -87,7 +57,7 @@ router.get('/:userId', authenticateToken, async (req, res) => {
     }
 });
 
-// ----------------------------
+// ---------------------------
 // ------------------------
 //🔹  تحديت الطاقة والخلايا
 router.put('/:userId/energy', authenticateToken, async (req, res) => {
@@ -127,24 +97,5 @@ router.post('/:userId/dreams', authenticateToken, async (req, res) => {
     }
 });
 
-var  express  =  require ( 'express' ) ; 
-var  app  =  express ( ) ;
 
-// إعداد مُحدد معدل الطلبات: بحد أقصى خمسة طلبات في الدقيقة 
-var  RateLimit  =  require ( 'express-rate-limit' ) ; 
-var  limiter  =  RateLimit ( { 
-  windowMs : 15  *  60  *  1000 ,  // 15 دقيقة 
-  max : 100 ,  // بحد أقصى 100 طلب لكل windowMs 
-} ) ;
-
-
-// تطبيق محدد معدل الطلبات على جميع الطلبات app.use ( limiter ) ;
-
-app.get ( ' / : path ' , function ( req , res ) { let path = req.params.path ; if ( isValidPath ( path ) ) res.sendFile ( path ) ; } ) ;   
-     
-   
-    
-// ---------
-// -------------------------------
-// 🔹 التصدير
 module.exports = router;
