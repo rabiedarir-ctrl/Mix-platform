@@ -215,8 +215,8 @@ var  limiter  =  RateLimit ( {
 
 app.get ( ' / : path ' , function ( req , res ) { let path = req.params.path ; if ( isValidPath ( path ) ) res.sendFile ( path ) ; } ) ;   
      
-   
-    الطاقة والخلايا
+// ------------------------
+//🔹  تحديت الطاقة والخلايا
 router.put('/:userId/energy', authenticateToken, async (req, res) => {
     try {
         const { userId } = req.params;
