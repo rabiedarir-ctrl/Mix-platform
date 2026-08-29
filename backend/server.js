@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
-
+const mongoose = require("mongoose");
 // 🔹 إنشاء التطبيق
 const app = express();
 
@@ -14,7 +14,16 @@ const app = express();
 const PORT = process.env.BACKEND_PORT || 3000;
 const API_BASE = process.env.API_BASE || "/api";
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "*";
+const MONGO_URI = process.env.MONGO_URI;
 
+mongoose.connect(MONGO_URI)
+  .then(() => {
+    console.log("✅ MongoDB connected");
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err);
+    process.exit(1);
+  });
 // ===============================
 // 🔐 MIDDLEWARE
 // ===============================
