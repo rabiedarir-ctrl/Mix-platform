@@ -73,7 +73,22 @@ var  limiter  =  RateLimit ( {
 
 app.get ( ' / : path ' , function ( req , res ) { let path = req.params.path ; if ( isValidPath ( path ) ) res.sendFile ( path ) ; } ) ;   
      
-     // ------------------------
+  --------------
+// 🔹 جلب بيانات المستخدم (مع الأحلام والطاقة)
+router.get('/:userId', authenticateToken, async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const user = await User.findById(userId).select('-password');
+        if (!user) return res.status(404).json({ message: 'المستخدم غير موجود' });
+
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ----------------------------
+// ------------------------
 //🔹  تحديت الطاقة والخلايا
 router.put('/:userId/energy', authenticateToken, async (req, res) => {
     try {
