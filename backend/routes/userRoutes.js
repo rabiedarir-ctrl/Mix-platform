@@ -216,7 +216,62 @@ var  limiter  =  RateLimit ( {
 app.get ( ' / : path ' , function ( req , res ) { let path = req.params.path ; if ( isValidPath ( path ) ) res.sendFile ( path ) ; } ) ;   
      
    
+    الطاقة والخلايا
+router.put('/:userId/energy', authenticateToken, async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { energyChange, cellsChange } = req.body;
+
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ message: 'المستخدم غير موجود' });
+
+        if (energyChange) user.updateEnergy(energyChange);
+        if (cellsChange) user.cells += cellsChange;
+
+        await user.save();
+        res.json({ energy: user.energy, cells: user.cells });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// -------------------------------
+// 🔹 إضافة حلم جديد للمستخدم
+router.post('/:userId/dreams', authenticateToken, async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { dreamData } = req.body;
+
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ message: 'المستخدم غير موجود' });
+
+        user.addDream(dreamData);
+        await user.save();
+
+        res.status(201).json({ dreams: user.dreams });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+var  express  =  require ( 'express' ) ; 
+var  app  =  express ( ) ;
+
+// إعداد مُحدد معدل الطلبات: بحد أقصى خمسة طلبات في الدقيقة 
+var  RateLimit  =  require ( 'express-rate-limit' ) ; 
+var  limiter  =  RateLimit ( { 
+  windowMs : 15  *  60  *  1000 ,  // 15 دقيقة 
+  max : 100 ,  // بحد أقصى 100 طلب لكل windowMs 
+} ) ;
+
+
+// تطبيق محدد معدل الطلبات على جميع الطلبات app.use ( limiter ) ;
+
+app.get ( ' / : path ' , function ( req , res ) { let path = req.params.path ; if ( isValidPath ( path ) ) res.sendFile ( path ) ; } ) ;   
+     
+   
     
+// ---------
 // -------------------------------
 // 🔹 التصدير
 module.exports = router;
