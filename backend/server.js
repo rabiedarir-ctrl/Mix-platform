@@ -100,6 +100,28 @@ try {
 } catch (e) {
   console.warn("⚠️ dreamRoutes not found");
 }
+// ======================================================
+// 🧠 Dream Memory Controller
+// ======================================================
+
+try {
+  const dreamMemoryRoutes =
+    require("./routes/dreamMemoryRoutes");
+
+  app.use(
+    `${API_BASE}/dream-memory`,
+    dreamMemoryRoutes
+  );
+
+  console.log("✅ dreamMemoryRoutes loaded");
+
+} catch (e) {
+
+  console.error(
+    "❌ dreamMemoryRoutes loading error:",
+    e
+  );
+}
 
 // ===============================
 // 🌐 STATIC FILES (اختياري)
