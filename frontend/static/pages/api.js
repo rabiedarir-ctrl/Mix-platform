@@ -1,12 +1,19 @@
 // ===========================
-// 🔹 إعداد Mix API Base
+// 🔹 إعداد API Base
 // ===========================
-const window.Mix_API_BASE = "http://localhost:3000/api";
+
+const API_BASE = "http://localhost:3000/api";
+
+// متاح للـ login.html و register.html
+window.MIX_API_BASE = API_BASE;
+
 const token = localStorage.getItem("mixToken");
+
 const StoreAPI = {
     getProducts: () => fetchGet("/store/items"),
     buyProduct: (id) => fetchPost("/store/buy", { itemId: id })
 };
+
 // ===========================
 // 🔹 إعدادات Fetch العامة
 // ===========================
