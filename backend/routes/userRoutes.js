@@ -8,7 +8,7 @@ const bcrypt = require('bcryptjs');
 
 // -------------------------------
 // 🔹 تسجيل مستخدم جديد
-router.post('/register', async (req, res) => {
+router.post('/api/users/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
@@ -27,7 +27,7 @@ router.post('/register', async (req, res) => {
     
 // -------------------------------
 // 🔹 تسجيل الدخول
-router.post('/login', async (req, res) => {
+router.post('/api/users/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
