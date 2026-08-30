@@ -3,6 +3,97 @@
 // File: frontend/static/pages/api.js
 // ======================================================
 
+// ======================================================
+// 🧠 Dream Memory API
+// ======================================================
+
+const DreamMemoryAPI = {
+
+    // إنشاء ذاكرة
+    create: (data) =>
+        fetchPost(
+            "/dream-memory",
+            data
+        ),
+
+    // جلب ذاكرة
+    get: (memoryId) =>
+        fetchGet(
+            `/dream-memory/${encodeURIComponent(memoryId)}`
+        ),
+
+    // جلب ذاكرة الخلية
+    getByCell: (cellId) =>
+        fetchGet(
+            `/dream-memory/cell/${encodeURIComponent(cellId)}`
+        ),
+
+    // تفعيل
+    activate: (memoryId) =>
+        fetchPut(
+            `/dream-memory/${encodeURIComponent(memoryId)}/activate`,
+            {}
+        ),
+
+    // تعطيل
+    deactivate: (memoryId) =>
+        fetchPut(
+            `/dream-memory/${encodeURIComponent(memoryId)}/deactivate`,
+            {}
+        ),
+
+    // تحديث الموقع
+    setLocation: (memoryId, location) =>
+        fetchPut(
+            `/dream-memory/${encodeURIComponent(memoryId)}/location`,
+            location
+        ),
+
+    // تحديث حالة العالم
+    setWorldState: (memoryId, state) =>
+        fetchPut(
+            `/dream-memory/${encodeURIComponent(memoryId)}/world`,
+            state
+        ),
+
+    // إضافة أمر تحكم
+    addAction: (memoryId, action, payload = {}) =>
+        fetchPost(
+            `/dream-memory/${encodeURIComponent(memoryId)}/actions`,
+            {
+                action,
+                payload
+            }
+        ),
+
+    // الأوامر غير المنفذة
+    getPendingActions: (memoryId) =>
+        fetchGet(
+            `/dream-memory/${encodeURIComponent(memoryId)}/actions/pending`
+        ),
+
+    // تسجيل تنفيذ أمر
+    markActionExecuted: (memoryId, actionId) =>
+        fetchPut(
+            `/dream-memory/${encodeURIComponent(memoryId)}/actions/${encodeURIComponent(actionId)}/execute`,
+            {}
+        ),
+
+    // قفل
+    lock: (memoryId) =>
+        fetchPut(
+            `/dream-memory/${encodeURIComponent(memoryId)}/lock`,
+            {}
+        ),
+
+    // فتح
+    unlock: (memoryId) =>
+        fetchPut(
+            `/dream-memory/${encodeURIComponent(memoryId)}/unlock`,
+            {}
+        )
+};
+
 "use strict";
 
 // ======================================================
@@ -13,7 +104,7 @@
 const API_BASE = "http://localhost:3000/api";
 
 // إتاحة العنوان للصفحات مثل login.html و register.html
-window.MIX_API_BASE = API_BASE;
+window.MIX_API_BASE = API_BASE;DreamMemoryAPI,
 
 
 // ======================================================
