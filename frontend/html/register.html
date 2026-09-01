@@ -450,17 +450,46 @@
                 termsError.classList.add('show');
                 isValid = false;
             }
-            if (!isValid) return
-            //  إرسال استمارة الى قاعدة البيانات 
-            export dataregister.href = "backend/database/mix_platform_db.sql";}                   
-            function () {
-                   if dataregister.database(register.ok)  
-                    console.log(form.register);
-                     }
-             const data = dataregister.response;
-             return form.test(register);}  
-             window.location.href = "/dashboard.html";
-        // إرسال البيانات إلى الخادم
+         if (!isValid) return
+      
+   // ارسال إستمارة الى قاعدة البيانات      
+  <script>document.getElementById("registerForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+        const response = await fetch("/api/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            console.log("تم حفظ بيانات التسجيل في قاعدة البيانات");
+
+            alert("تم إنشاء الحساب بنجاح");
+
+            this.reset();
+
+            window.location.href = "/dashboard.html";
+        } else {
+            alert(result.message || "فشل تسجيل الحساب");
+        }
+
+    } catch (error) {
+        console.error("خطأ في إرسال البيانات:", error);
+        alert("تعذر الاتصال بالخادم");
+    }
+});
+</script>
+            // إرسال البيانات إلى الخادم
             submitBtn.disabled = true;
             submitBtn.textContent = 'جاري الإنشاء...';
             try {
