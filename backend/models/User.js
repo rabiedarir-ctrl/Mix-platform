@@ -19,6 +19,14 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    level: {
+        type: Number,
+        default: 1
+    },
+    wallet: {
+        type: Number,
+        default: 0
+    },
     energy: {
         type: Number,
         default: 100
