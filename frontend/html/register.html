@@ -475,7 +475,7 @@
                 if (response.ok) {
                     feedback.innerHTML = '<div class="success-message">✅ تم إنشاء الحساب بنجاح! جاري التحويل إلى تسجيل الدخول...</div>';
                     setTimeout(() => {
-                        window.location.href = "home.html";
+                        window.location.href = "login.html";
                      }, 2000);
                 } else {
                     const errorMsg = data.message || "خطأ في إنشاء الحساب";
