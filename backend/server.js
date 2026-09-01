@@ -1,160 +1,235 @@
-require("dotenv").config();
+// ===================================================
+// Mix Platform - Backend Server
+// ===================================================
 
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const fs = require("fs");
-const mongoose = require("mongoose");
-// 🔹 إنشاء التطبيق
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+
 const app = express();
 
-// ===============================
-// ⚙️ ENV CONFIG
-// ===============================
-const PORT = process.env.BACKEND_PORT || 3000;
-const API_BASE = process.env.API_BASE || "/api";
-const CORS_ORIGIN = process.env.CORS_ORIGIN || "*";
-const MONGO_URI = process.env.MONGO_URI;
+// ===================================================
+// 🔹 Middleware
+// ===================================================
 
-mongoose.connect(MONGO_URI)
-  .then(() => {
-    console.log("✅ MongoDB connected");
-  })
-  .catch((err) => {
-    console.error("❌ MongoDB connection error:", err);
-    process.exit(1);
-  });
-// ===============================
-// 🔐 MIDDLEWARE
-// ===============================
-
-// CORS
 app.use(cors({
-  origin: CORS_ORIGIN,
-  methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: '*',
+    credentials: true
 }));
 
-// JSON Parser
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// ===============================
-// 📁 ضمان وجود مجلدات التخزين
-// ===============================
-const storagePath = path.join(__dirname, "../storage");
-const logsPath = path.join(__dirname, "../logs");
+// ===================================================
+// 🔹 Health Check
+// ===================================================
 
-if (!fs.existsSync(storagePath)) {
-  fs.mkdirSync(storagePath, { recursive: true });
-}
-
-if (!fs.existsSync(logsPath)) {
-  fs.mkdirSync(logsPath, { recursive: true });
-}
-
-// ===============================
-// 🧪 HEALTH CHECK API
-// ===============================
-app.get(`${API_BASE}/health`, (req, res) => {
-  res.json({
-    status: "OK",
-    service: "Mix Platform API",
-    time: new Date(),
-  });
+app.get('/health', (req, res) => {
+    res.json({ 
+        status: 'OK', 
+        message: 'Mix Platform Backend is running',
+        timestamp: new Date().toISOString()
+    });
 });
 
-// ===============================
-// 🔗 ROUTES (ربط تدريجي)
-// ===============================
+// ===================================================
+// 🔹 Authentication Routes
+// ===================================================
 
-try {
-  const userRoutes = require("./routes/userRoutes");
-  app.use(`${API_BASE}/users`, userRoutes);
-} catch (e) {
-  console.warn("⚠️ userRoutes not found");
-}
+app.post('/api/users/login', (req, res) => {
+    const { email, password } = req.body;
+    
+    if (!email || !password) {
+        return res.status(400).json({ 
+            error: 'البريد الإلكتروني وكلمة المرور مطلوبة' 
+        });
+    }
+    
+    // مثال توضيحي - في الإنتاج استخدم قاعدة بيانات حقيقية
+    const token = 'demo_token_' + Date.now();
+    
+    res.json({
+        message: 'تم تسجيل الدخول بنجاح',
+        token: token,
+        user: {
+            id: '1',
+            email: email,
+            username: email.split('@')[0],
+            energy: 100,
+            cells: 10,
+            level: 1,
+            wallet: 0,
+            notifications: [
+                { message: '🎉 مرحباً بك في Mix Platform!' }
+            ]
+        }
+    });
+});
 
-try {
-  const socialRoutes = require("./routes/socialRoutes");
-  app.use(`${API_BASE}/social`, socialRoutes);
-} catch (e) {
-  console.warn("⚠️ socialRoutes not found");
-}
+app.post('/api/users/register', (req, res) => {
+    const { email, password, username } = req.body;
+    
+    if (!email || !password) {
+        return res.status(400).json({ 
+            error: 'البريد الإلكتروني وكلمة المرور مطلوبة' 
+        });
+    }
+    
+    const token = 'demo_token_' + Date.now();
+    
+    res.json({
+        message: 'تم إنشاء الحساب بنجاح',
+        token: token,
+        user: {
+            id: '1',
+            email: email,
+            username: username || email.split('@')[0],
+            energy: 100,
+            cells: 0,
+            level: 1,
+            wallet: 0
+        }
+    });
+});
 
-try {
-  const walletRoutes = require("./routes/walletRoutes");
-  app.use(`${API_BASE}/wallet`, walletRoutes);
-} catch (e) {
-  console.warn("⚠️ walletRoutes not found");
-}
+// ===================================================
+// 🔹 User Routes
+// ===================================================
 
-try {
-  const gameRoutes = require("./routes/gameRoutes");
-  app.use(`${API_BASE}/games`, gameRoutes);
-} catch (e) {
-  console.warn("⚠️ gameRoutes not found");
-}
+app.get('/api/users/me', (req, res) => {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    
+    if (!token) {
+        return res.status(401).json({ error: 'غير مصرح' });
+    }
+    
+    res.json({
+        id: '1',
+        email: 'demo@example.com',
+        username: 'demo_user',
+        energy: 100,
+        cells: 10,
+        level: 1,
+        wallet: 0,
+        score: 1500,
+        notifications: [
+            { message: 'لديك رسالة جديدة' },
+            { message: 'تم تحديث النظام' }
+        ]
+    });
+});
 
-try {
-  const dreamRoutes = require("./routes/dreamRoutes");
-  app.use(`${API_BASE}/dreams`, dreamRoutes);
-} catch (e) {
-  console.warn("⚠️ dreamRoutes not found");
-}
-// ======================================================
-// 🧠 Dream Memory Controller
-// ======================================================
+// ===================================================
+// 🔹 Social Routes
+// ===================================================
 
-try {
-  const dreamMemoryRoutes =
-    require("./routes/dreamMemoryRoutes");
+app.get('/api/social/posts', (req, res) => {
+    res.json([
+        {
+            id: '1',
+            user: 'user1',
+            content: 'منشور تجريبي 1',
+            createdAt: new Date(),
+            comments: []
+        },
+        {
+            id: '2',
+            user: 'user2',
+            content: 'منشور تجريبي 2',
+            createdAt: new Date(),
+            comments: []
+        }
+    ]);
+});
 
-  app.use(
-    `${API_BASE}/dream-memory`,
-    dreamMemoryRoutes
-  );
+app.post('/api/social/posts', (req, res) => {
+    res.json({
+        message: 'تم نشر المنشور بنجاح',
+        post: req.body
+    });
+});
 
-  console.log("✅ dreamMemoryRoutes loaded");
+// ===================================================
+// 🔹 Games Routes
+// ===================================================
 
-} catch (e) {
+app.post('/api/games/btc/start', (req, res) => {
+    res.json({
+        message: 'تم بدء اللعبة',
+        gameSession: {
+            id: 'game_' + Date.now(),
+            status: 'running'
+        }
+    });
+});
 
-  console.error(
-    "❌ dreamMemoryRoutes loading error:",
-    e
-  );
-}
+// ===================================================
+// 🔹 Wallet Routes
+// ===================================================
 
-// ===============================
-// 🌐 STATIC FILES (اختياري)
-// ===============================
-app.use("/assets", express.static(path.join(__dirname, "../assets")));
-app.use("/storage", express.static(path.join(__dirname, "../storage")));
+app.get('/api/wallet/:userId/balance', (req, res) => {
+    res.json({
+        balance: 0,
+        currency: 'MIX'
+    });
+});
 
-// ===============================
-// ❌ 404 HANDLER
-// ===============================
+// ===================================================
+// 🔹 Dreams Routes
+// ===================================================
+
+app.get('/api/dreams', (req, res) => {
+    res.json([
+        {
+            id: '1',
+            title: 'حلم تجريبي',
+            description: 'هذا حلم تجريبي للتجربة',
+            createdAt: new Date()
+        }
+    ]);
+});
+
+// ===================================================
+// 🔹 Store Routes
+// ===================================================
+
+app.get('/api/store/items', (req, res) => {
+    res.json([
+        {
+            id: '1',
+            name: 'عنصر تجريبي',
+            price: 100,
+            description: 'عنصر للتجربة'
+        }
+    ]);
+});
+
+// ===================================================
+// 🔹 404 Handler
+// ===================================================
+
 app.use((req, res) => {
-  res.status(404).json({
-    error: "Route not found",
-    path: req.originalUrl,
-  });
+    res.status(404).json({
+        error: 'المسار غير موجود',
+        path: req.path
+    });
 });
 
-// ===============================
-// 🚨 ERROR HANDLER
-// ===============================
-app.use((err, req, res, next) => {
-  console.error("🔥 Server Error:", err);
+// ===================================================
+// 🔹 Server Start
+// ===================================================
 
-  res.status(500).json({
-    error: "Internal Server Error",
-    message: err.message,
-  });
+const PORT = process.env.BACKEND_PORT || process.env.PORT || 3000;
+const HOST = process.env.BACKEND_HOST || 'localhost';
+
+app.listen(PORT, HOST, () => {
+    console.log(`\n${'='.repeat(50)}`);
+    console.log(`✅ Mix Platform Backend is running`);
+    console.log(`📍 Server: http://${HOST}:${PORT}`);
+    console.log(`🔗 API: http://${HOST}:${PORT}/api`);
+    console.log(`🏥 Health: http://${HOST}:${PORT}/health`);
+    console.log(`${'='.repeat(50)}\n`);
 });
 
-// ===============================
-// 🚀 START SERVER
-// ===============================
-app.listen(PORT, () => {
-  console.log(`🚀 Mix Platform running on port ${PORT}`);
-  console.log(`📡 API: http://localhost:${PORT}${API_BASE}`);
-});
+module.exports = app;
