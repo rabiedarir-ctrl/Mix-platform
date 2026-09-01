@@ -1,0 +1,50 @@
+# ==============================================
+# Mix Platform - .gitignore
+# ==============================================
+
+# Dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment variables (IMPORTANT)
+.env
+.env.local
+.env.*.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build output
+dist/
+build/
+.next/
+out/
+
+# Logs
+logs/
+*.log
+
+# Storage (local data)
+storage/*.json
+storage/cache/
+storage/backups/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.nyc_output/
+coverage/
+
+# Temporary
+tmp/
+temp/
+*.tmp

@@ -1,83 +1,143 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
-const UserSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-        trim: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    level: {
-        type: Number,
-        default: 1
-    },
-    wallet: {
-        type: Number,
-        default: 0
-    },
-    energy: {
-        type: Number,
-        default: 100
-    },
-    cells: {
-        type: Number,
-        default: 0
-    },
-    dreams: [{
-        type: mongoose.Schema.Types.Mixed
-    }],
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
-});
+const UserSchema = new mongoose.Schema(
+    {
+        // البيانات الأساسية
+        username: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true,
+            minlength: 3,
+            maxlength: 30,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            lowercase: true,
+            match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        },
+        password: {
+            type: String,
+            required: true,
+            minlength: 6,
+        },
+        profileImage: {
+            type: String,
+            default: null,
+        },
 
-// -------------------------------
-// 🔹 تشفير كلمة المرور قبل الحفظ
-UserSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) return next();
-    try {
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
-        next();
-    } catch (err) {
-        next(err);
-    }
-});
+        // نظام الطاقة
+        energy: {
+            type: Number,
+            default: 100,
+            min: 0,
+        },
+        cells: {
+            type: Number,
+            default: 0,
+            min: 0,
+        },
+        level: {
+            type: Number,
+            default: 1,
+            min: 1,
+        },
+        experience: {
+            type: Number,
+            default: 0,
+            min: 0,
+        },
 
-// -------------------------------
-// 🔹 تحقق كلمة المرور
-UserSchema.methods.comparePassword = async function(candidatePassword) {
-    return await bcrypt.compare(candidatePassword, this.password);
-};
+        // المحفظة
+        wallet: {
+            type: Number,
+            default: 0,
+            min: 0,
+        },
+        currency: {
+            type: String,
+            default: 'MIX',
+        },
 
-// -------------------------------
-// 🔹 تحديث الطاقة تلقائيًا
-UserSchema.methods.updateEnergy = function(amount) {
-    this.energy = Math.max(0, this.energy + amount);
-    return this.energy;
-};
+        // الإحصائيات
+        score: {
+            type: Number,
+            default: 0,
+            min: 0,
+        },
+        gamesPlayed: {
+            type: Number,
+            default: 0,
+            min: 0,
+        },
+        dreamsCount: {
+            type: Number,
+            default: 0,
+            min: 0,
+        },
 
-// -------------------------------
-// 🔹 إضافة حلم جديد
-UserSchema.methods.addDream = function(dreamData) {
-    this.dreams.push(dreamData);
-    return this.dreams;
-};
+        // الحالة
+        isActive: {
+            type: Boolean,
+            default: true,
+        },
+        lastLogin: {
+            type: Date,
+            default: null,
+        },
+        isEmailVerified: {
+            type: Boolean,
+            default: false,
+        },
 
-// -------------------------------
-// 🔹 التصدير
-const User = mongoose.model('User', UserSchema);
-module.exports = User;
+        // الأدوار والأذونات
+        role: {
+            type: String,
+            enum: ['user', 'admin', 'moderator'],
+            default: 'user',
+        },
+
+        // البيانات الإضافية
+        bio: {
+            type: String,
+            maxlength: 500,
+            default: '',
+        },
+        location: {
+            type: String,
+            default: '',
+        },
+        website: {
+            type: String,
+            default: '',
+        },
+
+        // الإشعارات
+        notifications: [
+            {
+                message: String,
+                type: { type: String, enum: ['info', 'warning', 'error', 'success'] },
+                createdAt: { type: Date, default: Date.now },
+                read: { type: Boolean, default: false },
+            },
+        ],
+
+        // الضبط
+        preferences: {
+            theme: { type: String, enum: ['light', 'dark'], default: 'dark' },
+            language: { type: String, default: 'ar' },
+            notifications: { type: Boolean, default: true },
+            emailNotifications: { type: Boolean, default: false },
+        },
+    },
+    { timestamps: true }
+);
+
+// Indexes
+UserSchema.index({ email: 1 });
+UserSchema.index({ username: 1 });
+UserSchema.index({ createdAt: -1 });
+
+module.exports = mongoose.model('User', UserSchema);

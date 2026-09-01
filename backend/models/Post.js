@@ -1,61 +1,72 @@
 const mongoose = require('mongoose');
 
-const PostSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    content: {
-        type: String,
-        required: true
-    },
-    energyImpact: { // تأثير المنشور على طاقة المستخدم أو الخلايا
-        type: Number,
-        default: 0
-    },
-    dreamsLinked: [{
-        type: mongoose.Schema.Types.Mixed
-    }],
-    comments: [{
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        comment: String,
-        createdAt: { type: Date, default: Date.now }
-    }],
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date
-    }
-});
+const PostSchema = new mongoose.Schema(
+    {
+        // المنشور
+        content: {
+            type: String,
+            required: true,
+            maxlength: 5000,
+        },
+        images: [String],
+        videos: [String],
 
-// -------------------------------
-// 🔹 تحديث وقت التعديل تلقائيًا
-PostSchema.pre('save', function(next) {
-    this.updatedAt = Date.now();
-    next();
-});
+        // المؤلف
+        author: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
 
-// -------------------------------
-// 🔹 إضافة تعليق جديد
-PostSchema.methods.addComment = function(userId, commentText) {
-    this.comments.push({
-        userId,
-        comment: commentText
-    });
-    return this.comments;
-};
+        // التفاعلات
+        likes: [
+            {
+                userId: mongoose.Schema.Types.ObjectId,
+                createdAt: { type: Date, default: Date.now },
+            },
+        ],
+        comments: [
+            {
+                userId: mongoose.Schema.Types.ObjectId,
+                content: String,
+                createdAt: { type: Date, default: Date.now },
+            },
+        ],
+        shares: {
+            type: Number,
+            default: 0,
+        },
 
-// -------------------------------
-// 🔹 ربط حلم جديد بالمنشور
-PostSchema.methods.linkDream = function(dreamData) {
-    this.dreamsLinked.push(dreamData);
-    return this.dreamsLinked;
-};
+        // الحالة
+        isPublished: {
+            type: Boolean,
+            default: true,
+        },
+        isDraft: {
+            type: Boolean,
+            default: false,
+        },
+        isPinned: {
+            type: Boolean,
+            default: false,
+        },
 
-// -------------------------------
-// 🔹 التصدير
-const Post = mongoose.model('Post', PostSchema);
-module.exports = Post;
+        // التصنيفات
+        tags: [String],
+        category: String,
+
+        // الإحصائيات
+        views: {
+            type: Number,
+            default: 0,
+        },
+    },
+    { timestamps: true }
+);
+
+// Indexes
+PostSchema.index({ author: 1, createdAt: -1 });
+PostSchema.index({ createdAt: -1 });
+PostSchema.index({ 'likes.userId': 1 });
+
+module.exports = mongoose.model('Post', PostSchema);
