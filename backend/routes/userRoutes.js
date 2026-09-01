@@ -29,7 +29,7 @@ function createToken(user) {
 }
 
 // ======================================================
-// 📝 تسجيل مستخدم جديد
+// 📝 تسجيل مستخدم جدي��
 // POST /api/users/register
 // ======================================================
 
@@ -90,7 +90,11 @@ router.post("/register", async (req, res) => {
         const user = new User({
             username: cleanUsername,
             email: cleanEmail,
-            password
+            password,
+            level: 1,
+            wallet: 0,
+            energy: 100,
+            cells: 0
         });
 
         // UserSchema يقوم بتشفير كلمة المرور قبل الحفظ
@@ -100,7 +104,11 @@ router.post("/register", async (req, res) => {
             message: "تم التسجيل بنجاح",
             userId: user._id.toString(),
             username: user.username,
-            email: user.email
+            email: user.email,
+            level: user.level,
+            wallet: user.wallet,
+            energy: user.energy,
+            cells: user.cells
         });
 
     } catch (error) {
@@ -178,6 +186,8 @@ router.post("/login", async (req, res) => {
                 id: user._id.toString(),
                 username: user.username,
                 email: user.email,
+                level: user.level,
+                wallet: user.wallet,
                 energy: user.energy,
                 cells: user.cells,
                 dreams: user.dreams || []
@@ -218,6 +228,8 @@ router.get("/me", authenticateToken, async (req, res) => {
             id: user._id.toString(),
             username: user.username,
             email: user.email,
+            level: user.level,
+            wallet: user.wallet,
             energy: user.energy,
             cells: user.cells,
             dreams: user.dreams || [],
@@ -362,4 +374,3 @@ router.post("/:userId/dreams", authenticateToken, async (req, res) => {
 // ======================================================
 
 module.exports = router;
-
