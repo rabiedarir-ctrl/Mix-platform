@@ -3,48 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="لوحة التحكم الخاصة بك في منصة Mix Platform">
+    <meta name="description" content="لوحة التحكم - Mix Platform">
     <title>لوحة التحكم - Mix Platform</title>
-    <link rel="stylesheet" href="../static/style.css">
-    <style>
-        .error-message {
-            color: #e74c3c;
-            padding: 12px;
-            background-color: #fadbd8;
-            border-radius: 4px;
-            margin: 12px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="../../static/style.css">
+    <link rel="stylesheet" href="../../static/dashboard.css">
 </head>
 <body>
     <header>
-        <h1>لوحة التحكم الخاصة بك</h1>
+        <h1>لوحة التحكم</h1>
         <nav>
             <ul>
-                <li><a href="feed.html">التغذية</a></li>
-                <li><a href="messages.html">الرسائل</a></li>
-                <li><a href="games.html">الألعاب</a></li>
-                <li><a href="dream_world.html">عالم الأحلام</a></li>
-                <li><button id="logoutBtn" type="button">تسجيل الخروج</button></li>
+                <li><a href="feed.html">📊 التغذية</a></li>
+                <li><a href="messages.html">💬 الرسائل</a></li>
+                <li><a href="store.html">🛒 المتجر</a></li>
+                <li><a href="games.html">🎮 الألعاب</a></li>
+                <li><a href="dream_world.html">🌙 عالم الأحلام</a></li>
+                <li><button id="logoutBtn" type="button">🚪 تسجيل الخروج</button></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <section class="user-stats">
-            <h2>الطاقة والخلايا</h2>
+        <section class="user-info">
+            <h2>معلومات المستخدم</h2>
+            <div class="user-card">
+                <p><strong>الاسم:</strong> <span id="userName">جاري التحميل...</span></p>
+                <p><strong>البريد:</strong> <span id="userEmail">جاري التحميل...</span></p>
+            </div>
+        </section>
+
+        <section class="stats">
+            <h2>الإحصائيات</h2>
             <div class="stats-cards">
                 <div class="card">
-                    <h3>الطاقة</h3>
+                    <h3>⚡ الطاقة</h3>
                     <p id="energy">جارٍ التحميل...</p>
                 </div>
                 <div class="card">
-                    <h3>الخلايا</h3>
+                    <h3>🧬 الخلايا</h3>
                     <p id="cells">جارٍ التحميل...</p>
                 </div>
                 <div class="card">
-                    <h3>النقاط</h3>
+                    <h3>📊 النقاط</h3>
                     <p id="score">جارٍ التحميل...</p>
+                </div>
+                <div class="card">
+                    <h3>💰 المحفظة</h3>
+                    <p id="wallet">جارٍ التحميل...</p>
                 </div>
             </div>
         </section>
@@ -57,12 +62,12 @@
         </section>
 
         <section class="dream-world-preview">
-            <h2>عالم الأحلام</h2>
+            <h2>🌙 عالم الأحلام</h2>
             <button id="dreamWorldBtn" type="button">استكشف عالم الأحلام</button>
         </section>
 
         <section class="games-preview">
-            <h2>الألعاب</h2>
+            <h2>🎮 الألعاب</h2>
             <button id="gamesBtn" type="button">ابدأ اللعب</button>
         </section>
 
@@ -73,8 +78,7 @@
         <p>© 2026 Mix Platform. جميع الحقوق محفوظة.</p>
     </footer>
 
-    <script src="../static/api.js"></script>
-    <script src="../static/dashboard.js"></script>
+    <script src="../../static/pages/api.js"></script>
     <script>
         const logoutBtn = document.getElementById('logoutBtn');
         const dreamWorldBtn = document.getElementById('dreamWorldBtn');
@@ -84,6 +88,7 @@
         // تسجيل الخروج
         logoutBtn.addEventListener('click', () => {
             localStorage.removeItem("mixToken");
+            localStorage.removeItem("currentUser");
             window.location.href = "login.html";
         });
 
@@ -106,39 +111,47 @@
             }
 
             try {
-                const response = await fetch(`${MIX_API_BASE}/users/me`, {
-                    headers: { "Authorization": `Bearer ${token}` }
+                const response = await fetch(`${window.MIX_API_BASE}/users/me`, {
+                    headers: { 
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
                 });
+                
                 const data = await response.json();
 
                 if (response.ok) {
+                    document.getElementById('userName').textContent = data.username || data.email || 'مستخدم';
+                    document.getElementById('userEmail').textContent = data.email || 'N/A';
                     document.getElementById('energy').textContent = data.energy || 0;
                     document.getElementById('cells').textContent = data.cells || 0;
                     document.getElementById('score').textContent = data.score || 0;
+                    document.getElementById('wallet').textContent = data.wallet || 0;
 
                     const notifList = document.getElementById('notificationsList');
                     notifList.innerHTML = '';
                     if (data.notifications && data.notifications.length) {
                         data.notifications.forEach(n => {
                             const li = document.createElement('li');
-                            li.textContent = `[${n.type}] ${n.message}`;
+                            li.textContent = n.message || n;
                             notifList.appendChild(li);
                         });
                     } else {
-                        notifList.innerHTML = '<li>لا توجد إشعارات حالياً</li>';
+                        const li = document.createElement('li');
+                        li.textContent = 'لا توجد إشعارات جديدة';
+                        notifList.appendChild(li);
                     }
                 } else {
-                    errorContainer.innerHTML = `<div class="error-message">خطأ: ${data.message}</div>`;
-                    console.error(data.message);
+                    errorContainer.innerHTML = `<div class="error">❌ خطأ في تحميل البيانات: ${data.message}</div>`;
                 }
             } catch (err) {
-                errorContainer.innerHTML = '<div class="error-message">تعذر تحميل بيانات المستخدم. تحقق من اتصالك.</div>';
-                console.error("خطأ في تحميل بيانات المستخدم", err);
+                console.error(err);
+                errorContainer.innerHTML = `<div class="error">❌ تعذر الاتصال بالخادم. تحقق من أن Backend يعمل على http://localhost:3000</div>`;
             }
         }
 
         // تحميل البيانات عند فتح الصفحة
-        loadUserData();
+        document.addEventListener('DOMContentLoaded', loadUserData);
     </script>
 </body>
 </html>
