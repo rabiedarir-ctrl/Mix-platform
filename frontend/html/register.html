@@ -450,9 +450,16 @@
                 termsError.classList.add('show');
                 isValid = false;
             }
-            if (!isValid) return;
-            
-            // إرسال البيانات إلى الخادم
+            if (!isValid) return
+            //  إرسال استمارة الى قاعدة البيانات 
+            export dataregister.href = "backend/database/mix_platform_db.sql";}                   
+            function () {
+                   if dataregister.database(register.ok)  
+                    console.log(form.register);
+                     }
+             const data = dataregister.response;
+             return form.test(register);}  
+        // إرسال البيانات إلى الخادم
             submitBtn.disabled = true;
             submitBtn.textContent = 'جاري الإنشاء...';
             try {
