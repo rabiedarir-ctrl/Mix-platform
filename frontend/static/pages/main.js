@@ -1,6 +1,6 @@
 // ===========================
 //   
-const MIX_API_BASE = "http://localhost:3000/api"; // يمكن تغييره إلى الإنتاج لاحقًا
+const API_BASE = "https://اسم-الخادم.onrender.com/api";// يمكن تغييره إلى الإنتاج لاحقًا
 window.MIX_API_BASE = MIX_API_BASE; // expose globally so pages using window.MIX_API_BASE don't fail
 const token = localStorage.getItem("mixToken");
 
