@@ -1,5 +1,5 @@
 // 🔹 WebSocket للربط بالـ Backend
-const dreamSocket = new WebSocket("ws://const API_BASE = "https://اسم-الخادم.onrender.com/api/dreams");
+const dreamSocket = new WebSocket("ws://const API_BASE = "http://localhost:3000/api/dreams");
 
 dreamSocket.onopen = () => {
     console.log("Connected to Dream Engine backend");
