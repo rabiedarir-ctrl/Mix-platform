@@ -36,7 +36,7 @@ const Settings = {
     // 🔹 الشبكة و API
     // ===========================
     network: {
-        apiBase: "https://اسم-الخادم.onrender.com/api",
+        apiBase: "https://اسم-الخادم.onrender.com",
         timeout: 10000, // milliseconds
         retryAttempts: 2
     },
