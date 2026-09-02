@@ -10,7 +10,7 @@
 // ======================================================
 
 // للاختبار المحلي:
-const API_BASE = "https://اسم-الخادم.onrender.com/api";
+const API_BASE = "http://localhost:3000/api";
 
 // إتاحة العنوان للصفحات مثل login.html و register.html
 window.MIX_API_BASE = API_BASE;
