@@ -16,7 +16,7 @@ const Wallet = require('./models/Wallet');
 
 const app = express();
 
-//استحابة الخادم 
+//استجابة الخادم 
 const PORT = process.env.PORT || 10000;
 const HOST = "0.0.0.0";
 
