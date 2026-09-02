@@ -90,7 +90,7 @@ function updateZoneCard(zoneId, zoneData) {
 // -------------------------------------------
 let socket;
 function initWebSocket() {
-    socket = new WebSocket('ws://اسم-الخادم.onrender.com/api'); // عدل حسب إعدادات السيرفر
+    socket = new WebSocket('ws://localhost:3000/api'); // عدل حسب إعدادات السيرفر
 
     socket.addEventListener('open', () => {
         console.log('WebSocket متصل');
