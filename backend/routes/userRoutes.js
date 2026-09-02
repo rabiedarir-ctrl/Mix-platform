@@ -33,7 +33,7 @@ function createToken(user) {
 // POST /api/users/register
 // ======================================================
 
-router.post("/api/users/register", async (req, res) => {
+router.post("/register", async (req, res) => {
     try {
         const {
             username,
@@ -133,7 +133,7 @@ router.post("/api/users/register", async (req, res) => {
 // POST /api/users/login
 // ======================================================
 
-router.post("/api/users//login", async (req, res) => {
+router.post("/login", async (req, res) => {
     try {
 
         const {
@@ -209,7 +209,7 @@ router.post("/api/users//login", async (req, res) => {
 // GET /api/users/me
 // ======================================================
 
-router.get("/api/users/me", authenticateToken, async (req, res) => {
+router.get("/me", authenticateToken, async (req, res) => {
     try {
 
         const userId = req.user.userId;
@@ -251,7 +251,7 @@ router.get("/api/users/me", authenticateToken, async (req, res) => {
 // GET /api/users/:userId
 // ======================================================
 
-router.get("/api/users/:userId", authenticateToken, async (req, res) => {
+router.get("/:userId", authenticateToken, async (req, res) => {
     try {
 
         const { userId } = req.params;
@@ -283,7 +283,7 @@ router.get("/api/users/:userId", authenticateToken, async (req, res) => {
 // PUT /api/users/:userId/energy
 // ======================================================
 
-router.put("/api/users/:userId/energy", authenticateToken, async (req, res) => {
+router.put("/:userId/energy", authenticateToken, async (req, res) => {
     try {
 
         const { userId } = req.params;
@@ -331,7 +331,7 @@ router.put("/api/users/:userId/energy", authenticateToken, async (req, res) => {
 // POST /api/users/:userId/dreams
 // ======================================================
 
-router.post("/api/users/:userId/dreams", authenticateToken, async (req, res) => {
+router.post("/:userId/dreams", authenticateToken, async (req, res) => {
     try {
 
         const { userId } = req.params;
