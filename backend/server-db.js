@@ -16,6 +16,14 @@ const Wallet = require('./models/Wallet');
 
 const app = express();
 
+//استحابة الخادم 
+const PORT = process.env.PORT || 10000;
+const HOST = "0.0.0.0";
+
+app.listen(PORT, HOST, () => {
+    console.log(`Mix API running on ${HOST}:${PORT}`);
+});
+
 // ===================================================
 // 🔹 Middleware
 // ===================================================
