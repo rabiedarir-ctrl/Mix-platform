@@ -193,6 +193,8 @@ router.post("/login", async (req, res) => {
                 cells: user.cells,
                 dreams: user.dreams || []
             }
+      level: data.user.level || 1, 
+      wallet: data.user.wallet || 0  
         });
 
     } catch (error) {
@@ -236,7 +238,8 @@ router.get("/me", authenticateToken, async (req, res) => {
             dreams: user.dreams || [],
             createdAt: user.createdAt
         });
-
+      level: data.user.level || 1,  
+      wallet: data.user.wallet || 0 
     } catch (error) {
 
         console.error("GET ME ERROR:", error);
