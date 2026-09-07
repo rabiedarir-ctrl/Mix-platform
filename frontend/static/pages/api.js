@@ -306,12 +306,13 @@ const DreamMemoryAPI = {
 // ======================================================
 
 const AuthAPI = {
-
-    login: (email, password) =>
+    
+    login: (email, password) =>  // تغيير من username إلى email
         fetchPost("/users/login", {
-            email,
+            email,      // ✅ صحيح
             password
         }),
+    
 
     register: (data) =>
         fetchPost("/users/register", data)
