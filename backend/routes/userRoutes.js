@@ -134,12 +134,13 @@ router.post("/register", async (req, res) => {
 // ======================================================
 
 router.post("/login", async (req, res) => {
-    try {
-
-        const {
-            email,
+    try 
+    const AuthAPI = {
+    login: (email, password) =>  // تغيير من username إلى email
+        fetchPost("/users/login", {
+            email,      // ✅ صحيح
             password
-        } = req.body;
+        }),
 
         // التحقق من البيانات
         if (!email || !password) {
