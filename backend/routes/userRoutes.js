@@ -191,10 +191,7 @@ router.post("/login", async (req, res) => {
                 wallet: user.wallet,
                 energy: user.energy,
                 cells: user.cells,
-                dreams: user.dreams || []
-              
-                    level: data.user.level || 1, 
-                    wallet: data.user.wallet || 0  
+                dreams: user.dreams || [] 
             }
         });
 
@@ -238,9 +235,6 @@ router.get("/me", authenticateToken, async (req, res) => {
             cells: user.cells,
             dreams: user.dreams || [],
             createdAt: user.createdAt
-        
-                level: data.user.level || 1, 
-                wallet: data.user.wallet || 0  
         
         });
       
