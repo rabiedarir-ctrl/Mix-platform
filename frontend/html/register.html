@@ -459,7 +459,7 @@
                 if (!window.MIX_API_BASE) {
                     throw new Error('API Base URL غير محددة');
                 }
-                const response = await fetch(`${MIX_API_BASE}/usres/register`, {
+                const response = await fetch(`${MIX_API_BASE}api/usres/register`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ 
