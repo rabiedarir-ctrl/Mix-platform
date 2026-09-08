@@ -43,7 +43,7 @@ app.use(
    HEALTH
 ===================================================== */
 
-app.get("/health", async (req, res) => {
+app.get("api/health", async (req, res) => {
     const mongoose =
         require("mongoose");
 
