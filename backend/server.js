@@ -1,235 +1,161 @@
-// ===================================================
-// Mix Platform - Backend Server
-// ===================================================
+"use strict";
 
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+require("dotenv").config();
+
+const express = require("express");
+const cors = require("cors");
+
+const connectDB = require("./config/database");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
-// ===================================================
-// 🔹 Middleware
-// ===================================================
+/* =====================================================
+   CONFIG
+===================================================== */
 
-app.use(cors({
-    origin: '*',
-    credentials: true
-}));
+const PORT = Number(process.env.PORT) || 3000;
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+/* =====================================================
+   MIDDLEWARE
+===================================================== */
 
-// ===================================================
-// 🔹 Health Check
-// ===================================================
+const frontendUrl =
+    process.env.FRONTEND_URL || "*";
 
-app.get('/health', (req, res) => {
-    res.json({ 
-        status: 'OK', 
-        message: 'Mix Platform Backend is running',
-        timestamp: new Date().toISOString()
+app.use(
+    cors({
+        origin: frontendUrl,
+        credentials: frontendUrl !== "*"
+    })
+);
+
+app.use(express.json({ limit: "2mb" }));
+
+app.use(
+    express.urlencoded({
+        extended: true,
+        limit: "2mb"
+    })
+);
+
+/* =====================================================
+   HEALTH
+===================================================== */
+
+app.get("/health", async (req, res) => {
+    const mongoose =
+        require("mongoose");
+
+    const connected =
+        mongoose.connection.readyState === 1;
+
+    res.status(
+        connected ? 200 : 503
+    ).json({
+        status: connected
+            ? "OK"
+            : "ERROR",
+
+        database: connected
+            ? "Connected"
+            : "Disconnected",
+
+        service: "Mix Platform API",
+
+        timestamp:
+            new Date().toISOString()
     });
 });
 
-// ===================================================
-// 🔹 Authentication Routes
-// ===================================================
+/* =====================================================
+   API ROUTES
+===================================================== */
 
-app.post('/api/users/login', (req, res) => {
-    const { email, password } = req.body;
-    
-    if (!email || !password) {
-        return res.status(400).json({ 
-            error: 'البريد الإلكتروني وكلمة المرور مطلوبة' 
-        });
-    }
-    
-    // مثال توضيحي - في الإنتاج استخدم قاعدة بيانات حقيقية
-    const token = 'demo_token_' + Date.now();
-    
+app.use(
+    "/api/users",
+    userRoutes
+);
+
+/* =====================================================
+   ROOT
+===================================================== */
+
+app.get("/", (req, res) => {
     res.json({
-        message: 'تم تسجيل الدخول بنجاح',
-        token: token,
-        user: {
-            id: '1',
-            email: email,
-            username: email.split('@')[0],
-            energy: 100,
-            cells: 10,
-            level: 1,
-            wallet: 0,
-            notifications: [
-                { message: '🎉 مرحباً بك في Mix Platform!' }
-            ]
-        }
+        name: "Mix Platform API",
+        status: "running",
+        version: "1.0.0"
     });
 });
 
-app.post('/api/users/register', (req, res) => {
-    const { email, password, username } = req.body;
-    
-    if (!email || !password) {
-        return res.status(400).json({ 
-            error: 'البريد الإلكتروني وكلمة المرور مطلوبة' 
-        });
-    }
-    
-    const token = 'demo_token_' + Date.now();
-    
-    res.json({
-        message: 'تم إنشاء الحساب بنجاح',
-        token: token,
-        user: {
-            id: '1',
-            email: email,
-            username: username || email.split('@')[0],
-            energy: 100,
-            cells: 0,
-            level: 1,
-            wallet: 0
-        }
-    });
-});
-
-// ===================================================
-// 🔹 User Routes
-// ===================================================
-
-app.get('/api/users/me', (req, res) => {
-    const token = req.headers.authorization?.replace('Bearer ', '');
-    
-    if (!token) {
-        return res.status(401).json({ error: 'غير مصرح' });
-    }
-    
-    res.json({
-        id: '1',
-        email: 'demo@example.com',
-        username: 'demo_user',
-        energy: 100,
-        cells: 10,
-        level: 1,
-        wallet: 0,
-        score: 1500,
-        notifications: [
-            { message: 'لديك رسالة جديدة' },
-            { message: 'تم تحديث النظام' }
-        ]
-    });
-});
-
-// ===================================================
-// 🔹 Social Routes
-// ===================================================
-
-app.get('/api/social/posts', (req, res) => {
-    res.json([
-        {
-            id: '1',
-            user: 'user1',
-            content: 'منشور تجريبي 1',
-            createdAt: new Date(),
-            comments: []
-        },
-        {
-            id: '2',
-            user: 'user2',
-            content: 'منشور تجريبي 2',
-            createdAt: new Date(),
-            comments: []
-        }
-    ]);
-});
-
-app.post('/api/social/posts', (req, res) => {
-    res.json({
-        message: 'تم نشر المنشور بنجاح',
-        post: req.body
-    });
-});
-
-// ===================================================
-// 🔹 Games Routes
-// ===================================================
-
-app.post('/api/games/btc/start', (req, res) => {
-    res.json({
-        message: 'تم بدء اللعبة',
-        gameSession: {
-            id: 'game_' + Date.now(),
-            status: 'running'
-        }
-    });
-});
-
-// ===================================================
-// 🔹 Wallet Routes
-// ===================================================
-
-app.get('/api/wallet/:userId/balance', (req, res) => {
-    res.json({
-        balance: 0,
-        currency: 'MIX'
-    });
-});
-
-// ===================================================
-// 🔹 Dreams Routes
-// ===================================================
-
-app.get('/api/dreams', (req, res) => {
-    res.json([
-        {
-            id: '1',
-            title: 'حلم تجريبي',
-            description: 'هذا حلم تجريبي للتجربة',
-            createdAt: new Date()
-        }
-    ]);
-});
-
-// ===================================================
-// 🔹 Store Routes
-// ===================================================
-
-app.get('/api/store/items', (req, res) => {
-    res.json([
-        {
-            id: '1',
-            name: 'عنصر تجريبي',
-            price: 100,
-            description: 'عنصر للتجربة'
-        }
-    ]);
-});
-
-// ===================================================
-// 🔹 404 Handler
-// ===================================================
+/* =====================================================
+   404
+===================================================== */
 
 app.use((req, res) => {
     res.status(404).json({
-        error: 'المسار غير موجود',
+        message: "Route not found",
         path: req.path
     });
 });
 
-// ===================================================
-// 🔹 Server Start
-// ===================================================
+/* =====================================================
+   ERROR HANDLER
+===================================================== */
 
-const PORT = process.env.BACKEND_PORT || process.env.PORT || 3000;
-const HOST = process.env.BACKEND_HOST || 'localhost';
+app.use((error, req, res, next) => {
+    console.error(
+        "SERVER ERROR:",
+        error
+    );
 
-app.listen(PORT, HOST, () => {
-    console.log(`\n${'='.repeat(50)}`);
-    console.log(`✅ Mix Platform Backend is running`);
-    console.log(`📍 Server: http://${HOST}:${PORT}`);
-    console.log(`🔗 API: http://${HOST}:${PORT}/api`);
-    console.log(`🏥 Health: http://${HOST}:${PORT}/health`);
-    console.log(`${'='.repeat(50)}\n`);
+    res.status(500).json({
+        message:
+            "حدث خطأ داخلي في الخادم"
+    });
 });
+
+/* =====================================================
+   START
+===================================================== */
+
+async function startServer() {
+    try {
+        if (!process.env.MONGODB_URI) {
+            throw new Error(
+                "MONGODB_URI غير موجود في Environment Variables"
+            );
+        }
+
+        if (!process.env.JWT_SECRET) {
+            throw new Error(
+                "JWT_SECRET غير موجود في Environment Variables"
+            );
+        }
+
+        await connectDB();
+
+        app.listen(
+            PORT,
+            "0.0.0.0",
+            () => {
+                console.log(
+                    `Mix Platform API running on port ${PORT}`
+                );
+            }
+        );
+
+    } catch (error) {
+        console.error(
+            "STARTUP ERROR:",
+            error.message
+        );
+
+        process.exit(1);
+    }
+}
+
+startServer();
 
 module.exports = app;
