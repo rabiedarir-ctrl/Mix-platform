@@ -453,15 +453,18 @@
          if (!isValid) return
       
    //  //  إرسال استمارة الى قاعدة البيانات 
-            export dataregister.href = "backend/api/users.py"}                   
-            function () {
-                   if dataregister.database(register.ok)  
-                    console.log(form.register);
-                     }
-             const data = dataregister.response;
-             return form.test(register);}  
-             window.location.href = "/dashboard.html";
-            // إرسال البيانات إلى الخادم
+        fetch (`${window.MIX_API_BASE}/storage/cache/logs/backend.log"}                   
+                   {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({   name: username || fullname,
+                        email, 
+                        username, 
+                        fullname, 
+                        password, 
+                        phone: phone || null  })                
+                                 
+              // إرسال البيانات إلى الخادم
             submitBtn.disabled = true;
             submitBtn.textContent = 'جاري الإنشاء...';
             try {
@@ -485,7 +488,7 @@
                 if (response.ok) {
                     feedback.innerHTML = '<div class="success-message">✅ تم إنشاء الحساب بنجاح! جاري التحويل إلى تسجيل الدخول...</div>';
                     setTimeout(() => {
-                        window.location.href = "login.html";
+                        window.location.href = "dashboard.html";
                      }, 2000);
                 } else {
                     const errorMsg = data.message || "خطأ في إنشاء الحساب";
