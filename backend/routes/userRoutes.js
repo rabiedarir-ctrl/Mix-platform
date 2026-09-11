@@ -411,6 +411,18 @@ router.post(
                     message:
                         "غير مسموح بتعديل حساب مستخدم آخر"
                 });
+           var  express  =  require ( ' express ' ) ; 
+           var  app  =  express ( ) ; 
+
+// إعداد مُحدد معدل الطلبات: بحد أقصى خمسة طلبات في الدقيقة 
+var  RateLimit  =  require ( 'express-rate-limit' ) ; 
+var  limiter  =  RateLimit ( { 
+  windowMs : 15  *  60  *  1000 ,  // 15 دقيقة 
+  max : 100 ,  // 100 طلب كحد أقصى لكل windowMs 
+} ) ; 
+
+// تطبيق مُحدد معدل الطلبات على جميع 
+الطلبات app.use ( limiter ) ; app.get ( ' / : path ' , function ( req , res ) { let path = req.params.path ; if ( isValidPath ( path ) ) res.sendFile ( path ) ; } ) ;
             }
 
             if (dreamData === undefined) {
