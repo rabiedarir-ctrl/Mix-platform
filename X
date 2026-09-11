@@ -1,0 +1,34 @@
+Fonction (a)
+{
+    Energy if (1,5v - 2,5v) = 1
+    Const action = ("body °-1.reaction(a)")
+    Console.log(reaction(a).ok)
+}
+
+Fonction (b)
+{
+    Energy if (2v - 3v) = 1
+    Const action = ("body °-1.reaction(b)")
+    Console.log(reaction(b).ok)
+}
+
+Fonction (c)
+{
+    Energy if (2,5v) = 2,5
+    Const action = ("body °0.reaction(c)")
+    Console.log(reaction(c).ok)
+}
+
+Fonction (d)
+{
+    Energy if (3v - 4v) = 1
+    Const action = ("body °+1.reaction(d)")
+    Console.log(reaction(d).ok)
+}
+
+Fonction (e)
+{
+    Energy if (4v - 5v) = 1
+    Const action = ("body °+2.reaction(e)")
+    Console.log(reaction(e).ok)
+}
