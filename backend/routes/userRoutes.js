@@ -9,6 +9,18 @@ const User = require("../models/User");
 const { authenticateToken } = require("../core/auth");
 
 const router = express.Router();
+const rateLimit = require("express-rate-limit");
+const router = express.Router();
+
+const authRateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 10,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    message: {
+        message: "محاولات كثيرة جدًا، يرجى المحاولة لاحقًا"
+    }
+});
 
 function createToken(user) {
     if (!process.env.JWT_SECRET) {
@@ -59,7 +71,7 @@ function publicUser(user) {
    POST /api/users/register
 ===================================================== */
 
-router.post("/register", async (req, res) => {
+router.post("/login", authRateLimiter, async (req, res)}
     try {
         const {
             username,
@@ -187,7 +199,7 @@ router.post("/register", async (req, res) => {
    POST /api/users/login
 ===================================================== */
 
-router.post("/login", async (req, res) => {
+router.post("/login",authRateLimiter, async (req, res) => {
     try {
         const {
             email,
@@ -411,15 +423,7 @@ router.post(
                     message:
                         "غير مسموح بتعديل حساب مستخدم آخر"
                 });
-           var  express  =  require ( ' express ' ) ; 
-           var  app  =  express ( ) ; 
-
-// إعداد مُحدد معدل الطلبات: بحد أقصى خمسة طلبات في الدقيقة 
-var  RateLimit  =  require ( 'express-rate-limit' ) ; 
-var  limiter  =  RateLimit ( { 
-  windowMs : 15  *  60  *  1000 ,  // 15 دقيقة 
-  max : 100 ,  // 100 طلب كحد أقصى لكل windowMs 
-} ) ; 
+            
 
 // تطبيق مُحدد معدل الطلبات على جميع 
 الطلبات app.use ( limiter ) ; app.get ( ' / : path ' , function ( req , res ) { let path = req.params.path ; if ( isValidPath ( path ) ) res.sendFile ( path ) ; } ) ;
