@@ -10,18 +10,9 @@ const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
-/* =====================================================
-   CONFIG
-===================================================== */
-
 const PORT = Number(process.env.PORT) || 3000;
 
-/* =====================================================
-   MIDDLEWARE
-===================================================== */
-
-const frontendUrl =
-    process.env.FRONTEND_URL || "*";
+const frontendUrl = process.env.FRONTEND_URL || "*";
 
 app.use(
     cors({
@@ -39,47 +30,81 @@ app.use(
     })
 );
 
-/* =====================================================
+/* ==============================
    HEALTH
-===================================================== */
+============================== */
 
 app.get("/api/health", async (req, res) => {
-    const mongoose =
-        require("mongoose");
+    const mongoose = require("mongoose");
 
     const connected =
         mongoose.connection.readyState === 1;
 
-    res.status(
-        connected ? 200 : 503
-    ).json({
-        status: connected
-            ? "OK"
-            : "ERROR",
-
-        database: connected
-            ? "Connected"
-            : "Disconnected",
-
+    res.status(connected ? 200 : 503).json({
+        status: connected ? "OK" : "ERROR",
+        database: connected ? "Connected" : "Disconnected",
         service: "Mix Platform API",
-
-        timestamp:
-            new Date().toISOString()
+        timestamp: new Date().toISOString()
     });
 });
 
-/* =====================================================
+/* ==============================
+   DATABASE INITIALIZATION
+============================== */
+
+let databasePromise = null;
+
+async function ensureDatabase() {
+    if (databasePromise) {
+        return databasePromise;
+    }
+
+    if (!process.env.MONGODB_URI) {
+        throw new Error(
+            "MONGODB_URI غير موجود في Environment Variables"
+        );
+    }
+
+    if (!process.env.JWT_SECRET) {
+        throw new Error(
+            "JWT_SECRET غير موجود في Environment Variables"
+        );
+    }
+
+    databasePromise = connectDB();
+
+    return databasePromise;
+}
+
+/*
+   Vercel / serverless:
+   يتم الاتصال بقاعدة البيانات عند وصول الطلب.
+*/
+app.use(async (req, res, next) => {
+    try {
+        await ensureDatabase();
+        next();
+    } catch (error) {
+        console.error("DATABASE STARTUP ERROR:", error);
+
+        res.status(503).json({
+            message: "تعذر الاتصال بقاعدة البيانات"
+        });
+    }
+});
+
+/* ==============================
    API ROUTES
-===================================================== */
+============================== */
 
 app.use(
     "/api/users",
     userRoutes
 );
 
-/* =====================================================
+/* ==============================
    ROOT
-===================================================== */
+============================== */
 
 app.get("/", (req, res) => {
     res.json({
@@ -89,9 +114,9 @@ app.get("/", (req, res) => {
     });
 });
 
-/* =====================================================
+/* ==============================
    404
-===================================================== */
+============================== */
 
 app.use((req, res) => {
     res.status(404).json({
@@ -100,62 +125,43 @@ app.use((req, res) => {
     });
 });
 
-/* =====================================================
+/* ==============================
    ERROR HANDLER
-===================================================== */
+============================== */
 
 app.use((error, req, res, next) => {
-    console.error(
-        "SERVER ERROR:",
-        error
-    );
+    console.error("SERVER ERROR:", error);
 
     res.status(500).json({
-        message:
-            "حدث خطأ داخلي في الخادم"
+        message: "حدث خطأ داخلي في الخادم"
     });
 });
 
-/* =====================================================
-   START
-===================================================== */
+/* ==============================
+   LOCAL SERVER
+============================== */
 
-async function startServer() {
-    try {
-        if (!process.env.MONGODB_URI) {
-            throw new Error(
-                "MONGODB_URI غير موجود في Environment Variables"
+if (process.env.VERCEL !== "1") {
+    ensureDatabase()
+        .then(() => {
+            app.listen(
+                PORT,
+                "0.0.0.0",
+                () => {
+                    console.log(
+                        `Mix Platform API running on port ${PORT}`
+                    );
+                }
             );
-        }
-
-        if (!process.env.JWT_SECRET) {
-            throw new Error(
-                "JWT_SECRET غير موجود في Environment Variables"
+        })
+        .catch((error) => {
+            console.error(
+                "STARTUP ERROR:",
+                error.message
             );
-        }
 
-        await connectDB();
-
-        app.listen(
-            PORT,
-            "0.0.0.0",
-            () => {
-                console.log(
-                    `Mix Platform API running on port ${PORT}`
-                );
-            }
-        );
-
-    } catch (error) {
-        console.error(
-            "STARTUP ERROR:",
-            error.message
-        );
-
-        process.exit(1);
-    }
+            process.exit(1);
+        });
 }
-
-startServer();
 
 module.exports = app;
