@@ -9,10 +9,7 @@
 // 🔹 API Base
 // ======================================================
 
-// للاختبار المحلي:
-const API_BASE = "http://localhost:3000/api";
-
-// إتاحة العنوان للصفحات مثل login.html و register.html
+const API_BASE = "/api";
 window.MIX_API_BASE = API_BASE;
 
 
