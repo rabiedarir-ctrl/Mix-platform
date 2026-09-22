@@ -1,17 +1,18 @@
-
 "use strict";
 
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const rateLimit = require("express-rate-limit");
 
 const User = require("../models/User");
 const { authenticateToken } = require("../core/auth");
 
 const router = express.Router();
-const rateLimit = require("express-rate-limit");
-const router = express.Router();
 
+/*
+ * Rate limiting للتسجيل وتسجيل الدخول
+ */
 const authRateLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 10,
@@ -22,25 +23,34 @@ const authRateLimiter = rateLimit({
     }
 });
 
+/*
+ * إنشاء JWT
+ */
 function createToken(user) {
     if (!process.env.JWT_SECRET) {
-        throw new Error("JWT_SECRET is not configured");
+        throw new Error("JWT_SECRET غير موجود");
     }
 
     return jwt.sign(
         {
-            userId: user._id.toString()
+            userId: user._id.toString(),
+            username: user.username,
+            role: user.role
         },
         process.env.JWT_SECRET,
         {
-            expiresIn: "7d"
+            expiresIn: process.env.JWT_EXPIRES_IN || "7d"
         }
     );
 }
 
+/*
+ * بيانات المستخدم التي يمكن إرسالها للواجهة
+ * لا نرسل كلمة المرور أو بيانات حساسة.
+ */
 function publicUser(user) {
     return {
-        id: user._id.toString(),
+        id: user._id,
         username: user.username,
         email: user.email,
         fullname: user.fullname,
@@ -55,401 +65,537 @@ function publicUser(user) {
         score: user.score,
         gamesPlayed: user.gamesPlayed,
         dreamsCount: user.dreamsCount,
+        isActive: user.isActive,
+        lastLogin: user.lastLogin,
         isEmailVerified: user.isEmailVerified,
         role: user.role,
         bio: user.bio,
         location: user.location,
         website: user.website,
-        notifications: user.notifications,
         preferences: user.preferences,
-        createdAt: user.createdAt
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
     };
 }
 
-/* =====================================================
-   REGISTER
-   POST /api/users/register
-===================================================== */
-
-router.post("/login", authRateLimiter, async (req, res)}
-    try {
-        const {
-            username,
-            email,
-            password,
-            confirmPassword,
-            fullname,
-            phone,
-            terms
-        } = req.body;
-
-        if (!username || !email || !password) {
-            return res.status(400).json({
-                message:
-                    "اسم المستخدم والبريد الإلكتروني وكلمة المرور مطلوبة"
-            });
-        }
-
-        if (confirmPassword !== undefined &&
-            password !== confirmPassword) {
-            return res.status(400).json({
-                message: "كلمتا المرور غير متطابقتين"
-            });
-        }
-
-        if (terms !== undefined &&
-            terms !== true &&
-            terms !== "true" &&
-            terms !== "on") {
-            return res.status(400).json({
-                message: "يجب الموافقة على الشروط"
-            });
-        }
-
-        const cleanUsername = String(username).trim();
-        const cleanEmail = String(email).trim().toLowerCase();
-
-        if (cleanUsername.length < 3) {
-            return res.status(400).json({
-                message: "اسم المستخدم يجب أن يحتوي على 3 أحرف على الأقل"
-            });
-        }
-
-        if (cleanUsername.length > 30) {
-            return res.status(400).json({
-                message: "اسم المستخدم طويل جدًا"
-            });
-        }
-
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
-            return res.status(400).json({
-                message: "البريد الإلكتروني غير صالح"
-            });
-        }
-
-        if (password.length < 6) {
-            return res.status(400).json({
-                message: "كلمة المرور يجب أن تحتوي على 6 أحرف على الأقل"
-            });
-        }
-
-        const existingUser = await User.findOne({
-            $or: [
-                { email: cleanEmail },
-                { username: cleanUsername }
-            ]
-        }).lean();
-
-        if (existingUser) {
-            if (existingUser.email === cleanEmail) {
-                return res.status(409).json({
-                    message: "البريد الإلكتروني مستخدم مسبقًا"
-                });
-            }
-
-            return res.status(409).json({
-                message: "اسم المستخدم مستخدم مسبقًا"
-            });
-        }
-
-        const user = new User({
-            username: cleanUsername,
-            email: cleanEmail,
-            password,
-            fullname: fullname
-                ? String(fullname).trim()
-                : "",
-            phone: phone
-                ? String(phone).trim()
-                : "",
-            termsAcceptedAt:
-                terms !== undefined
-                    ? new Date()
-                    : null
-        });
-
-        await user.save();
-
-        const token = createToken(user);
-
-        return res.status(201).json({
-            message: "تم إنشاء الحساب بنجاح",
-            token,
-            user: publicUser(user)
-        });
-
-    } catch (error) {
-        console.error("REGISTER ERROR:", error);
-
-        if (error.code === 11000) {
-            return res.status(409).json({
-                message:
-                    "البريد الإلكتروني أو اسم المستخدم مستخدم مسبقًا"
-            });
-        }
-
-        return res.status(500).json({
-            message: "حدث خطأ أثناء التسجيل"
-        });
-    }
-});
-
-/* =====================================================
-   LOGIN
-   POST /api/users/login
-===================================================== */
-
-router.post("/login",authRateLimiter, async (req, res) => {
-    try {
-        const {
-            email,
-            password
-        } = req.body;
-
-        if (!email || !password) {
-            return res.status(400).json({
-                message:
-                    "البريد الإلكتروني وكلمة المرور مطلوبان"
-            });
-        }
-
-        const cleanEmail =
-            String(email).trim().toLowerCase();
-
-        const user = await User
-            .findOne({ email: cleanEmail })
-            .select("+password");
-
-        if (!user) {
-            return res.status(401).json({
-                message:
-                    "البريد الإلكتروني أو كلمة المرور غير صحيحة"
-            });
-        }
-
-        if (!user.isActive) {
-            return res.status(403).json({
-                message: "هذا الحساب غير نشط"
-            });
-        }
-
-        const passwordValid =
-            await user.comparePassword(password);
-
-        if (!passwordValid) {
-            return res.status(401).json({
-                message:
-                    "البريد الإلكتروني أو كلمة المرور غير صحيحة"
-            });
-        }
-
-        user.lastLogin = new Date();
-
-        await user.save();
-
-        const token = createToken(user);
-
-        return res.status(200).json({
-            message: "تم تسجيل الدخول بنجاح",
-            token,
-            user: publicUser(user)
-        });
-
-    } catch (error) {
-        console.error("LOGIN ERROR:", error);
-
-        return res.status(500).json({
-            message:
-                "حدث خطأ أثناء تسجيل الدخول"
-        });
-    }
-});
-
-/* =====================================================
-   CURRENT USER
-   GET /api/users/me
-===================================================== */
-
-router.get("/me", authenticateToken, async (req, res) => {
-    try {
-        const user = await User
-            .findById(req.user.userId)
-            .select("-password");
-
-        if (!user) {
-            return res.status(404).json({
-                message: "المستخدم غير موجود"
-            });
-        }
-
-        return res.status(200).json(
-            publicUser(user)
-        );
-
-    } catch (error) {
-        console.error("GET ME ERROR:", error);
-
-        return res.status(500).json({
-            message:
-                "تعذر جلب بيانات المستخدم"
-        });
-    }
-});
-
-/* =====================================================
-   GET USER
-   GET /api/users/:userId
-===================================================== */
-
-router.get("/:userId", authenticateToken, async (req, res) => {
-    try {
-        const { userId } = req.params;
-
-        if (!mongoose.Types.ObjectId.isValid(userId)) {
-            return res.status(400).json({
-                message: "معرف المستخدم غير صالح"
-            });
-        }
-
-        const user = await User
-            .findById(userId)
-            .select("-password");
-
-        if (!user) {
-            return res.status(404).json({
-                message: "المستخدم غير موجود"
-            });
-        }
-
-        return res.status(200).json(
-            publicUser(user)
-        );
-
-    } catch (error) {
-        console.error("GET USER ERROR:", error);
-
-        return res.status(500).json({
-            message:
-                "تعذر جلب بيانات المستخدم"
-        });
-    }
-});
-
-/* =====================================================
-   ENERGY
-   PUT /api/users/:userId/energy
-===================================================== */
-
-router.put(
-    "/:userId/energy",
-    authenticateToken,
+/*
+ * REGISTER
+ * POST /api/users/register
+ */
+router.post(
+    "/register",
+    authRateLimiter,
     async (req, res) => {
         try {
-            const { userId } = req.params;
+            const {
+                username,
+                email,
+                password,
+                confirmPassword,
+                fullname,
+                phone,
+                termsAccepted
+            } = req.body;
 
-            if (req.user.userId !== userId) {
-                return res.status(403).json({
+            if (!username || !email || !password) {
+                return res.status(400).json({
                     message:
-                        "غير مسموح بتعديل حساب مستخدم آخر"
+                        "اسم المستخدم والبريد الإلكتروني وكلمة المرور مطلوبة"
                 });
             }
 
-            const energyChange =
-                Number(req.body.energyChange || 0);
+            if (username.trim().length < 3) {
+                return res.status(400).json({
+                    message:
+                        "اسم المستخدم يجب أن يحتوي على 3 أحرف على الأقل"
+                });
+            }
 
-            const cellsChange =
-                Number(req.body.cellsChange || 0);
+            if (password.length < 6) {
+                return res.status(400).json({
+                    message:
+                        "كلمة المرور يجب أن تحتوي على 6 أحرف على الأقل"
+                });
+            }
 
             if (
-                !Number.isFinite(energyChange) ||
-                !Number.isFinite(cellsChange)
+                confirmPassword !== undefined &&
+                password !== confirmPassword
             ) {
                 return res.status(400).json({
-                    message: "قيم الطاقة أو الخلايا غير صالحة"
+                    message:
+                        "كلمة المرور وتأكيد كلمة المرور غير متطابقين"
                 });
             }
 
-            const user = await User.findById(userId);
-
-            if (!user) {
-                return res.status(404).json({
-                    message: "المستخدم غير موجود"
+            if (termsAccepted !== true) {
+                return res.status(400).json({
+                    message:
+                        "يجب الموافقة على الشروط والأحكام"
                 });
             }
 
-            user.updateEnergy(energyChange);
+            const normalizedUsername =
+                username.trim();
 
-            user.cells = Math.max(
-                0,
-                user.cells + cellsChange
-            );
+            const normalizedEmail =
+                email.trim().toLowerCase();
+
+            const existingUser =
+                await User.findOne({
+                    $or: [
+                        {
+                            username:
+                                normalizedUsername
+                        },
+                        {
+                            email:
+                                normalizedEmail
+                        }
+                    ]
+                });
+
+            if (existingUser) {
+                if (
+                    existingUser.username ===
+                    normalizedUsername
+                ) {
+                    return res.status(409).json({
+                        message:
+                            "اسم المستخدم مستخدم بالفعل"
+                    });
+                }
+
+                return res.status(409).json({
+                    message:
+                        "البريد الإلكتروني مستخدم بالفعل"
+                });
+            }
+
+            const user = new User({
+                username: normalizedUsername,
+                email: normalizedEmail,
+                password,
+                fullname:
+                    fullname
+                        ? fullname.trim()
+                        : "",
+                phone:
+                    phone
+                        ? phone.trim()
+                        : "",
+                termsAcceptedAt:
+                    new Date()
+            });
 
             await user.save();
 
-            return res.status(200).json({
-                energy: user.energy,
-                cells: user.cells
+            const token =
+                createToken(user);
+
+            return res.status(201).json({
+                message:
+                    "تم إنشاء الحساب بنجاح",
+                token,
+                user:
+                    publicUser(user)
             });
 
         } catch (error) {
             console.error(
-                "ENERGY UPDATE ERROR:",
+                "REGISTER ERROR:",
                 error
             );
 
+            if (
+                error.code === 11000
+            ) {
+                return res.status(409).json({
+                    message:
+                        "اسم المستخدم أو البريد الإلكتروني مستخدم بالفعل"
+                });
+            }
+
+            if (
+                error instanceof mongoose.Error.ValidationError
+            ) {
+                return res.status(400).json({
+                    message:
+                        "بيانات التسجيل غير صحيحة",
+                    errors:
+                        Object.values(
+                            error.errors
+                        ).map(
+                            (item) =>
+                                item.message
+                        )
+                });
+            }
+
             return res.status(500).json({
                 message:
-                    "تعذر تحديث الطاقة والخلايا"
+                    "حدث خطأ أثناء إنشاء الحساب"
             });
         }
     }
 );
 
-/* =====================================================
-   ADD DREAM
-   POST /api/users/:userId/dreams
-===================================================== */
+/*
+ * LOGIN
+ * POST /api/users/login
+ */
+router.post(
+    "/login",
+    authRateLimiter,
+    async (req, res) => {
+        try {
+            const {
+                email,
+                username,
+                password
+            } = req.body;
 
+            const login =
+                email || username;
+
+            if (!login || !password) {
+                return res.status(400).json({
+                    message:
+                        "اسم المستخدم أو البريد الإلكتروني وكلمة المرور مطلوبة"
+                });
+            }
+
+            const query = login.includes("@")
+                ? {
+                    email:
+                        login
+                            .trim()
+                            .toLowerCase()
+                }
+                : {
+                    username:
+                        login.trim()
+                };
+
+            const user =
+                await User.findOne(query)
+                    .select("+password");
+
+            if (!user) {
+                return res.status(401).json({
+                    message:
+                        "بيانات تسجيل الدخول غير صحيحة"
+                });
+            }
+
+            if (!user.isActive) {
+                return res.status(403).json({
+                    message:
+                        "هذا الحساب غير نشط"
+                });
+            }
+
+            const passwordValid =
+                await user.comparePassword(
+                    password
+                );
+
+            if (!passwordValid) {
+                return res.status(401).json({
+                    message:
+                        "بيانات تسجيل الدخول غير صحيحة"
+                });
+            }
+
+            user.lastLogin =
+                new Date();
+
+            await user.save();
+
+            const token =
+                createToken(user);
+
+            return res.status(200).json({
+                message:
+                    "تم تسجيل الدخول بنجاح",
+                token,
+                user:
+                    publicUser(user)
+            });
+
+        } catch (error) {
+            console.error(
+                "LOGIN ERROR:",
+                error
+            );
+
+            return res.status(500).json({
+                message:
+                    "حدث خطأ أثناء تسجيل الدخول"
+            });
+        }
+    }
+);
+
+/*
+ * CURRENT USER
+ * GET /api/users/me
+ */
+router.get(
+    "/me",
+    authenticateToken,
+    async (req, res) => {
+        try {
+            const user =
+                await User.findById(
+                    req.user.userId
+                );
+
+            if (!user) {
+                return res.status(404).json({
+                    message:
+                        "المستخدم غير موجود"
+                });
+            }
+
+            return res.status(200).json({
+                user:
+                    publicUser(user)
+            });
+
+        } catch (error) {
+            console.error(
+                "GET ME ERROR:",
+                error
+            );
+
+            return res.status(500).json({
+                message:
+                    "حدث خطأ أثناء جلب بيانات المستخدم"
+            });
+        }
+    }
+);
+
+/*
+ * GET USER
+ * GET /api/users/:userId
+ */
+router.get(
+    "/:userId",
+    authenticateToken,
+    async (req, res) => {
+        try {
+            const {
+                userId
+            } = req.params;
+
+            if (
+                !mongoose.Types.ObjectId.isValid(
+                    userId
+                )
+            ) {
+                return res.status(400).json({
+                    message:
+                        "معرف المستخدم غير صالح"
+                });
+            }
+
+            const user =
+                await User.findById(
+                    userId
+                );
+
+            if (!user) {
+                return res.status(404).json({
+                    message:
+                        "المستخدم غير موجود"
+                });
+            }
+
+            return res.status(200).json({
+                user:
+                    publicUser(user)
+            });
+
+        } catch (error) {
+            console.error(
+                "GET USER ERROR:",
+                error
+            );
+
+            return res.status(500).json({
+                message:
+                    "حدث خطأ أثناء جلب المستخدم"
+            });
+        }
+    }
+);
+
+/*
+ * UPDATE ENERGY
+ * PUT /api/users/:userId/energy
+ */
+router.put(
+    "/:userId/energy",
+    authenticateToken,
+    async (req, res) => {
+        try {
+            const {
+                userId
+            } = req.params;
+
+            const {
+                amount
+            } = req.body;
+
+            if (
+                req.user.userId !==
+                userId &&
+                req.user.role !== "admin"
+            ) {
+                return res.status(403).json({
+                    message:
+                        "غير مصرح لك بتعديل طاقة هذا المستخدم"
+                });
+            }
+
+            if (
+                !mongoose.Types.ObjectId.isValid(
+                    userId
+                )
+            ) {
+                return res.status(400).json({
+                    message:
+                        "معرف المستخدم غير صالح"
+                });
+            }
+
+            const numericAmount =
+                Number(amount);
+
+            if (
+                !Number.isFinite(
+                    numericAmount
+                )
+            ) {
+                return res.status(400).json({
+                    message:
+                        "قيمة الطاقة غير صالحة"
+                });
+            }
+
+            const user =
+                await User.findById(
+                    userId
+                );
+
+            if (!user) {
+                return res.status(404).json({
+                    message:
+                        "المستخدم غير موجود"
+                });
+            }
+
+            user.updateEnergy(
+                numericAmount
+            );
+
+            await user.save();
+
+            return res.status(200).json({
+                message:
+                    "تم تحديث الطاقة",
+                energy:
+                    user.energy,
+                user:
+                    publicUser(user)
+            });
+
+        } catch (error) {
+            console.error(
+                "UPDATE ENERGY ERROR:",
+                error
+            );
+
+            return res.status(500).json({
+                message:
+                    "حدث خطأ أثناء تحديث الطاقة"
+            });
+        }
+    }
+);
+
+/*
+ * ADD DREAM
+ * POST /api/users/:userId/dreams
+ */
 router.post(
     "/:userId/dreams",
     authenticateToken,
     async (req, res) => {
         try {
-            const { userId } = req.params;
-            const { dreamData } = req.body;
+            const {
+                userId
+            } = req.params;
 
-            if (req.user.userId !== userId) {
+            if (
+                req.user.userId !==
+                userId &&
+                req.user.role !== "admin"
+            ) {
                 return res.status(403).json({
                     message:
-                        "غير مسموح بتعديل حساب مستخدم آخر"
+                        "غير مصرح لك بإضافة حلم لهذا المستخدم"
                 });
-            
-
-// تطبيق مُحدد معدل الطلبات على جميع 
-الطلبات app.use ( limiter ) ; app.get ( ' / : path ' , function ( req , res ) { let path = req.params.path ; if ( isValidPath ( path ) ) res.sendFile ( path ) ; } ) ;
             }
 
-            if (dreamData === undefined) {
+            if (
+                !mongoose.Types.ObjectId.isValid(
+                    userId
+                )
+            ) {
                 return res.status(400).json({
-                    message: "بيانات الحلم مطلوبة"
+                    message:
+                        "معرف المستخدم غير صالح"
                 });
             }
 
-            const user = await User.findById(userId);
+            if (
+                req.body === undefined ||
+                req.body === null
+            ) {
+                return res.status(400).json({
+                    message:
+                        "بيانات الحلم مطلوبة"
+                });
+            }
+
+            const user =
+                await User.findById(
+                    userId
+                );
 
             if (!user) {
                 return res.status(404).json({
-                    message: "المستخدم غير موجود"
+                    message:
+                        "المستخدم غير موجود"
                 });
             }
 
-            user.addDream(dreamData);
+            const dream =
+                user.addDream(
+                    req.body
+                );
 
             await user.save();
 
             return res.status(201).json({
-                dreams: user.dreams,
-                dreamsCount: user.dreamsCount
+                message:
+                    "تم حفظ الحلم",
+                dream,
+                dreamsCount:
+                    user.dreamsCount
             });
 
         } catch (error) {
@@ -460,7 +606,7 @@ router.post(
 
             return res.status(500).json({
                 message:
-                    "تعذر إضافة الحلم"
+                    "حدث خطأ أثناء حفظ الحلم"
             });
         }
     }
