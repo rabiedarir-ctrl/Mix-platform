@@ -1,157 +1,227 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="لوحة التحكم - Mix Platform">
-    <title>لوحة التحكم - Mix Platform</title>
-    <link rel="stylesheet" href="../../static/style.css">
-    <link rel="stylesheet" href="../../static/dashboard.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إنشاء حساب جديد - Mix Platform</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      padding: 0;
+    }
+    .register-section {
+      max-width: 520px;
+      margin: 60px auto;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+      padding: 30px;
+      color: white;
+    }
+    .register-section h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      font-size: 28px;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 14px;
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      color: white;
+      outline: none;
+    }
+    input::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: white;
+      color: #4f46e5;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    .feedback {
+      margin-top: 16px;
+      min-height: 22px;
+    }
+    .error-message, .success-message {
+      display: block;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    .error-message {
+      background: rgba(255, 99, 99, 0.15);
+      color: white;
+      border-left: 4px solid #ff5e5e;
+    }
+    .success-message {
+      background: rgba(76, 201, 91, 0.15);
+      color: white;
+      border-left: 4px solid #55d66b;
+    }
+    .login-link {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+    .login-link a {
+      color: white;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>لوحة التحكم</h1>
-        <nav>
-            <ul>
-                <li><a href="feed.html">📊 التغذية</a></li>
-                <li><a href="messages.html">💬 الرسائل</a></li>
-                <li><a href="store.html">🛒 المتجر</a></li>
-                <li><a href="games.html">🎮 الألعاب</a></li>
-                <li><a href="dream_world.html">🌙 عالم الأحلام</a></li>
-                <li><button id="logoutBtn" type="button">🚪 تسجيل الخروج</button></li>
-            </ul>
-        </nav>
-    </header>
+  <section class="register-section">
+    <h2>إنشاء حساب جديد</h2>
 
-    <main>
-        <section class="user-info">
-            <h2>معلومات المستخدم</h2>
-            <div class="user-card">
-                <p><strong>الاسم:</strong> <span id="userName">جاري التحميل...</span></p>
-                <p><strong>البريد:</strong> <span id="userEmail">جاري التحميل...</span></p>
-            </div>
-        </section>
+    <form id="registerForm" novalidate>
+      <div class="form-group">
+        <label for="email">البريد الإلكتروني</label>
+        <input type="email" id="email" name="email" placeholder="أدخل بريدك الإلكتروني" />
+      </div>
 
-        <section class="stats">
-            <h2>الإحصائيات</h2>
-            <div class="stats-cards">
-                <div class="card">
-                    <h3>⚡ الطاقة</h3>
-                    <p id="energy">جارٍ التحميل...</p>
-                </div>
-                <div class="card">
-                    <h3>🧬 الخلايا</h3>
-                    <p id="cells">جارٍ التحميل...</p>
-                </div>
-                <div class="card">
-                    <h3>📊 النقاط</h3>
-                    <p id="score">جارٍ التحميل...</p>
-                </div>
-                <div class="card">
-                    <h3>💰 المحفظة</h3>
-                    <p id="wallet">جارٍ التحميل...</p>
-                </div>
-            </div>
-        </section>
+      <div class="form-group">
+        <label for="username">اسم المستخدم</label>
+        <input type="text" id="username" name="username" placeholder="اختر اسم مستخدم" />
+      </div>
 
-        <section class="notifications">
-            <h2>الإشعارات</h2>
-            <ul id="notificationsList">
-                <li>جارٍ التحميل...</li>
-            </ul>
-        </section>
+      <div class="form-group">
+        <label for="fullname">الاسم الكامل</label>
+        <input type="text" id="fullname" name="fullname" placeholder="أدخل الاسم الكامل" />
+      </div>
 
-        <section class="dream-world-preview">
-            <h2>🌙 عالم الأحلام</h2>
-            <button id="dreamWorldBtn" type="button">استكشف عالم الأحلام</button>
-        </section>
+      <div class="form-group">
+        <label for="password">كلمة المرور</label>
+        <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" />
+      </div>
 
-        <section class="games-preview">
-            <h2>🎮 الألعاب</h2>
-            <button id="gamesBtn" type="button">ابدأ اللعب</button>
-        </section>
+      <div class="form-group">
+        <label for="confirmPassword">تأكيد كلمة المرور</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="أعد إدخال كلمة المرور" />
+      </div>
 
-        <div id="errorContainer" role="alert" aria-live="polite"></div>
-    </main>
+      <div class="form-group">
+        <label for="phone">رقم الهاتف (اختياري)</label>
+        <input type="tel" id="phone" name="phone" placeholder="أدخل رقم الهاتف" />
+      </div>
 
-    <footer>
-        <p>© 2026 Mix Platform. جميع الحقوق محفوظة.</p>
-    </footer>
+      <div class="terms-checkbox" style="display:flex; align-items:center; gap:10px; margin-top:10px;">
+        <input type="checkbox" id="terms" />
+        <label for="terms" style="margin:0;">أوافق على الشروط</label>
+      </div>
 
-    <script src="../../static/pages/api.js"></script>
-    <script>
-        const logoutBtn = document.getElementById('logoutBtn');
-        const dreamWorldBtn = document.getElementById('dreamWorldBtn');
-        const gamesBtn = document.getElementById('gamesBtn');
-        const errorContainer = document.getElementById('errorContainer');
+      <button id="submitBtn" type="submit">إنشاء حسابي</button>
+    </form>
 
-        // تسجيل الخروج
-        logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem("mixToken");
-            localStorage.removeItem("currentUser");
-            window.location.href = "login.html";
+    <div id="feedback" class="feedback"></div>
+
+    <div class="login-link">
+      لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a>
+    </div>
+  </section>
+
+  <script src="../../static/pages/api.js"></script>
+  <script>
+    const registerForm = document.getElementById("registerForm");
+    const feedback = document.getElementById("feedback");
+    const submitBtn = document.getElementById("submitBtn");
+
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      feedback.innerHTML = "";
+
+      const email = document.getElementById("email").value.trim();
+      const username = document.getElementById("username").value.trim();
+      const fullname = document.getElementById("fullname").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const phone = document.getElementById("phone").value.trim();
+      const termsAccepted = document.getElementById("terms").checked;
+
+      if (!email || !username || !fullname || !password || !confirmPassword) {
+        feedback.innerHTML = '<div class="error-message">❌ يرجى ملء جميع الحقول الأساسية</div>';
+        return;
+      }
+
+      if (password.length < 8) {
+        feedback.innerHTML = '<div class="error-message">❌ كلمة المرور يجب أن لا تقل عن 8 أحرف</div>';
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        feedback.innerHTML = '<div class="error-message">❌ كلمة المرور وتأكيدها غير متطابقين</div>';
+        return;
+      }
+
+      if (!termsAccepted) {
+        feedback.innerHTML = '<div class="error-message">❌ يجب الموافقة على الشروط</div>';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "جاري الإنشاء...";
+
+      try {
+        const response = await fetch(`${window.MIX_API_BASE}/users/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email,
+            username,
+            fullname,
+            password,
+            confirmPassword,
+            phone: phone || "",
+            termsAccepted: true
+          })
         });
 
-        // الانتقال إلى عالم الأحلام
-        dreamWorldBtn.addEventListener('click', () => {
-            window.location.href = 'dream_world.html';
-        });
+        const data = await response.json();
 
-        // الانتقال إلى الألعاب
-        gamesBtn.addEventListener('click', () => {
-            window.location.href = 'games.html';
-        });
-
-        // تحميل بيانات المستخدم
-        async function loadUserData() {
-            const token = localStorage.getItem("mixToken");
-            if (!token) {
-                window.location.href = "login.html";
-                return;
-            }
-
-            try {
-                const response = await fetch(`${window.MIX_API_BASE}/users/me`, {
-                    headers: { 
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    }
-                });
-                
-                const data = await response.json();
-
-                if (response.ok) {
-                    document.getElementById('userName').textContent = data.username || data.email || 'مستخدم';
-                    document.getElementById('userEmail').textContent = data.email || 'N/A';
-                    document.getElementById('energy').textContent = data.energy || 0;
-                    document.getElementById('cells').textContent = data.cells || 0;
-                    document.getElementById('score').textContent = data.score || 0;
-                    document.getElementById('wallet').textContent = data.wallet || 0;
-
-                    const notifList = document.getElementById('notificationsList');
-                    notifList.innerHTML = '';
-                    if (data.notifications && data.notifications.length) {
-                        data.notifications.forEach(n => {
-                            const li = document.createElement('li');
-                            li.textContent = n.message || n;
-                            notifList.appendChild(li);
-                        });
-                    } else {
-                        const li = document.createElement('li');
-                        li.textContent = 'لا توجد إشعارات جديدة';
-                        notifList.appendChild(li);
-                    }
-                } else {
-                    errorContainer.innerHTML = `<div class="error">❌ خطأ في تحميل البيانات: ${data.message}</div>`;
-                }
-            } catch (err) {
-                console.error(err);
-                errorContainer.innerHTML = `<div class="error">❌ تعذر الاتصال بالخادم. تحقق من أن Backend يعمل على http://localhost:3000</div>`;
-            }
+        if (!response.ok) {
+          throw new Error(data.message || "فشل في إنشاء الحساب");
         }
 
-        // تحميل البيانات عند فتح الصفحة
-        document.addEventListener('DOMContentLoaded', loadUserData);
-    </script>
+        feedback.innerHTML = '<div class="success-message">✅ تم إنشاء الحساب بنجاح</div>';
+
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1000);
+
+      } catch (error) {
+        feedback.innerHTML = `<div class="error-message">❌ ${error.message}</div>`;
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "إنشاء حسابي";
+      }
+    });
+  </script>
 </body>
 </html>

@@ -1,167 +1,143 @@
+// ======================================================
+// Mix Platform - API Client
+// File: frontend/static/pages/api.js
+// ======================================================
+
 "use strict";
 
-require("dotenv").config();
+// ======================================================
+// 🔹 API Base
+// ======================================================
 
-const express = require("express");
-const cors = require("cors");
+const API_BASE = "http://localhost:3000/api";
+window.MIX_API_BASE = API_BASE;
 
-const connectDB = require("./config/database");
-const userRoutes = require("./routes/userRoutes");
+// ======================================================
+// 🔹 Authentication Token
+// ======================================================
 
-const app = express();
-
-const PORT = Number(process.env.PORT) || 3000;
-
-const frontendUrl = process.env.FRONTEND_URL || "*";
-
-app.use(
-    cors({
-        origin: frontendUrl,
-        credentials: frontendUrl !== "*"
-    })
-);
-
-app.use(express.json({ limit: "2mb" }));
-
-app.use(
-    express.urlencoded({
-        extended: true,
-        limit: "2mb"
-    })
-);
-
-/* ==============================
-   HEALTH
-============================== */
-
-app.get("/api/health", async (req, res) => {
-    const mongoose = require("mongoose");
-
-    const connected =
-        mongoose.connection.readyState === 1;
-
-    res.status(connected ? 200 : 503).json({
-        status: connected ? "OK" : "ERROR",
-        database: connected ? "Connected" : "Disconnected",
-        service: "Mix Platform API",
-        timestamp: new Date().toISOString()
-    });
-});
-
-/* ==============================
-   DATABASE INITIALIZATION
-============================== */
-
-let databasePromise = null;
-
-async function ensureDatabase() {
-    if (databasePromise) {
-        return databasePromise;
-    }
-
-    if (!process.env.MONGODB_URI) {
-        throw new Error(
-            "MONGODB_URI غير موجود في Environment Variables"
-        );
-    }
-
-    if (!process.env.JWT_SECRET) {
-        throw new Error(
-            "JWT_SECRET غير موجود في Environment Variables"
-        );
-    }
-
-    databasePromise = connectDB();
-
-    return databasePromise;
+function getToken() {
+    return localStorage.getItem("mixToken");
 }
 
-/*
-   Vercel / serverless:
-   يتم الاتصال بقاعدة البيانات عند وصول الطلب.
-*/
-app.use(async (req, res, next) => {
+function getAuthHeaders(includeJson = false) {
+    const headers = {};
+
+    const token = getToken();
+
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
+    }
+
+    if (includeJson) {
+        headers["Content-Type"] = "application/json";
+    }
+
+    return headers;
+}
+
+// ======================================================
+// 🔹 معالجة استجابة الخادم
+// ======================================================
+
+async function parseResponse(response) {
+    const contentType = response.headers.get("content-type") || "";
+    let data;
+
+    if (contentType.includes("application/json")) {
+        data = await response.json();
+    } else {
+        data = await response.text();
+    }
+
+    if (!response.ok) {
+        let message = `HTTP ${response.status}`;
+
+        if (data && typeof data === "object") {
+            message = data.message || data.error || message;
+        } else if (typeof data === "string" && data.trim()) {
+            message = data;
+        }
+
+        const error = new Error(message);
+        error.status = response.status;
+        error.data = data;
+        throw error;
+    }
+
+    return data;
+}
+
+// ======================================================
+// 🔹 GET
+// ======================================================
+
+async function fetchGet(endpoint) {
+    if (!endpoint.startsWith("/")) {
+        endpoint = `/${endpoint}`;
+    }
+
+    const url = `${window.MIX_API_BASE}${endpoint}`;
+
     try {
-        await ensureDatabase();
-        next();
+        const response = await fetch(url, {
+            method: "GET",
+            headers: getAuthHeaders(),
+            credentials: "include"
+        });
+
+        return await parseResponse(response);
     } catch (error) {
-        console.error("DATABASE STARTUP ERROR:", error);
-
-        res.status(503).json({
-            message: "تعذر الاتصال بقاعدة البيانات"
-        });
+        console.error(`GET ${url} failed:`, error);
+        throw error;
     }
-});
-
-/* ==============================
-   API ROUTES
-============================== */
-
-app.use(
-    "/api/users",
-    userRoutes
-);
-
-/* ==============================
-   ROOT
-============================== */
-
-app.get("/", (req, res) => {
-    res.json({
-        name: "Mix Platform API",
-        status: "running",
-        version: "1.0.0"
-    });
-});
-
-/* ==============================
-   404
-============================== */
-
-app.use((req, res) => {
-    res.status(404).json({
-        message: "Route not found",
-        path: req.path
-    });
-});
-
-/* ==============================
-   ERROR HANDLER
-============================== */
-
-app.use((error, req, res, next) => {
-    console.error("SERVER ERROR:", error);
-
-    res.status(500).json({
-        message: "حدث خطأ داخلي في الخادم"
-    });
-});
-
-/* ==============================
-   LOCAL SERVER
-============================== */
-
-if (process.env.VERCEL !== "1") {
-    ensureDatabase()
-        .then(() => {
-            app.listen(
-                PORT,
-                "0.0.0.0",
-                () => {
-                    console.log(
-                        `Mix Platform API running on port ${PORT}`
-                    );
-                }
-            );
-        })
-        .catch((error) => {
-            console.error(
-                "STARTUP ERROR:",
-                error.message
-            );
-
-            process.exit(1);
-        });
 }
 
-module.exports = app;
+async function fetchPost(endpoint, body = {}) {
+    if (!endpoint.startsWith("/")) {
+        endpoint = `/${endpoint}`;
+    }
+
+    const url = `${window.MIX_API_BASE}${endpoint}`;
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: getAuthHeaders(true),
+            credentials: "include",
+            body: JSON.stringify(body)
+        });
+
+        return await parseResponse(response);
+    } catch (error) {
+        console.error(`POST ${url} failed:`, error);
+        throw error;
+    }
+}
+
+// ======================================================
+// 🔐 Authentication API
+// ======================================================
+
+const AuthAPI = {
+    login: (identifier, password) => {
+        const payload = identifier.includes("@")
+            ? { email: identifier, password }
+            : { username: identifier, password };
+
+        return fetchPost("/users/login", payload);
+    },
+
+    register: (data) => fetchPost("/users/register", data)
+};
+
+window.AuthAPI = AuthAPI;
+window.MixAPI = {
+    API_BASE: window.MIX_API_BASE,
+    AuthAPI,
+    fetchGet,
+    fetchPost,
+    getToken
+};
+
+console.log("✅ Mix Platform API loaded:", window.MIX_API_BASE);
