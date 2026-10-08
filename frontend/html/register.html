@@ -1,193 +1,827 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="صفحة تسجيل الدخول إلى منصة Mix Platform - عالم افتراضي تفاعلي" />
-    <title>تسجيل الحساب - Mix Platform</title>
-    <link rel="stylesheet" href="../../static/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="صفحة إنشاء حساب جديد في منصة Mix Platform - عالم افتراضي تفاعلي">
+    <title>إنشاء حساب جديد - Mix Platform</title>
+
+    <!-- استخدم المسار المناسب لملف style.css في مشروعك -->
+    <link rel="stylesheet" href="../static/style.css">
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f7fb;
-            m;
+        .register-section {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
-        input {
+
+        .register-section h2 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .form-group input {
             width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
             box-sizing: border-box;
-            padding: 12px 14px;
-            border: 1px solid rgba(255,255,255,0.4);
-            border-radius: 8px;
-            background: rgba(255,255,255,0.08);
-            color: white;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-group input:focus {
             outline: none;
+            border-color: #fff;
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
-        input::placeholder {
-            color: rgba(255,255,255,0.75);
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 6px;
+            padding: 8px 12px;
+            background-color: rgba(255, 107, 107, 0.1);
+            border-radius: 4px;
+            border-right: 3px solid #ff6b6b;
+            display: none;
         }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            color: #51cf66;
+            font-size: 13px;
+            padding: 10px;
+            background-color: rgba(81, 207, 102, 0.1);
+            border-radius: 4px;
+            border-right: 3px solid #51cf66;
+            display: block;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #ff6b6b;
+            transition: all 0.3s ease;
+        }
+
+        .password-strength-bar.weak {
+            width: 33%;
+        }
+
+        .password-strength-bar.medium {
+            width: 66%;
+            background-color: #ffd43b;
+        }
+
+        .password-strength-bar.strong {
+            width: 100%;
+            background-color: #51cf66;
+        }
+
+        .password-strength-text {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 4px;
+        }
+
         button {
             width: 100%;
             padding: 12px;
+            margin-top: 20px;
+            background-color: #fff;
+            color: #667eea;
             border: none;
-            border-radius: 8px;
-            background: white;
-            color: #4f46e5;
+            border-radius: 5px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.2s ease;
+            transition: all 0.3s ease;
         }
+
         button:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
         }
+
         button:disabled {
-            opacity: 0.7;
+            opacity: 0.6;
             cursor: not-allowed;
         }
-        .feedback {
-            margin-top: 16px;
-            min-height: 24px;
-        }
-        .error-message, .success-message {
-            display: block;
-            border-radius: 8px;
-            padding: 10px 12px;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        .error-message {
-            background: rgba(255, 99, 99, 0.15);
-            color: #fff;
-            border-left: 4px solid #ff5e5e;
-        }
-        .success-message {
-            background: rgba(76, 201, 91, 0.15);
-            color: white;
-            border-left: 4px solid #55d66b;
-        }
-        .register-link {
-            margin-top: 18px;
+
+        .login-link {
             text-align: center;
-            font-size: 14px;
+            margin-top: 20px;
+            color: #fff;
         }
-        .register-link a {
-            color: white;
+
+        .login-link a {
+            color: #fff;
+            text-decoration: none;
             font-weight: bold;
+            border-bottom: 2px solid #fff;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            min-height: 50px;
+        }
+
+        .terms-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 15px;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .terms-checkbox input {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .terms-checkbox a {
+            color: #fff;
             text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .register-section {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            .register-section h2 {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
-<body>
-    <section class="login-section">
-        <h2>تسجيل الدخول</h2>
 
-        <form id="loginForm" novalidate>
+<body>
+
+<header>
+    <h1>إنشاء حساب جديد في Mix Platform</h1>
+</header>
+
+<main>
+    <section class="register-section">
+
+        <h2>🌟 انضم إلينا الآن</h2>
+
+        <form id="registerForm" novalidate>
+
+            <!-- البريد الإلكتروني -->
             <div class="form-group">
-                <label for="email">البريد الإلكتروني أو اسم المستخدم</label>
-                <input type="text" id="email" name="email" placeholder="أدخل البريد أو اسم المستخدم" />
-                <span id="email-error" class="error-message" style="display:none;"></span>
+                <label for="email">البريد الإلكتروني</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    placeholder="أدخل بريدك الإلكتروني"
+                    autocomplete="email"
+                    aria-required="true"
+                    aria-describedby="email-error"
+                >
+
+                <span
+                    id="email-error"
+                    class="error-message"
+                    role="alert">
+                </span>
             </div>
 
+            <!-- اسم المستخدم -->
+            <div class="form-group">
+                <label for="username">اسم المستخدم</label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    required
+                    minlength="3"
+                    maxlength="30"
+                    placeholder="اختر اسم مستخدم (3-30 أحرف)"
+                    autocomplete="username"
+                    aria-required="true"
+                    aria-describedby="username-error"
+                >
+
+                <span
+                    id="username-error"
+                    class="error-message"
+                    role="alert">
+                </span>
+            </div>
+
+            <!-- الاسم الكامل -->
+            <div class="form-group">
+                <label for="fullname">الاسم الكامل</label>
+
+                <input
+                    type="text"
+                    id="fullname"
+                    name="fullname"
+                    required
+                    maxlength="100"
+                    placeholder="أدخل اسمك الكامل"
+                    autocomplete="name"
+                    aria-required="true"
+                    aria-describedby="fullname-error"
+                >
+
+                <span
+                    id="fullname-error"
+                    class="error-message"
+                    role="alert">
+                </span>
+            </div>
+
+            <!-- كلمة المرور -->
             <div class="form-group">
                 <label for="password">كلمة المرور</label>
-                <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" />
-                <span id="password-error" class="error-message" style="display:none;"></span>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    minlength="8"
+                    placeholder="كلمة مرور قوية (8 أحرف على الأقل)"
+                    autocomplete="new-password"
+                    aria-required="true"
+                    aria-describedby="password-error"
+                >
+
+                <div class="password-strength">
+                    <div
+                        class="password-strength-bar"
+                        id="strengthBar">
+                    </div>
+                </div>
+
+                <div
+                    class="password-strength-text"
+                    id="strengthText">
+                </div>
+
+                <span
+                    id="password-error"
+                    class="error-message"
+                    role="alert">
+                </span>
             </div>
 
-            <button id="loginBtn" type="submit">تسجيل الدخول</button>
+            <!-- تأكيد كلمة المرور -->
+            <div class="form-group">
+                <label for="confirmPassword">تأكيد كلمة المرور</label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    required
+                    placeholder="أعد إدخال كلمة المرور"
+                    autocomplete="new-password"
+                    aria-required="true"
+                    aria-describedby="confirmPassword-error"
+                >
+
+                <span
+                    id="confirmPassword-error"
+                    class="error-message"
+                    role="alert">
+                </span>
+            </div>
+
+            <!-- الهاتف -->
+            <div class="form-group">
+                <label for="phone">رقم الهاتف (اختياري)</label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="+212 6XXXXXXXX"
+                    autocomplete="tel"
+                    aria-describedby="phone-error"
+                >
+
+                <span
+                    id="phone-error"
+                    class="error-message"
+                    role="alert">
+                </span>
+            </div>
+
+            <!-- شروط الخدمة -->
+            <div class="terms-checkbox">
+
+                <input
+                    type="checkbox"
+                    id="terms"
+                    name="terms"
+                    required
+                    aria-required="true"
+                    aria-describedby="terms-error"
+                >
+
+                <label for="terms">
+                    أوافق على
+                    <a href="#" target="_blank" rel="noopener noreferrer">
+                        شروط الخدمة
+                    </a>
+                    و
+                    <a href="#" target="_blank" rel="noopener noreferrer">
+                        سياسة الخصوصية
+                    </a>
+                </label>
+
+            </div>
+
+            <span
+                id="terms-error"
+                class="error-message"
+                role="alert">
+            </span>
+
+            <!-- زر التسجيل -->
+            <button
+                type="submit"
+                id="submitBtn"
+                class="register-btn">
+                إنشاء حسابي
+            </button>
+
         </form>
 
-        <div id="feedback" class="feedback"></div>
-
-        <div class="register-link">
-            ليس لديك حساب؟ <a href="register.html">إنشاء حساب جديد</a>
+        <!-- رسائل النتيجة -->
+        <div
+            id="feedback"
+            role="alert"
+            aria-live="polite"
+            class="feedback">
         </div>
+
+        <!-- تسجيل الدخول -->
+        <div class="login-link">
+            هل تملك حسابًا بالفعل؟
+            <a href="login.html">تسجيل الدخول</a>
+        </div>
+
     </section>
+</main>
 
-    <script src="../../static/pages/api.js"></script>
-    <script>
-        const loginForm = document.getElementById("loginForm");
-        const loginBtn = document.getElementById("loginBtn");
-        const emailInput = document.getElementById("email");
-        const passwordInput = document.getElementById("password");
-        const emailError = document.getElementById("email-error");
-        const passwordError = document.getElementById("password-error");
-        const feedback = document.getElementById("feedback");
+<footer>
+    <p>© 2026 Mix Platform. جميع الحقوق محفوظة.</p>
+</footer>
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const token = localStorage.getItem("mixToken");
-            if (token) {
-                window.location.href = "dashboard.html";
+
+<!-- API -->
+<script src="../../static/pages/api.js"></script>
+
+<script>
+'use strict';
+
+const registerForm = document.getElementById('registerForm');
+const feedback = document.getElementById('feedback');
+const submitBtn = document.getElementById('submitBtn');
+
+const emailInput = document.getElementById('email');
+const usernameInput = document.getElementById('username');
+const fullnameInput = document.getElementById('fullname');
+const passwordInput = document.getElementById('password');
+const confirmPasswordInput = document.getElementById('confirmPassword');
+const phoneInput = document.getElementById('phone');
+const termsCheckbox = document.getElementById('terms');
+
+const emailError = document.getElementById('email-error');
+const usernameError = document.getElementById('username-error');
+const fullnameError = document.getElementById('fullname-error');
+const passwordError = document.getElementById('password-error');
+const confirmPasswordError = document.getElementById('confirmPassword-error');
+const phoneError = document.getElementById('phone-error');
+const termsError = document.getElementById('terms-error');
+
+const strengthBar = document.getElementById('strengthBar');
+const strengthText = document.getElementById('strengthText');
+
+
+/* التحقق من البريد */
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+
+/* قوة كلمة المرور */
+function checkPasswordStrength(password) {
+
+    let strength = 0;
+
+    if (password.length >= 8) strength++;
+    if (password.length >= 12) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength++;
+
+    if (strength <= 2) {
+
+        strengthBar.className = 'password-strength-bar weak';
+        strengthText.textContent = 'ضعيفة ❌';
+
+    } else if (strength <= 4) {
+
+        strengthBar.className = 'password-strength-bar medium';
+        strengthText.textContent = 'متوسطة ⚠️';
+
+    } else {
+
+        strengthBar.className = 'password-strength-bar strong';
+        strengthText.textContent = 'قوية جداً ✅';
+    }
+
+    return strength;
+}
+
+
+/* مراقبة كلمة المرور */
+passwordInput.addEventListener('input', function () {
+
+    if (this.value) {
+        checkPasswordStrength(this.value);
+    } else {
+        strengthBar.className = 'password-strength-bar';
+        strengthText.textContent = '';
+    }
+
+});
+
+
+/* إخفاء رسالة الخطأ عند تعديل الحقل */
+[
+    emailInput,
+    usernameInput,
+    fullnameInput,
+    passwordInput,
+    confirmPasswordInput,
+    phoneInput
+].forEach(input => {
+
+    input.addEventListener('input', function () {
+
+        const errorElement =
+            document.getElementById(this.id + '-error');
+
+        if (errorElement) {
+            errorElement.textContent = '';
+            errorElement.classList.remove('show');
+        }
+
+    });
+
+});
+
+
+termsCheckbox.addEventListener('change', function () {
+
+    termsError.textContent = '';
+    termsError.classList.remove('show');
+
+});
+
+
+/* تنظيف الأخطاء */
+function clearErrors() {
+
+    [
+        emailError,
+        usernameError,
+        fullnameError,
+        passwordError,
+        confirmPasswordError,
+        phoneError,
+        termsError
+    ].forEach(error => {
+
+        error.textContent = '';
+        error.classList.remove('show');
+
+    });
+
+    feedback.innerHTML = '';
+}
+
+
+/* إظهار خطأ */
+function showError(element, message) {
+
+    element.textContent = message;
+    element.classList.add('show');
+
+}
+
+
+/* إرسال التسجيل */
+registerForm.addEventListener('submit', async function (event) {
+
+    event.preventDefault();
+
+    clearErrors();
+
+    const email = emailInput.value.trim();
+    const username = usernameInput.value.trim();
+    const fullname = fullnameInput.value.trim();
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+    const phone = phoneInput.value.trim();
+    const termsAccepted = termsCheckbox.checked;
+
+    let isValid = true;
+
+
+    /* البريد */
+    if (!email) {
+
+        showError(emailError, 'البريد الإلكتروني مطلوب');
+        isValid = false;
+
+    } else if (!validateEmail(email)) {
+
+        showError(
+            emailError,
+            'صيغة البريد الإلكتروني غير صحيحة'
+        );
+
+        isValid = false;
+    }
+
+
+    /* اسم المستخدم */
+    if (!username) {
+
+        showError(
+            usernameError,
+            'اسم المستخدم مطلوب'
+        );
+
+        isValid = false;
+
+    } else if (username.length < 3) {
+
+        showError(
+            usernameError,
+            'اسم المستخدم يجب أن يكون 3 أحرف على الأقل'
+        );
+
+        isValid = false;
+
+    } else if (username.length > 30) {
+
+        showError(
+            usernameError,
+            'اسم المستخدم يجب ألا يتجاوز 30 حرفاً'
+        );
+
+        isValid = false;
+
+    } else if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+
+        showError(
+            usernameError,
+            'اسم المستخدم يمكن أن يحتوي على الأحرف الإنجليزية والأرقام والشرطة فقط'
+        );
+
+        isValid = false;
+    }
+
+
+    /* الاسم الكامل */
+    if (!fullname) {
+
+        showError(
+            fullnameError,
+            'الاسم الكامل مطلوب'
+        );
+
+        isValid = false;
+    }
+
+
+    /* كلمة المرور */
+    if (!password) {
+
+        showError(
+            passwordError,
+            'كلمة المرور مطلوبة'
+        );
+
+        isValid = false;
+
+    } else if (password.length < 8) {
+
+        showError(
+            passwordError,
+            'كلمة المرور يجب أن تكون 8 أحرف على الأقل'
+        );
+
+        isValid = false;
+    }
+
+
+    /* تأكيد كلمة المرور */
+    if (!confirmPassword) {
+
+        showError(
+            confirmPasswordError,
+            'تأكيد كلمة المرور مطلوب'
+        );
+
+        isValid = false;
+
+    } else if (password !== confirmPassword) {
+
+        showError(
+            confirmPasswordError,
+            'كلمات المرور غير متطابقة'
+        );
+
+        isValid = false;
+    }
+
+
+    /* الهاتف */
+    if (phone && !/^[\d+\s\-()]+$/.test(phone)) {
+
+        showError(
+            phoneError,
+            'صيغة رقم الهاتف غير صحيحة'
+        );
+
+        isValid = false;
+    }
+
+
+    /* الشروط */
+    if (!termsAccepted) {
+
+        showError(
+            termsError,
+            'يجب أن توافق على شروط الخدمة وسياسة الخصوصية'
+        );
+
+        isValid = false;
+    }
+
+
+    if (!isValid) {
+        return;
+    }
+
+
+    /* تعطيل الزر */
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'جاري إنشاء الحساب...';
+
+
+    try {
+
+        /* التأكد من وجود عنوان API */
+        if (!window.MIX_API_BASE) {
+            throw new Error(
+                'MIX_API_BASE غير محددة'
+            );
+        }
+
+
+        /* إزالة / الأخيرة إن وجدت */
+        const apiBase =
+            String(window.MIX_API_BASE).replace(/\/+$/, '');
+
+
+        /* إرسال البيانات */
+        const response = await fetch(
+            `${apiBase}/users/register`,
+            {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+
+                body: JSON.stringify({
+                    name: username || fullname,
+                    email: email,
+                    username: username,
+                    fullname: fullname,
+                    password: password,
+                    phone: phone || null
+                })
             }
-        });
+        );
 
-        loginForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
 
-            emailError.style.display = "none";
-            emailError.textContent = "";
-            passwordError.style.display = "none";
-            passwordError.textContent = "";
-            feedback.innerHTML = "";
+        /* محاولة قراءة JSON */
+        let data = {};
 
-            const email = emailInput.value.trim();
-            const password = passwordInput.value;
+        try {
+            data = await response.json();
+        } catch (jsonError) {
+            data = {};
+        }
 
-            let valid = true;
 
-            if (!email) {
-                emailError.textContent = "البريد أو اسم المستخدم مطلوب";
-                emailError.style.display = "block";
-                valid = false;
-            }
+        /* نجاح */
+        if (response.ok) {
 
-            if (!password) {
-                passwordError.textContent = "كلمة المرور مطلوبة";
-                passwordError.style.display = "block";
-                valid = false;
-            }
+            feedback.innerHTML =
+                '<div class="success-message">' +
+                '✅ تم إنشاء الحساب بنجاح! ' +
+                'جاري التحويل إلى تسجيل الدخول...' +
+                '</div>';
 
-            if (!valid) return;
 
-            loginBtn.disabled = true;
-            loginBtn.textContent = "جاري الدخول...";
+            /*
+             * الانتقال إلى صفحة تسجيل الدخول.
+             * لا يتم افتراض وجود dashboard.html.
+             */
+            setTimeout(function () {
 
-            try {
-                const response = await AuthAPI.login(email, password);
+                window.location.href = 'login.html';
 
-                if (!response || !response.token) {
-                    throw new Error("لم يتم استلام توكن من الخادم");
-                }
+            }, 2000);
 
-                localStorage.setItem("mixToken", response.token);
+            return;
+        }
 
-                if (response.user) {
-                    localStorage.setItem("currentUser", JSON.stringify(response.user));
-                }
 
-                feedback.innerHTML = '<div class="success-message">✅ تم تسجيل الدخول بنجاح</div>';
+        /* خطأ من الخادم */
+        const errorMessage =
+            data.message ||
+            data.error ||
+            'تعذر إنشاء الحساب';
 
-                setTimeout(() => {
-                    window.location.href = "dashboard.html";
-                }, 700);
-            } catch (error) {
-                let msg = "❌ حدث خطأ أثناء تسجيل الدخول";
-                if (error.status === 401) {
-                    msg = "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة";
-                } else if (error.status === 403) {
-                    msg = "❌ هذا الحساب غير نشط";
-                } else if (error.status === 429) {
-                    msg = "❌ عدد محاولات كثيرة، حاول لاحقاً";
-                } else if (error.message) {
-                    msg = `❌ ${error.message}`;
-                }
 
-                feedback.innerHTML = `<div class="error-message">${msg}</div>`;
-            } finally {
-                loginBtn.disabled = false;
-                loginBtn.textContent = "register.html";
-            }
-        });
-    </script>
-</body>
-</html>
+        feedback.innerHTML =
+            '<div class="error-message show">' +
+            '❌ ' +
+            errorMessage +
+            '</div>';
+
+
+    } catch (error) {
+
+        console.error(
+            'خطأ في التسجيل:',
+            error
+        );
+
+
+        feedback.innerHTML =
+            '<div class="error-message show">' +
+            '❌ تعذر الاتصال بالخادم. ' +
+            'تحقق من عنوان API واتصال الإنترنت.' +
+            '</div
