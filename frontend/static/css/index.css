@@ -1,0 +1,770 @@
+/* =========================================================
+Mix Platform
+Main Index Page Styles
+Path:
+frontend/static/css/index.css
+========================================================= */
+
+/* =========================================================
+Variables
+========================================================= */
+
+:root {
+--mix-primary: #3498db;
+--mix-primary-dark: #217dbb;
+--mix-primary-light: #5dade2;
+
+--mix-white: #ffffff;
+--mix-bg: #f4f8fc;
+--mix-bg-secondary: #eaf3fb;
+
+--mix-text: #1f2937;
+--mix-text-light: #64748b;
+
+--mix-border: #d9e6f2;
+
+--mix-success: #27ae60;
+--mix-danger: #e74c3c;
+
+--mix-shadow:
+    0 10px 30px rgba(31, 41, 55, 0.08);
+
+--mix-shadow-hover:
+    0 18px 40px rgba(31, 41, 55, 0.14);
+
+--mix-radius: 16px;
+--mix-radius-small: 10px;
+
+--mix-transition:
+    0.25s ease;
+
+}
+
+/* =========================================================
+Reset
+========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  }
+
+html {
+scroll-behavior: smooth;
+}
+
+body {
+min-height: 100vh;
+
+font-family:
+    "Segoe UI",
+    Tahoma,
+    Arial,
+    sans-serif;
+
+direction: rtl;
+
+background:
+    linear-gradient(
+        180deg,
+        #ffffff 0%,
+        var(--mix-bg) 100%
+    );
+
+color: var(--mix-text);
+
+line-height: 1.7;
+
+overflow-x: hidden;
+
+}
+
+/* =========================================================
+Links
+========================================================= */
+
+a {
+color: inherit;
+text-decoration: none;
+}
+
+a:focus-visible,
+button:focus-visible {
+outline: 3px solid rgba(52, 152, 219, 0.35);
+outline-offset: 3px;
+}
+
+/* =========================================================
+Header
+========================================================= */
+
+header {
+width: 100%;
+
+display: flex;
+align-items: center;
+justify-content: space-between;
+
+gap: 30px;
+
+padding:
+    18px
+    clamp(20px, 5vw, 70px);
+
+background: rgba(255, 255, 255, 0.96);
+
+border-bottom:
+    1px solid var(--mix-border);
+
+box-shadow:
+    0 4px 18px rgba(31, 41, 55, 0.06);
+
+position: sticky;
+top: 0;
+z-index: 1000;
+
+backdrop-filter: blur(12px);
+
+}
+
+/* =========================================================
+Logo / Header Title
+========================================================= */
+
+header h1 {
+color: var(--mix-primary);
+
+font-size:
+    clamp(1.4rem, 3vw, 2rem);
+
+font-weight: 800;
+
+letter-spacing: 0.5px;
+
+white-space: nowrap;
+
+}
+
+/* =========================================================
+Navigation
+========================================================= */
+
+nav ul {
+list-style: none;
+
+display: flex;
+align-items: center;
+
+gap: 10px;
+
+flex-wrap: wrap;
+
+}
+
+nav li {
+display: block;
+}
+
+nav a {
+display: inline-flex;
+
+align-items: center;
+justify-content: center;
+
+min-height: 42px;
+
+padding:
+    8px
+    16px;
+
+border:
+    1px solid var(--mix-border);
+
+border-radius:
+    var(--mix-radius-small);
+
+background: var(--mix-white);
+
+color: var(--mix-text);
+
+font-size: 0.95rem;
+font-weight: 600;
+
+transition:
+    transform var(--mix-transition),
+    background var(--mix-transition),
+    color var(--mix-transition),
+    border-color var(--mix-transition),
+    box-shadow var(--mix-transition);
+
+}
+
+nav a:hover {
+background: var(--mix-primary);
+
+border-color: var(--mix-primary);
+
+color: var(--mix-white);
+
+transform: translateY(-2px);
+
+box-shadow:
+    0 6px 16px rgba(52, 152, 219, 0.22);
+
+}
+
+/* =========================================================
+Main
+========================================================= */
+
+main {
+width: 100%;
+
+max-width: 1200px;
+
+margin:
+    0 auto;
+
+padding:
+    60px
+    24px
+    70px;
+
+}
+
+/* =========================================================
+Intro Section
+========================================================= */
+
+.intro {
+position: relative;
+
+text-align: center;
+
+padding:
+    clamp(40px, 8vw, 85px)
+    clamp(20px, 6vw, 70px);
+
+margin-bottom: 60px;
+
+background:
+    linear-gradient(
+        135deg,
+        #ffffff 0%,
+        #edf7ff 100%
+    );
+
+border:
+    1px solid var(--mix-border);
+
+border-radius:
+    24px;
+
+box-shadow:
+    var(--mix-shadow);
+
+overflow: hidden;
+
+}
+
+/* Decorative background */
+
+.intro::before {
+content: "";
+
+position: absolute;
+
+width: 260px;
+height: 260px;
+
+top: -120px;
+right: -100px;
+
+border-radius: 50%;
+
+background:
+    rgba(52, 152, 219, 0.08);
+
+pointer-events: none;
+
+}
+
+.intro::after {
+content: "";
+
+position: absolute;
+
+width: 180px;
+height: 180px;
+
+bottom: -90px;
+left: -70px;
+
+border-radius: 50%;
+
+background:
+    rgba(52, 152, 219, 0.06);
+
+pointer-events: none;
+
+}
+
+/* =========================================================
+Intro Heading
+========================================================= */
+
+.intro h2 {
+position: relative;
+z-index: 1;
+
+margin-bottom: 18px;
+
+color: var(--mix-primary);
+
+font-size:
+    clamp(1.8rem, 5vw, 3rem);
+
+font-weight: 800;
+
+line-height: 1.3;
+
+}
+
+/* =========================================================
+Intro Paragraph
+========================================================= */
+
+.intro > p {
+position: relative;
+z-index: 1;
+
+max-width: 700px;
+
+margin:
+    0 auto 20px;
+
+color: var(--mix-text-light);
+
+font-size:
+    clamp(1rem, 2vw, 1.2rem);
+
+}
+
+/* =========================================================
+Intro List
+========================================================= */
+
+.intro > ul {
+position: relative;
+z-index: 1;
+
+width: fit-content;
+
+max-width: 100%;
+
+margin:
+    0 auto 30px;
+
+padding-right: 24px;
+
+text-align: right;
+
+color: var(--mix-text);
+
+}
+
+.intro > ul li {
+margin-bottom: 7px;
+
+font-size: 1rem;
+
+}
+
+.intro > ul li::marker {
+color: var(--mix-primary);
+}
+
+/* =========================================================
+Start Button
+========================================================= */
+
+.start-button {
+position: relative;
+z-index: 1;
+
+border: none;
+
+min-width: 180px;
+
+min-height: 52px;
+
+padding:
+    12px 28px;
+
+border-radius:
+    999px;
+
+background:
+    linear-gradient(
+        135deg,
+        var(--mix-primary),
+        var(--mix-primary-dark)
+    );
+
+color: var(--mix-white);
+
+font-family: inherit;
+
+font-size: 1.05rem;
+
+font-weight: 700;
+
+cursor: pointer;
+
+box-shadow:
+    0 10px 24px rgba(52, 152, 219, 0.25);
+
+transition:
+    transform var(--mix-transition),
+    box-shadow var(--mix-transition),
+    filter var(--mix-transition);
+
+}
+
+.start-button:hover {
+transform:
+translateY(-3px);
+
+box-shadow:
+    0 15px 30px rgba(52, 152, 219, 0.3);
+
+filter:
+    brightness(1.05);
+
+}
+
+.start-button:active {
+transform:
+translateY(0);
+
+box-shadow:
+    0 7px 15px rgba(52, 152, 219, 0.22);
+
+}
+
+/* =========================================================
+Features Section
+========================================================= */
+
+.features {
+width: 100%;
+}
+
+.features > h2 {
+margin-bottom: 30px;
+
+text-align: center;
+
+color: var(--mix-text);
+
+font-size:
+    clamp(1.5rem, 4vw, 2.2rem);
+
+font-weight: 800;
+
+}
+
+/* =========================================================
+Feature Cards Container
+========================================================= */
+
+.feature-cards {
+display: grid;
+
+grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+gap: 20px;
+
+}
+
+/* =========================================================
+Card
+========================================================= */
+
+.card {
+min-width: 0;
+
+padding: 28px 22px;
+
+background:
+    var(--mix-white);
+
+border:
+    1px solid var(--mix-border);
+
+border-radius:
+    var(--mix-radius);
+
+box-shadow:
+    var(--mix-shadow);
+
+text-align: center;
+
+transition:
+    transform var(--mix-transition),
+    box-shadow var(--mix-transition),
+    border-color var(--mix-transition);
+
+}
+
+.card:hover {
+transform:
+translateY(-6px);
+
+box-shadow:
+    var(--mix-shadow-hover);
+
+border-color:
+    rgba(52, 152, 219, 0.4);
+
+}
+
+/* =========================================================
+Card Heading
+========================================================= */
+
+.card h3 {
+margin-bottom: 12px;
+
+color: var(--mix-primary);
+
+font-size: 1.2rem;
+
+font-weight: 800;
+
+}
+
+/* =========================================================
+Card Paragraph
+========================================================= */
+
+.card p {
+color: var(--mix-text-light);
+
+font-size: 0.95rem;
+
+line-height: 1.8;
+
+}
+
+/* =========================================================
+Footer
+========================================================= */
+
+footer {
+width: 100%;
+
+padding:
+    25px
+    20px;
+
+border-top:
+    1px solid var(--mix-border);
+
+background:
+    var(--mix-white);
+
+color:
+    var(--mix-text-light);
+
+text-align: center;
+
+font-size: 0.9rem;
+
+}
+
+footer p {
+margin: 0;
+}
+
+/* =========================================================
+Responsive - Tablet
+========================================================= */
+
+@media (max-width: 900px) {
+
+header {
+    padding:
+        16px 24px;
+}
+
+main {
+    padding:
+        45px 20px 55px;
+}
+
+.feature-cards {
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+}
+
+}
+
+/* =========================================================
+Responsive - Mobile
+========================================================= */
+
+@media (max-width: 600px) {
+
+header {
+    position: relative;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 15px;
+
+    padding:
+        18px 16px;
+}
+
+header h1 {
+    text-align: center;
+}
+
+nav ul {
+    justify-content: center;
+
+    width: 100%;
+}
+
+nav li {
+    flex: 1 1 auto;
+}
+
+nav a {
+    width: 100%;
+
+    padding:
+        9px 10px;
+
+    font-size: 0.9rem;
+}
+
+main {
+    padding:
+        30px 14px 45px;
+}
+
+.intro {
+    padding:
+        38px 20px;
+
+    margin-bottom: 40px;
+
+    border-radius:
+        18px;
+}
+
+.intro h2 {
+    font-size:
+        clamp(1.6rem, 8vw, 2.2rem);
+}
+
+.intro > ul {
+    width: 100%;
+
+    padding-right: 20px;
+
+    text-align: right;
+}
+
+.start-button {
+    width: 100%;
+
+    max-width: 320px;
+}
+
+.feature-cards {
+    grid-template-columns:
+        1fr;
+
+    gap: 15px;
+}
+
+.card {
+    padding:
+        24px 20px;
+}
+
+}
+
+/* =========================================================
+Very Small Screens
+========================================================= */
+
+@media (max-width: 360px) {
+
+nav ul {
+    flex-direction: column;
+}
+
+nav li {
+    width: 100%;
+}
+
+.intro {
+    padding:
+        30px 15px;
+}
+
+.intro > ul {
+    font-size: 0.9rem;
+}
+
+}
+
+/* =========================================================
+Reduced Motion
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+html {
+    scroll-behavior: auto;
+}
+
+*,
+*::before,
+*::after {
+    transition: none !important;
+    animation: none !important;
+}
+
+}
+
+/* =========================================================
+Print
+========================================================= */
+
+@media print {
+
+header {
+    position: static;
+
+    box-shadow: none;
+}
+
+.start-button {
+    display: none;
+}
+
+.card,
+.intro {
+    box-shadow: none;
+}
+
+      }
