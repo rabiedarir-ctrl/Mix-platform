@@ -133,7 +133,7 @@ Logo / Header Title
 ========================================================= */
 
 header h1 {
-color: var(--mix-primary);
+color: var(--mix-primary-dark‎);
 
 font-size:
     clamp(1.4rem, 3vw, 2rem);
@@ -201,9 +201,9 @@ transition:
 }
 
 nav a:hover {
-background: var(--mix-primary);
+background: var(--mix-primary-dark‎);
 
-border-color: var(--mix-primary);
+border-color: var(--mix-primary-dark‎);
 
 color: var(--mix-white);
 
@@ -320,7 +320,7 @@ z-index: 1;
 
 margin-bottom: 18px;
 
-color: var(--mix-primary);
+color: var(--mix-primary-dark‎);
 
 font-size:
     clamp(1.8rem, 5vw, 3rem);
@@ -382,7 +382,7 @@ font-size: 1rem;
 }
 
 .intro > ul li::marker {
-color: var(--mix-primary);
+color: var(--mix-primary-dark‎);
 }
 
 /* =========================================================
@@ -538,7 +538,7 @@ Card Heading
 .card h3 {
 margin-bottom: 12px;
 
-color: var(--mix-primary);
+color: var(--mix-primary-dark‎);
 
 font-size: 1.2rem;
 
