@@ -203,7 +203,7 @@ transition:
 nav a:hover {
 background: var(--mix-primary-dark‎);
 
-border-color: var(--mix-primary-dark‎);
+border-color: var(--mix-primary‎);
 
 color: var(--mix-white);
 
@@ -408,7 +408,7 @@ border-radius:
 background:
     linear-gradient(
         135deg,
-        var(--mix-primary),
+        var(--mix-primary-dark‎),
         var(--mix-primary-dark)
     );
 
