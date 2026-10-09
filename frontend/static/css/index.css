@@ -186,7 +186,7 @@ border-radius:
 
 background: var(--mix-primary-dark);
 
-color: var(--mix-primary-dark);
+color: var(--mix-text);
 
 font-size: 0.95rem;
 font-weight: 600;
@@ -205,7 +205,7 @@ background: var(--mix-primary-dark‎);
 
 border-color: var(--mix-primary‎);
 
-color: var(--mix-primary-dark);
+color: var(--mix-text);
 
 transform: translateY(-2px);
 
