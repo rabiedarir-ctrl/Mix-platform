@@ -69,7 +69,7 @@ background:
     linear-gradient(
         180deg,
         #ffffff 0%,
-        var(--mix-bg) 100%
+        var(--mix-primary-dark) 100%
     );
 
 color: var(--mix-text);
