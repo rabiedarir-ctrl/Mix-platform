@@ -68,7 +68,7 @@ direction: rtl;
 background:
     linear-gradient(
         180deg,
-        #ffffff 0%,
+        --mix-primary-dark 0%,
         var(--mix-primary-dark) 100%
     );
 
@@ -85,7 +85,7 @@ Links
 ========================================================= */
 
 a {
-color: inherit;
+color:--mix-primary;
 text-decoration: none;
 }
 
