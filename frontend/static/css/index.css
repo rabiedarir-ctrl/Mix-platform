@@ -10,8 +10,8 @@ Variables
 ========================================================= */
 
 :root {
---mix-primary: #3498db;
---mix-primary-dark: #217dbb;
+--mix-primary: : #0865d5;
+--mix-primary-dark: linear-gradient(135deg, #071d3b, #0b65d8);
 --mix-primary-light: #5dade2;
 
 --mix-white: #ffffff;
@@ -72,7 +72,7 @@ background:
         var(--mix-primary-dark) 100%
     );
 
-color: var(--mix-text);
+color: var(:mix-primary-dark );
 
 line-height: 1.7;
 
