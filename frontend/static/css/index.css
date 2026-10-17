@@ -70,7 +70,7 @@ background:
 
     );
 
-color: (--mix-white );
+color: ( --mix-text);
 
 line-height: 1.7;
 
@@ -83,13 +83,13 @@ Links
 ========================================================= */
 
 a {
-color:--mix-primary;
+color:--mix-white;
 text-decoration: none;
 }
 
 a:focus-visible,
 button:focus-visible {
-outline: 3px --mix-white;
+outline: 3px --mix-primary;
 outline-offset: 3px;
 }
 
@@ -131,7 +131,7 @@ Logo / Header Title
 ========================================================= */
 
 header h1 {
-color: var(--mix-white);
+color: var(--mix-text);
 
 font-size:
     clamp(1.4rem, 3vw, 2rem);
@@ -406,8 +406,8 @@ border-radius:
 background:
     linear-gradient(
         135deg,
-        var(--mix-primary-dark‎),
-        var(--mix-primary-dark)
+        var(--mix-primary‎),
+        var(--mix-primary)
     );
 
 color: var(--mix-white);
