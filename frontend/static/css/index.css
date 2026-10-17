@@ -10,8 +10,8 @@ Variables
 ========================================================= */
 
 :root {
---mix-primary: : linear-gradient(135deg, #071d3b, #0b65d8);
---mix-primary-dark:  #0865d5;
+--mix-primary: :   #0865d5;
+--mix-primary-dark:  linear-gradient(135deg, #071d3b, #0b65d8);
 --mix-primary-light: #5dade2;
 
 --mix-white: #ffffff;
@@ -66,13 +66,11 @@ font-family:
 direction: rtl;
 
 background:
-    linear-gradient(
-        180deg,
-        --mix-primary-dark 0%,
-        var(--mix-primary-dark) 100%
+        --mix-primary-dark ,
+
     );
 
-color: var(:mix-primary-dark );
+color: (--mix-white );
 
 line-height: 1.7;
 
@@ -91,7 +89,7 @@ text-decoration: none;
 
 a:focus-visible,
 button:focus-visible {
-outline: 3px solid rgba(52, 152, 219, 0.35);
+outline: 3px --mix-white;
 outline-offset: 3px;
 }
 
@@ -133,7 +131,7 @@ Logo / Header Title
 ========================================================= */
 
 header h1 {
-color: var(--mix-primary-dark‎);
+color: var(--mix-white);
 
 font-size:
     clamp(1.4rem, 3vw, 2rem);
@@ -184,7 +182,7 @@ border:
 border-radius:
     var(--mix-radius-small);
 
-background: var(--mix-primary-dark);
+background: var(--mix-primary);
 
 color: var(--mix-text);
 
@@ -201,9 +199,9 @@ transition:
 }
 
 nav a:hover {
-background: var(--mix-primary-dark‎);
+background: var(--mix-primary‎);
 
-border-color: var(--mix-primary‎);
+border-color: var(--mix-border);
 
 color: var(--mix-text);
 
