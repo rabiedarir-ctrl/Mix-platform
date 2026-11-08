@@ -145,9 +145,75 @@ body:has(#registerForm) footer {
   text-align: center;
 }
 
+/* Give controls and spacing more room on phones while preserving the desktop layout. */
 @media (max-width: 600px) {
+  body:has(#registerForm) main {
+    padding: 8px 14px 28px;
+  }
+
   body:has(#registerForm) .register-section {
-    margin: 16px auto !important;
-    padding: 22px 18px !important;
+    width: 100%;
+    margin: 12px auto !important;
+    padding: 30px 22px !important;
+    border-radius: 18px !important;
+  }
+
+  body:has(#registerForm) .register-section h1 {
+    margin-bottom: 12px;
+    font-size: 1.8rem;
+  }
+
+  body:has(#registerForm) .register-section h2 {
+    margin-bottom: 30px !important;
+    font-size: 1.55rem !important;
+  }
+
+  body:has(#registerForm) .form-group {
+    margin-bottom: 24px;
+  }
+
+  body:has(#registerForm) .form-group label {
+    margin-bottom: 10px;
+    font-size: 1rem;
+  }
+
+  body:has(#registerForm) .form-group input {
+    min-height: 52px;
+    padding: 14px 15px;
+    font-size: 1rem;
+  }
+
+  body:has(#registerForm) .terms-checkbox {
+    gap: 12px;
+    margin-top: 20px;
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  body:has(#registerForm) .terms-checkbox input {
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+  }
+
+  body:has(#registerForm) .register-section button {
+    min-height: 54px;
+    margin-top: 24px;
+    font-size: 1.05rem;
+  }
+
+  body:has(#registerForm) .login-link {
+    margin-top: 26px;
+    line-height: 1.8;
+  }
+}
+
+@media (max-width: 380px) {
+  body:has(#registerForm) main {
+    padding-inline: 10px;
+  }
+
+  body:has(#registerForm) .register-section {
+    padding: 26px 18px !important;
   }
 }
