@@ -1,2 +1,105 @@
-/* Shared entry point already referenced by frontend/html/register.html. */
+/* Shared dark-blue theme for pages that load this stylesheet. */
 @import url("./css/register.css");
+
+:root {
+  --mix-navy: #071d3b;
+  --mix-blue: #0b65d8;
+  --mix-blue-hover: #064da5;
+  --mix-page-text: #f4f7fc;
+  --mix-card: rgba(8, 24, 48, 0.88);
+  --mix-card-border: rgba(139, 190, 255, 0.22);
+}
+
+body:not(:has(#registerForm)) {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--mix-navy), var(--mix-blue)) !important;
+  color: var(--mix-page-text);
+  font-family: Arial, "Segoe UI", sans-serif;
+}
+
+body:not(:has(#registerForm)) header {
+  background: rgba(7, 29, 59, 0.94);
+  color: #fff;
+  border-bottom: 1px solid var(--mix-card-border);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+body:not(:has(#registerForm)) main {
+  color: var(--mix-page-text);
+}
+
+body:not(:has(#registerForm)) main section,
+body:not(:has(#registerForm)) .card,
+body:not(:has(#registerForm)) .user-card,
+body:not(:has(#registerForm)) .stats-cards,
+body:not(:has(#registerForm)) #chatContainer,
+body:not(:has(#registerForm)) #productsContainer {
+  background: var(--mix-card);
+  color: var(--mix-page-text);
+  border: 1px solid var(--mix-card-border);
+  border-radius: 14px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+}
+
+body:not(:has(#registerForm)) h1,
+body:not(:has(#registerForm)) h2,
+body:not(:has(#registerForm)) h3 {
+  color: #fff;
+}
+
+body:not(:has(#registerForm)) a {
+  color: #b9d8ff;
+}
+
+body:not(:has(#registerForm)) a:hover {
+  color: #fff;
+}
+
+body:not(:has(#registerForm)) input,
+body:not(:has(#registerForm)) textarea,
+body:not(:has(#registerForm)) select {
+  max-width: 100%;
+  background: rgba(4, 17, 36, 0.88);
+  color: #fff;
+  border: 1px solid rgba(185, 216, 255, 0.35);
+  border-radius: 8px;
+}
+
+body:not(:has(#registerForm)) input::placeholder,
+body:not(:has(#registerForm)) textarea::placeholder {
+  color: rgba(235, 243, 255, 0.68);
+}
+
+body:not(:has(#registerForm)) input:focus,
+body:not(:has(#registerForm)) textarea:focus,
+body:not(:has(#registerForm)) select:focus {
+  outline: none;
+  border-color: #69aaff;
+  box-shadow: 0 0 0 3px rgba(105, 170, 255, 0.2);
+}
+
+body:not(:has(#registerForm)) button,
+body:not(:has(#registerForm)) input[type="submit"] {
+  background: var(--mix-blue);
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+body:not(:has(#registerForm)) button:hover:not(:disabled),
+body:not(:has(#registerForm)) input[type="submit"]:hover:not(:disabled) {
+  background: var(--mix-blue-hover);
+  transform: translateY(-1px);
+}
+
+body:not(:has(#registerForm)) footer {
+  color: rgba(244, 247, 252, 0.75);
+}
+
+@media (max-width: 600px) {
+  body:not(:has(#registerForm)) main section {
+    padding: 18px;
+  }
+}
