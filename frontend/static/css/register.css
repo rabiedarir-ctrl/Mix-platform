@@ -1,0 +1,153 @@
+/* Registration page theme: coordinated with auth.css (black + neon teal). */
+body:has(#registerForm) {
+  min-height: 100vh !important;
+  height: auto !important;
+  background: radial-gradient(ellipse at top, #10211e 0%, #050b0a 58%) !important;
+  color: #f4fffc !important;
+  font-family: "Segoe UI", Arial, sans-serif !important;
+}
+
+body:has(#registerForm) main {
+  width: 100%;
+  padding: 1px 16px 32px;
+}
+
+body:has(#registerForm) .register-section {
+  width: min(100%, 500px);
+  margin: 24px auto !important;
+  padding: clamp(22px, 5vw, 34px) !important;
+  background: rgba(0, 0, 0, 0.78) !important;
+  color: #f4fffc !important;
+  border: 1px solid rgba(0, 255, 204, 0.24);
+  border-radius: 16px !important;
+  box-shadow: 0 10px 30px rgba(0, 255, 204, 0.12) !important;
+  backdrop-filter: blur(10px);
+}
+
+body:has(#registerForm) .register-section h1,
+body:has(#registerForm) .register-section h2 {
+  color: #00ffcc !important;
+}
+
+body:has(#registerForm) .register-section h1 {
+  margin-bottom: 8px;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+}
+
+body:has(#registerForm) .register-section h2 {
+  margin-bottom: 24px !important;
+  font-size: clamp(1.35rem, 4vw, 1.75rem) !important;
+}
+
+body:has(#registerForm) .form-group label,
+body:has(#registerForm) .terms-checkbox,
+body:has(#registerForm) .login-link {
+  color: #d7e8e4 !important;
+}
+
+body:has(#registerForm) .form-group {
+  margin-bottom: 18px;
+  text-align: right;
+}
+
+body:has(#registerForm) .form-group input {
+  min-height: 44px;
+  border: 1px solid rgba(0, 255, 204, 0.3) !important;
+  border-radius: 8px !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  color: #fff !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+body:has(#registerForm) .form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.58) !important;
+}
+
+body:has(#registerForm) .form-group input:focus {
+  outline: none;
+  border-color: #00ffcc !important;
+  background: rgba(0, 0, 0, 0.72) !important;
+  box-shadow: 0 0 8px rgba(0, 255, 204, 0.55) !important;
+}
+
+body:has(#registerForm) .terms-checkbox {
+  text-align: right;
+}
+
+body:has(#registerForm) .terms-checkbox input {
+  accent-color: #00ffcc;
+}
+
+body:has(#registerForm) .terms-checkbox a,
+body:has(#registerForm) .login-link a {
+  color: #00ffcc !important;
+}
+
+body:has(#registerForm) .terms-checkbox a {
+  text-decoration-color: #00ffcc;
+}
+
+body:has(#registerForm) .login-link a {
+  border-bottom-color: #00ffcc !important;
+}
+
+body:has(#registerForm) .register-section button {
+  min-height: 46px;
+  background: #00ffcc !important;
+  color: #000 !important;
+  border-radius: 8px !important;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+body:has(#registerForm) .register-section button:hover:not(:disabled) {
+  background: #00e6b8 !important;
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+body:has(#registerForm) .register-section button:disabled {
+  opacity: 0.6;
+}
+
+body:has(#registerForm) .error-message {
+  color: #ff8290 !important;
+  background: rgba(255, 92, 112, 0.12) !important;
+  border-right-color: #ff5c70 !important;
+}
+
+body:has(#registerForm) .success-message {
+  color: #00ffcc !important;
+  background: rgba(0, 255, 204, 0.1) !important;
+  border-right-color: #00ffcc !important;
+}
+
+body:has(#registerForm) .password-strength {
+  background: rgba(255, 255, 255, 0.14) !important;
+}
+
+body:has(#registerForm) .password-strength-bar.weak {
+  background-color: #ff5c70 !important;
+}
+
+body:has(#registerForm) .password-strength-bar.medium {
+  background-color: #ffd166 !important;
+}
+
+body:has(#registerForm) .password-strength-bar.strong {
+  background-color: #00ffcc !important;
+}
+
+body:has(#registerForm) .password-strength-text {
+  color: rgba(255, 255, 255, 0.76) !important;
+}
+
+body:has(#registerForm) footer {
+  color: #b7cbc6;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  body:has(#registerForm) .register-section {
+    margin: 16px auto !important;
+    padding: 22px 18px !important;
+  }
+}
