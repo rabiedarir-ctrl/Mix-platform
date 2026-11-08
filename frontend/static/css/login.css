@@ -1,0 +1,212 @@
+/* ========================================
+   Mix Platform - Login Page
+   Color palette: Blue / White
+======================================== */
+
+/* إعدادات عامة */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    background: linear-gradient(135deg, #071d3b, #0b65d8);
+    color: #172b4d;
+}
+
+/* بطاقة تسجيل الدخول */
+.login-card {
+    width: 100%;
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 32px;
+    background: #ffffff;
+    color: #172b4d;
+    border: 1px solid #d9e2ef;
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+}
+
+/* الشعار */
+.logo {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.logo h1 {
+    margin: 0 0 8px;
+    color: #0865d5;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.logo p {
+    margin: 0;
+    color: #718096;
+    font-size: 14px;
+}
+
+/* العناوين */
+.login-card h2 {
+    color: #172b4d;
+    text-align: center;
+    margin: 20px 0 25px;
+    font-size: 25px;
+}
+
+/* مجموعات الحقول */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #172b4d;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* حقول الإدخال */
+.form-group input {
+    display: block;
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 14px;
+    border: 1px solid #d9e2ef;
+    border-radius: 10px;
+    background: #fbfdff;
+    color: #172b4d;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background-color 0.2s ease;
+}
+
+.form-group input::placeholder {
+    color: #8a98a9;
+}
+
+.form-group input:focus {
+    border-color: #0865d5;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(8, 101, 213, 0.1);
+}
+
+/* إظهار كلمة المرور */
+.show-password {
+    color: #0865d5;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.show-password:hover {
+    color: #064da5;
+}
+
+/* زر تسجيل الدخول */
+.submit-btn {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    margin-top: 22px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #0865d5;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.submit-btn:hover {
+    background: #064da5;
+    box-shadow: 0 5px 14px rgba(8, 101, 213, 0.2);
+    transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* رسائل الخطأ والنجاح */
+.message {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.message.error {
+    color: #a61b1b;
+    background: #fff0f0;
+    border: 1px solid #ffd0d0;
+}
+
+.message.success {
+    color: #176b3a;
+    background: #edfff3;
+    border: 1px solid #c4f0d2;
+}
+
+/* الروابط */
+.links {
+    margin-top: 22px;
+    text-align: center;
+    color: #718096;
+    font-size: 14px;
+}
+
+.links a {
+    color: #0865d5;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.links a:hover {
+    color: #064da5;
+    text-decoration: underline;
+}
+
+/* التذييل */
+footer {
+    text-align: center;
+    margin-top: 25px;
+    color: #ffffff;
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+/* الشاشات الصغيرة */
+@media (max-width: 600px) {
+    body {
+        padding: 12px;
+    }
+
+    .login-card {
+        margin: 20px auto;
+        padding: 22px;
+        border-radius: 16px;
+    }
+
+    .logo h1 {
+        font-size: 26px;
+    }
+
+    .login-card h2 {
+        font-size: 22px;
+    }
+}
