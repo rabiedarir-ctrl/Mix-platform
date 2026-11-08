@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="منصة Mix Platform - عالم افتراضي تفاعلي يجمع بين الأحلام والألعاب والمجتمع والعالم ثلاثي الأبعاد">
+    <meta name="author" content="Mix Platform">
+    <meta name="theme-color" content="#3498db">
+    <title>Mix Platform - منصة الأحلام والعوالم الافتراضية</title>
+
+    <!-- أساسي -->
+    <link rel="stylesheet" href="static/style.css">
+
+    <!-- لوحات واجهة المستخدم -->
+    <link rel="stylesheet" href="static/dashboard.css">
+    <link rel="stylesheet" href="static/scene.css">
+    <link rel="stylesheet" href="static/hud.css">
+    <link rel="stylesheet" href="static/notifications.css">
+    <link rel="stylesheet" href="static/buttons.css">
+    <link rel="stylesheet" href="static/home.css">
+
+    <!-- محرك الأحلام والعوالم -->
+    <link rel="stylesheet" href="static/dream_engine.css">
+    <link rel="stylesheet" href="static/dreams.css">
+    <link rel="stylesheet" href="static/games.css">
+    <link rel="stylesheet" href="static/matrix.css">
+    <link rel="stylesheet" href="static/world.css">
+
+    <!-- خدمات المستخدم -->
+    <link rel="stylesheet" href="static/wallet.css">
+    <link rel="stylesheet" href="static/store.css">
+    <link rel="stylesheet" href="static/social.css">
+    <link rel="stylesheet" href="static/messages.css">
+
+    <!-- المصادقة -->
+    <link rel="stylesheet" href="static/auth.css">
+
+    <!-- Manifest و Favicon -->
+    <link rel="manifest" href="static/manifest.json">
+    <link rel="icon" href="assets/textures/sky.jpg" type="image/jpeg">
+
+    <!-- Scripts الرئيسية -->
+    <script type="module" src="static/engine.js"></script>
+    <script type="module" src="static/scene.js"></script>
+    <script type="module" src="static/dashboard.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Mix Platform</h1>
+        <nav>
+            <ul>
+                <li><a href="frontend/html/login.html">📝 تسجيل الدخول</a></li>
+                <li><a href="frontend/html/dashboard.html">📱 لوحة التحكم</a></li>
+                <li><a href="frontend/html/feed.html">📊 التغذية</a></li>
+                <li><a href="frontend/html/home.html">🏫 الرئيسية</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="intro">
+            <h2>استكشاف عالم الطاقة والأحلام</h2>
+            <p>Mix Platform هو نظام تفاعلي يجمع بين:</p>
+            <ul>
+                <li>العالم الافتراضي ثلاثي الأبعاد</li>
+                <li>إدارة الطاقة والخلايا للمستخدم</li>
+                <li>الألعاب والتحديات</li>
+                <li>عالم الأحلام التفاعلي</li>
+                <li>الدردشة والمراسلات</li>
+            </ul>
+            <button id="startBtn" type="button" class="start-button">ابدأ الآن</button>
+        </section>
+
+        <section class="features">
+            <h2>المميزات الأساسية</h2>
+            <div class="feature-cards">
+                <div class="card">
+                    <h3>🌙 الأحلام</h3>
+                    <p>تفاعل مع عالم الأحلام الخاص بك وأضف أحداثًا ومشاهد تفاعلية.</p>
+                </div>
+                <div class="card">
+                    <h3>🎮 الألعاب</h3>
+                    <p>لعب ألعاب مثل BTC Game وتطوير الطاقة والنقاط.</p>
+                </div>
+                <div class="card">
+                    <h3>👥 المجتمع</h3>
+                    <p>التفاعل مع منشورات المستخدمين، التعليقات، الرسائل والدردشة.</p>
+                </div>
+                <div class="card">
+                    <h3>🌐 العالم الافتراضي</h3>
+                    <p>استكشف Metaverse ثلاثي الأبعاد باستخدام محرك Three.js.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Mix Platform. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="static/main.js"></script>
+    <script src="static/pages/api.js"></script>
+    <script src="static/home.js"></script>
+    <script>
+        // معالج حدث الزر "ابدأ الآن"
+        document.addEventListener('DOMContentLoaded', function() {
+            const startBtn = document.getElementById('startBtn');
+            if (startBtn) {
+                startBtn.addEventListener('click', function() {
+                    window.location.href = 'frontend/html/login.html';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
