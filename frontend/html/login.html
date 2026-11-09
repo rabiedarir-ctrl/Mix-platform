@@ -25,8 +25,12 @@
 
       <div class="form-group">
         <label for="password">كلمة المرور</label>
-        <input id="password" name="password" type="password" autocomplete="current-password"
-          placeholder="أدخل كلمة المرور" required>
+        <div class="password-field">
+          <input id="password" name="password" type="password" autocomplete="current-password"
+            placeholder="أدخل كلمة المرور" required>
+          <button class="password-toggle" type="button" data-password-toggle="password"
+            aria-controls="password" aria-label="إظهار كلمة المرور">إظهار</button>
+        </div>
       </div>
 
       <p id="feedback" class="message" role="alert" aria-live="polite" hidden></p>
@@ -52,6 +56,16 @@
       feedback.className = `message ${type}`;
       feedback.hidden = false;
     }
+
+    document.querySelectorAll("[data-password-toggle]").forEach((toggle) => {
+      toggle.addEventListener("click", () => {
+        const input = document.getElementById(toggle.dataset.passwordToggle);
+        const isHidden = input.type === "password";
+        input.type = isHidden ? "text" : "password";
+        toggle.textContent = isHidden ? "إخفاء" : "إظهار";
+        toggle.setAttribute("aria-label", `${isHidden ? "إخفاء" : "إظهار"} كلمة المرور`);
+      });
+    });
 
     loginForm.addEventListener("submit", async (event) => {
       event.preventDefault();
