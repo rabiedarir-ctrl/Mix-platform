@@ -87,19 +87,21 @@ main { width: 100%; }
 .register-section button.submit-btn {
   display: block;
   width: 100%;
-  min-height: 48px;
+  min-height: 60px;
   margin-top: 20px;
-  padding: 12px 18px;
+  padding: 15px 20px;
   border: 0;
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--blue);
   color: #fff;
   font: inherit;
+  font-size: 18px;
   font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 6px 16px rgba(8, 101, 213, .22);
   transition: background-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
-.register-section button.submit-btn:hover:not(:disabled) { background: var(--blue-hover); box-shadow: 0 5px 14px rgba(8, 101, 213, .2); transform: translateY(-1px); }
+.register-section button.submit-btn:hover:not(:disabled) { background: var(--blue-hover); box-shadow: 0 8px 20px rgba(8, 101, 213, .3); transform: translateY(-2px); }
 .register-section button.submit-btn:disabled { opacity: .65; cursor: wait; }
 
 .feedback { margin: 14px 0 0; padding: 11px 12px; border-radius: 8px; font-size: 14px; line-height: 1.6; }
@@ -116,4 +118,5 @@ footer { margin-top: 12px; color: #fff; text-align: center; font-size: 12px; opa
   .register-section { margin: 12px auto; padding: 24px 20px; border-radius: 16px; }
   .register-header h1 { font-size: 26px; }
   .register-section h2 { font-size: 22px; }
+  .register-section button.submit-btn { min-height: 58px; font-size: 17px; }
 }
