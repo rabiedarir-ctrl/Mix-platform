@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071d3b">
+  <title>إنشاء حساب - Mix Platform</title>
+  <link rel="stylesheet" href="../static/css/register.css">
+</head>
+<body>
+  <main>
+    <section class="register-section" aria-labelledby="pageTitle">
+      <header class="register-header">
+        <h1>Mix Platform</h1>
+        <p>انضم إلينا وابدأ رحلتك</p>
+      </header>
+      <h2 id="pageTitle">إنشاء حساب جديد</h2>
+
+      <form id="registerForm" novalidate>
+        <div class="form-group">
+          <label for="email">البريد الإلكتروني</label>
+          <input id="email" name="email" type="email" autocomplete="email"
+            placeholder="name@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="username">اسم المستخدم</label>
+          <input id="username" name="username" type="text" autocomplete="username"
+            minlength="3" placeholder="اختر اسم مستخدم (3 أحرف على الأقل)" required>
+        </div>
+
+        <div class="form-group">
+          <label for="fullname">الاسم الكامل</label>
+          <input id="fullname" name="fullname" type="text" autocomplete="name"
+            placeholder="أدخل اسمك الكامل" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">كلمة المرور</label>
+          <input id="password" name="password" type="password" autocomplete="new-password"
+            minlength="8" placeholder="8 أحرف على الأقل" required>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">تأكيد كلمة المرور</label>
+          <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password"
+            placeholder="أعد إدخال كلمة المرور" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">رقم الهاتف <span class="optional">(اختياري)</span></label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="أدخل رقم الهاتف">
+        </div>
+
+        <label class="terms-checkbox" for="terms">
+          <input id="terms" name="terms" type="checkbox" required>
+          <span>أوافق على الشروط والأحكام</span>
+        </label>
+
+        <p id="feedback" class="feedback" role="alert" aria-live="polite" hidden></p>
+        <button id="submitBtn" type="submit">إنشاء حسابي</button>
+      </form>
+
+      <p class="login-link">لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a></p>
+    </section>
+  </main>
+
+  <footer>© Mix Platform</footer>
+
+  <script src="../static/pages/api.js"></script>
+  <script>
+    const registerForm = document.getElementById("registerForm");
+    const feedback = document.getElementById("feedback");
+    const submitBtn = document.getElementById("submitBtn");
+
+    function showFeedback(message, type) {
+      feedback.textContent = message;
+      feedback.className = `feedback ${type}`;
+      feedback.hidden = false;
+    }
+
+    registerForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      feedback.hidden = true;
+
+      const email = document.getElementById("email").value.trim();
+      const username = document.getElementById("username").value.trim();
+      const fullname = document.getElementById("fullname").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const phone = document.getElementById("phone").value.trim();
+
+      if (!registerForm.reportValidity()) return;
+      if (username.length < 3) {
+        showFeedback("يجب أن يتكون اسم المستخدم من 3 أحرف على الأقل.", "error-message");
+        return;
+      }
+      if (password.length < 8) {
+        showFeedback("يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.", "error-message");
+        return;
+      }
+      if (password !== confirmPassword) {
+        showFeedback("كلمة المرور وتأكيدها غير متطابقين.", "error-message");
+        return;
+      }
+      if (!document.getElementById("terms").checked) {
+        showFeedback("يرجى الموافقة على الشروط والأحكام للمتابعة.", "error-message");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "جارٍ إنشاء الحساب...";
+      try {
+        const result = await window.AuthAPI.register({ email, username, fullname, password, phone });
+        showFeedback("تم إنشاء الحساب بنجاح. يمكنك الآن تسجيل الدخول.", "success-message");
+        if (result?.token) {
+          localStorage.setItem("mixToken", result.token);
+          if (result.user) localStorage.setItem("mixUser", JSON.stringify(result.user));
+          window.location.href = "dashboard.html";
+          return;
+        }
+        window.setTimeout(() => { window.location.href = "login.html"; }, 1200);
+      } catch (error) {
+        showFeedback(error.message || "تعذر إنشاء الحساب. حاول مرة أخرى.", "error-message");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "إنشاء حسابي";
+      }
+    });
+  </script>
+</body>
+</html>
