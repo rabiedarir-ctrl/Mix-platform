@@ -60,10 +60,31 @@ main { width: 100%; }
 .form-group input::placeholder { color: #8a98a9; }
 .form-group input:focus { border-color: var(--blue); background: #fff; box-shadow: 0 0 0 3px rgba(8, 101, 213, .12); }
 
+.password-field { position: relative; }
+.password-field input { padding-left: 76px; }
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  min-height: 34px;
+  padding: 5px 8px;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--blue);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.password-toggle:hover { color: var(--blue-hover); background: #eef5ff; }
+.password-toggle:focus-visible, a:focus-visible, button:focus-visible { outline: 3px solid rgba(8, 101, 213, .35); outline-offset: 2px; }
+
 .terms-checkbox { display: flex; align-items: center; gap: 10px; margin: 8px 0 18px; color: var(--ink); font-size: 14px; cursor: pointer; }
 .terms-checkbox input { width: 17px; height: 17px; margin: 0; accent-color: var(--blue); }
 
-.register-section button {
+.register-section button.submit-btn {
   display: block;
   width: 100%;
   min-height: 48px;
@@ -78,8 +99,8 @@ main { width: 100%; }
   cursor: pointer;
   transition: background-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
-.register-section button:hover:not(:disabled) { background: var(--blue-hover); box-shadow: 0 5px 14px rgba(8, 101, 213, .2); transform: translateY(-1px); }
-.register-section button:disabled { opacity: .65; cursor: wait; }
+.register-section button.submit-btn:hover:not(:disabled) { background: var(--blue-hover); box-shadow: 0 5px 14px rgba(8, 101, 213, .2); transform: translateY(-1px); }
+.register-section button.submit-btn:disabled { opacity: .65; cursor: wait; }
 
 .feedback { margin: 14px 0 0; padding: 11px 12px; border-radius: 8px; font-size: 14px; line-height: 1.6; }
 .feedback.error-message { border: 1px solid #ffd0d0; background: #fff0f0; color: #a61b1b; }
