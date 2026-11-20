@@ -87,18 +87,18 @@ main { width: 100%; }
 .register-section button.submit-btn {
   display: block;
   width: 100%;
-  min-height: 60px;
-  margin-top: 20px;
-  padding: 15px 20px;
+  min-height: 48px;
+  margin-top: 18px;
+  padding: 12px 18px;
   border: 0;
-  border-radius: 12px;
+  border-radius: 10px;
   background: var(--blue);
   color: #fff;
   font: inherit;
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(8, 101, 213, .22);
+  box-shadow: 0 6px 14px rgba(8, 101, 213, .22);
   transition: background-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 .register-section button.submit-btn:hover:not(:disabled) { background: var(--blue-hover); box-shadow: 0 8px 20px rgba(8, 101, 213, .3); transform: translateY(-2px); }
