@@ -2,6 +2,7 @@
 // Mix Platform - Updated Server with Database
 // ===================================================
 
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -48,7 +49,7 @@ connectDB().then(() => {
 
 app.get('/health', (req, res) => {
     res.json({ 
-        status: 'off',
+        status: 'ok',
         database: dbConnected ? 'Connected' : 'Disconnected',
         message: 'Mix Platform Backend is running',
         timestamp: new Date().toISOString()
@@ -122,11 +123,16 @@ app.post('/api/users/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
 
+        
         // التحقق من كلمة المرور (بسيطة للتطوير)
-        if (user.password !== password) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+        if (!user || !(await user.comparePassword(password))) {
+    return res.status(401).json({ error: 'Invalid credentials' });
         }
-
+       const token = jwt.sign(    
+           { id: user._id },
+           process.env.JWT_SECRET,
+           { expiresIn: '7d' }
+);
         // تحديث آخر تسجيل دخول
         user.lastLogin = new Date();
         await user.save();
