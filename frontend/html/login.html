@@ -82,7 +82,7 @@
       submitBtn.textContent = "جارٍ تسجيل الدخول...";
 
       try {
-        const result = await window.AuthAPI.login(identifier, password);
+        const result = await window.MixAPI.AuthAPI.login(identifier, password);
         if (!result || !result.token) {
           throw new Error(result?.message || result?.error || "لم يتم إرجاع رمز تسجيل الدخول من الخادم.");
         }
