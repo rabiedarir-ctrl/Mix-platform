@@ -14,15 +14,7 @@ const Post = require('./models/Post');
 const Dream = require('./models/Dream');
 const Wallet = require('./models/Wallet');
 
-const app = express();
-
-//استجابة الخادم 
-const PORT = process.env.PORT || 10000;
-const HOST = "0.0.0.0";
-
-app.listen(PORT, HOST, () => {
-    console.log(`Mix API running on ${HOST}:${PORT}`);
-});
+const app = express()
 
 // ===================================================
 // 🔹 Middleware
@@ -56,7 +48,7 @@ connectDB().then(() => {
 
 app.get('/health', (req, res) => {
     res.json({ 
-        status: 'OK',
+        status: 'off',
         database: dbConnected ? 'Connected' : 'Disconnected',
         message: 'Mix Platform Backend is running',
         timestamp: new Date().toISOString()
@@ -76,7 +68,7 @@ app.post('/api/users/register', async (req, res) => {
         }
 
         // التحقق من المستخدم الموجود
-        const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+        const existingUser = await User.findOne({ $or: [{ email }, { username } , { fullname } , { phone }] });
         if (existingUser) {
             return res.status(400).json({ error: 'Email or username already exists' });
         }
@@ -140,7 +132,11 @@ app.post('/api/users/login', async (req, res) => {
         await user.save();
 
         // إنشاء token (بسيط للتطوير)
-        const token = Buffer.from(`${user._id}:${Date.now()}`).toString('base64');
+    const user = await User.findOne({ email }).select('+password');
+
+if (!user || !(await user.comparePassword(password))) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+    }
 
         res.json({
             message: 'Login successful',
