@@ -111,7 +111,15 @@
       submitBtn.disabled = true;
       submitBtn.textContent = "جارٍ إنشاء الحساب...";
       try {
-        const result = await window.MixAPI.AuthAPI.register({ email, username, fullname, password, phone });
+        const result = await window.MixAPI.AuthAPI.register({
+    email,
+    username,
+    fullname,
+    password,
+    confirmPassword,
+    phone,
+    termsAccepted: document.getElementById("terms").checked
+});
         showFeedback("تم إنشاء الحساب بنجاح. يمكنك الآن تسجيل الدخول.", "success-message");
         if (result?.token) {
           localStorage.setItem("mixToken", result.token);
