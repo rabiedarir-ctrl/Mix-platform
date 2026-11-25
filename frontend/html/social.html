@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#217dbb">
+
+    <title>Mix Platform - التواصل الاجتماعي</title>
+
+    <style>
+        :root {
+            --blue: #217dbb;
+            --blue-light: #3498db;
+            --bg: #f4f8fc;
+            --white: #ffffff;
+            --text: #1f2937;
+            --muted: #64748b;
+            --border: #d9e6f2;
+            --green: #27ae60;
+            --red: #e74c3c;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        button,
+        textarea {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .topbar {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .brand {
+            color: var(--blue);
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .topbar-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            margin: 20px auto;
+            padding: 0 12px;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #eaf3fb;
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-weight: bold;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            resize: vertical;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            font-size: 15px;
+            background: #fff;
+        }
+
+        textarea:focus {
+            border-color: var(--blue);
+        }
+
+        .btn {
+            border: none;
+            border-radius: 9px;
+            padding: 10px 14px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: var(--blue);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #eaf3fb;
+            color: var(--blue);
+        }
+
+        .btn-danger {
+            background: #fdecec;
+            color: var(--red);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .composer-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .post-content {
+            font-size: 16px;
+            line-height: 1.9;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+            margin: 14px 0;
+        }
+
+        .post-stats {
+            display: flex;
+            gap: 15px;
+            color: var(--muted);
+            font-size: 13px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding-top: 10px;
+        }
+
+        .post-actions button {
+            flex: 1;
+            min-width: 75px;
+        }
+
+        .liked {
+            background: #eaf3fb;
+            color: var(--blue);
+        }
+
+        .comments {
+            margin-top: 14px;
+        }
+
+        .comment {
+            background: #f4f8fc;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 8px;
+        }
+
+        .comment-content {
+            margin-top: 6px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .comment-form {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .comment-form textarea {
+            min-height: 45px;
+            max-height: 120px;
+            flex: 1;
+        }
+
+        .message {
+            padding: 12px;
+            margin-bottom: 14px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .message.error {
+            background: #fdecec;
+            color: #a93226;
+            display: block;
+        }
+
+        .message.success {
+            background: #e8f8ef;
+            color: #1e8449;
+            display: block;
+        }
+
+        .loading,
+        .empty {
+            text-align: center;
+            color: var(--muted);
+            padding: 25px 10px;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .post-delete {
+            border: none;
+            background: transparent;
+            color: var(--red);
+            font-size: 13px;
+            padding: 5px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin-top: 12px;
+            }
+
+            .card {
+                padding: 12px;
+            }
+
+            .topbar {
+                padding: 12px;
+            }
+
+            .brand {
+                font-size: 18px;
+            }
+
+            .btn {
+                padding: 9px 11px;
+            }
+
+            .post-actions button {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="brand">Mix Platform</div>
+
+    <div class="topbar-actions">
+        <button class="btn btn-secondary" id="refreshBtn">
+            تحديث
+        </button>
+
+        <button class="btn btn-secondary" id="homeBtn">
+            الرئيسية
+        </button>
+    </div>
+</header>
+
+<main class="container">
+
+    <div id="messageBox" class="message"></div>
+
+    <!-- إنشاء منشور -->
+    <section class="card">
+        <div class="profile">
+            <div class="avatar" id="myAvatar">م</div>
+
+            <div>
+                <div class="profile-name" id="myName">
+                    المستخدم
+                </div>
+                <div class="muted">إنشاء منشور جديد</div>
+            </div>
+        </div>
+
+        <textarea
+            id="postInput"
+            maxlength="5000"
+            placeholder="بماذا تفكر؟"
+        ></textarea>
+
+        <div class="composer-footer">
+            <span class="muted">
+                <span id="charCount">0</span>/5000
+            </span>
+
+            <button
+                class="btn btn-primary"
+                id="publishBtn"
+            >
+                نشر المنشور
+            </button>
+        </div>
+    </section>
+
+    <!-- المنشورات -->
+    <section id="postsContainer">
+        <div class="loading" id="loading">
+            جارٍ تحميل المنشورات...
+        </div>
+    </section>
+
+</main>
+
+<script>
+"use strict";
+
+// ==================================================
+// إعداد API
+// ==================================================
+
+const API_BASE = (
+    window.MIX_API_BASE ||
+    "https://api.mix-rd.com/api"
+).replace(/\/+$/, "");
+
+const SOCIAL_API = API_BASE + "/social";
+
+// ==================================================
+// عناصر الصفحة
+// ==================================================
+
+const postInput = document.getElementById("postInput");
+const publishBtn = document.getElementById("publishBtn");
+const postsContainer = document.getElementById("postsContainer");
+const messageBox = document.getElementById("messageBox");
+const loading = document.getElementById("loading");
+const charCount = document.getElementById("charCount");
+
+// ==================================================
+// معلومات المستخدم
+// ==================================================
+
+const token = localStorage.getItem("mixToken");
+
+let currentUser = {};
+
+try {
+    currentUser = JSON.parse(
+        localStorage.getItem("currentUser") || "{}"
+    );
+} catch (error) {
+    currentUser = {};
+}
+
+// استخراج ID من JWT
+function getTokenUserId() {
+    try {
+        if (!token) return null;
+
+        const parts = token.split(".");
+
+        if (parts.length !== 3) return null;
+
+        let payload = parts[1]
+            .replace(/-/g, "+")
+            .replace(/_/g, "/");
+
+        while (payload.length % 4) {
+            payload += "=";
+        }
+
+        const decoded = JSON.parse(
+            atob(payload)
+        );
+
+        return decoded.userId || decoded.id || null;
+
+    } catch (error) {
+        return null;
+    }
+}
+
+const currentUserId =
+    currentUser._id ||
+    currentUser.id ||
+    currentUser.userId ||
+    getTokenUserId();
+
+const currentUserName =
+    currentUser.username ||
+    currentUser.name ||
+    currentUser.fullName ||
+    "المستخدم";
+
+document.getElementById("myName").textContent =
+    currentUserName;
+
+const myAvatarElement =
+    document.getElementById("myAvatar");
+
+if (currentUser.avatar) {
+    const avatarImage = document.createElement("img");
+
+    avatarImage.src = currentUser.avatar;
+    avatarImage.alt = "الصورة الشخصية";
+    avatarImage.onerror = function () {
+        myAvatarElement.textContent =
+            currentUserName.charAt(0);
+    };
+
+    myAvatarElement.textContent = "";
+    myAvatarElement.appendChild(avatarImage);
+} else {
+    myAvatarElement.textContent =
+        currentUserName.charAt(0) || "م";
+}
+
+// ==================================================
+// التحقق من تسجيل الدخول
+// ==================================================
+
+if (!token) {
+    showMessage("يجب تسجيل الدخول أولاً", "error");
+
+    setTimeout(() => {
+        window.location.href = "login.html";
+    }, 1200);
+}
+
+// ==================================================
+// وظائف مساعدة
+// ==================================================
+
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function showMessage(text, type) {
+    messageBox.textContent = text;
+    messageBox.className = "message " + type;
+
+    setTimeout(() => {
+        messageBox.className = "message";
+        messageBox.textContent = "";
+    }, 4000);
+}
+
+function getAuthorName(post) {
+    const author = post.author;
+
+    if (author && typeof author === "object") {
+        return author.username ||
+            author.name ||
+            author.fullName ||
+            "مستخدم";
+    }
+
+    return "مستخدم";
+}
+
+function getAuthorAvatar(post) {
+    if (
+        post.author &&
+        typeof post.author === "object"
+    ) {
+        return post.author.avatar || "";
+    }
+
+    return "";
+}
+
+function formatDate(dateValue) {
+    if (!dateValue) return "";
+
+    const date = new Date(dateValue);
+
+    if (isNaN(date.getTime())) {
+        return "";
+    }
+
+    return date.toLocaleString("ar-MA");
+}
+
+function getLikes(post) {
+    return Array.isArray(post.likes)
+        ? post.likes
+        : [];
+}
+
+function getComments(post) {
+    return Array.isArray(post.comments)
+        ? post.comments
+        : [];
+}
+
+function isLiked(post) {
+    if (!currentUserId) return false;
+
+    return getLikes(post).some(like => {
+        const likeUserId =
+            typeof like.userId === "object"
+                ? like.userId._id
+                : like.userId;
+
+        return String(likeUserId) ===
+            String(currentUserId);
+    });
+}
+
+function isMyPost(post) {
+    if (!currentUserId) return false;
+
+    const authorId =
+        typeof post.author === "object"
+            ? post.author._id
+            : post.author;
+
+    return String(authorId) ===
+        String(currentUserId);
+}
+
+// ==================================================
+// API Request
+// ==================================================
+
+async function apiRequest(url, options = {}) {
+    const headers = {
+        "Authorization": "Bearer " + token,
+        ...(options.body
+            ? { "Content-Type": "application/json" }
+            : {}),
+        ...(options.headers || {})
+    };
+
+    const response = await fetch(url, {
+        ...options,
+        headers
+    });
+
+    let data = {};
+
+    try {
+        data = await response.json();
+    } catch (error) {
+        data = {};
+    }
+
+    if (response.status === 401) {
+        localStorage.removeItem("mixToken");
+        localStorage.removeItem("currentUser");
+
+        window.location.href = "login.html";
+
+        throw new Error("انتهت جلسة الدخول");
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            data.message ||
+            data.error ||
+            "حدث خطأ في الاتصال بالخادم"
+        );
+    }
+
+    return data;
+}
+
+// ==================================================
+// تحميل المنشورات
+// ==================================================
+
+async function loadPosts() {
+    postsContainer.innerHTML = "";
+
+    const loadingElement = document.createElement("div");
+    loadingElement.className = "loading";
+    loadingElement.textContent = "جارٍ تحميل المنشورات...";
+
+    postsContainer.appendChild(loadingElement);
+
+    try {
+        const result = await apiRequest(
+            SOCIAL_API + "/posts"
+        );
+
+        const posts = Array.isArray(result)
+            ? result
+            : Array.isArray(result.posts)
+                ? result.posts
+                : [];
+
+        postsContainer.innerHTML = "";
+
+        if (posts.length === 0) {
+            const emptyElement = document.createElement("div");
+
+            emptyElement.className = "card empty";
+            emptyElement.textContent =
+                "لا توجد منشورات حالياً. كن أول من ينشر!";
+
+            postsContainer.appendChild(emptyElement);
+
+            return;
+        }
+
+        posts.forEach(post => {
+            postsContainer.appendChild(
+                createPostElement(post)
+            );
+        });
+
+    } catch (error) {
+        postsContainer.innerHTML = "";
+
+        const errorElement = document.createElement("div");
+
+        errorElement.className = "card empty";
+        errorElement.textContent =
+            "تعذر تحميل المنشورات: " + error.message;
+
+        postsContainer.appendChild(errorElement);
+    }
+}
+
+// ==================================================
+// إنشاء بطاقة المنشور
+// ==================================================
+
+function createPostElement(post) {
+    const card = document.createElement("article");
+
+    card.className = "card";
+    card.dataset.postId = post._id;
+
+    const authorName = getAuthorName(post);
+    const avatar = getAuthorAvatar(post);
+    const likes = getLikes(post);
+    const comments = getComments(post);
+
+    const avatarHTML = avatar
+        ? `<img src="${escapeHTML(avatar)}" alt="الصورة الشخصية">`
+        : escapeHTML(authorName.charAt(0));
+
+    const deleteButton = isMyPost(post)
+        ? `<button class="post-delete" data-action="delete">حذف المنشور</button>`
+        : "";
+
+    card.innerHTML = `
+        <div class="post-header">
+            <div class="profile">
+                <div class="avatar">${avatarHTML}</div>
+
+                <div>
+                    <div class="profile-name">
+                        ${escapeHTML(authorName)}
+                    </div>
+
+                    <div class="muted">
+                        ${escapeHTML(formatDate(post.createdAt))}
+                    </div>
+                </div>
+            </div>
+
+            ${deleteButton}
+        </div>
+
+        <div class="post-content">
+            ${escapeHTML(post.content)}
+        </div>
+
+        <div class="post-stats">
+            <span>❤️ ${likes.length} إعجاب</span>
+            <span>💬 ${comments.length} تعليق</span>
+        </div>
+
+        <div class="post-actions">
+            <button
+                class="btn btn-secondary ${isLiked(post) ? "liked" : ""}"
+                data-action="like"
+            >
+                ${isLiked(post) ? "إلغاء الإعجاب" : "إعجاب"}
+            </button>
+
+            <button
+                class="btn btn-secondary"
+                data-action="toggle-comments"
+            >
+                التعليقات
+            </button>
+        </div>
+
+        <section class="comments hidden">
+            <div class="comments-list">
+                ${renderComments(comments)}
+            </div>
+
+            <form class="comment-form">
+                <textarea
+                    name="comment"
+                    maxlength="2000"
+                    placeholder="اكتب تعليقاً..."
+                    required
+                ></textarea>
+
+                <button
+                    class="btn btn-primary"
+                    type="submit"
+                >
+                    إرسال
+                </button>
+            </form>
+        </section>
+    `;
+
+    return card;
+}
+
+// ==================================================
+// عرض التعليقات
+// ==================================================
+
+function renderComments(comments) {
+    if (!comments.length) {
+        return `
+            <div class="muted">
+                لا توجد تعليقات بعد.
+            </div>
+        `;
+    }
+
+    return comments.map(comment => {
+        const userName =
+            comment.username ||
+            comment.name ||
+            "مستخدم";
+
+        return `
+            <div class="comment">
+                <div class="profile-name">
+                    ${escapeHTML(userName)}
+                </div>
+
+                <div class="comment-content">
+                    ${escapeHTML(comment.content)}
+                </div>
+
+                <div class="muted">
+                    ${escapeHTML(formatDate(comment.createdAt))}
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+// ==================================================
+// نشر منشور
+// ==================================================
+
+publishBtn.addEventListener("click", async () => {
+    const content = postInput.value.trim();
+
+    if (!content) {
+        showMessage("اكتب محتوى المنشور أولاً", "error");
+        return;
+    }
+
+    publishBtn.disabled = true;
+    publishBtn.textContent = "جارٍ النشر...";
+
+    try {
+        await apiRequest(
+            SOCIAL_API + "/posts",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    content: content
+                })
+            }
+        );
+
+        postInput.value = "";
+        charCount.textContent = "0";
+
+        showMessage("تم نشر المنشور بنجاح", "success");
+
+        await loadPosts();
+
+    } catch (error) {
+        showMessage(error.message, "error");
+
+    } finally {
+        publishBtn.disabled = false;
+        publishBtn.textContent = "نشر المنشور";
+    }
+});
+
+// ==================================================
+// عداد الأحرف
+// ==================================================
+
+postInput.addEventListener("input", () => {
+    charCount.textContent =
+        postInput.value.length;
+});
+
+// ==================================================
+// التفاعل مع المنشورات
+// =======================================
