@@ -1,227 +1,666 @@
+
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>إنشاء حساب جديد - Mix Platform</title>
-  <link rel="stylesheet" href="/static/style.css" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      margin: 0;
-      padding: 0;
-    }
-    .register-section {
-      max-width: 520px;
-      margin: 60px auto;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 16px;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.15);
-      padding: 30px;
-      color: white;
-    }
-    .register-section h2 {
-      text-align: center;
-      margin-bottom: 24px;
-      font-size: 28px;
-    }
-    .form-group {
-      margin-bottom: 18px;
-    }
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
-    input {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px 14px;
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 8px;
-      background: rgba(255,255,255,0.08);
-      color: white;
-      outline: none;
-    }
-    input::placeholder {
-      color: rgba(255,255,255,0.7);
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: white;
-      color: #4f46e5;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.7;
-    }
-    .feedback {
-      margin-top: 16px;
-      min-height: 22px;
-    }
-    .error-message, .success-message {
-      display: block;
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 14px;
-      margin-top: 10px;
-    }
-    .error-message {
-      background: rgba(255, 99, 99, 0.15);
-      color: white;
-      border-left: 4px solid #ff5e5e;
-    }
-    .success-message {
-      background: rgba(76, 201, 91, 0.15);
-      color: white;
-      border-left: 4px solid #55d66b;
-    }
-    .login-link {
-      text-align: center;
-      margin-top: 16px;
-      font-size: 14px;
-    }
-    .login-link a {
-      color: white;
-      text-decoration: underline;
-      font-weight: bold;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#217dbb">
+<title>Mix Platform | لوحة التحكم</title>
+
+<style>
+:root {
+  --blue:#217dbb;
+  --blue2:#3498db;
+  --bg:#f4f8fc;
+  --white:#fff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --border:#d9e6f2;
+  --green:#27ae60;
+}
+
+* {
+  box-sizing:border-box;
+}
+
+body {
+  margin:0;
+  font-family:Tahoma,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+a {
+  text-decoration:none;
+  color:inherit;
+}
+
+button {
+  cursor:pointer;
+  font-family:inherit;
+}
+
+.layout {
+  display:grid;
+  grid-template-columns:245px 1fr;
+  min-height:100vh;
+}
+
+/* القائمة الجانبية */
+
+.sidebar {
+  background:white;
+  border-left:1px solid var(--border);
+  padding:20px 15px;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:20px;
+}
+
+.logo {
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  background:var(--blue);
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:23px;
+  font-weight:bold;
+}
+
+.brand strong {
+  color:var(--blue);
+  font-size:19px;
+}
+
+.nav-title {
+  color:#94a3b8;
+  font-size:12px;
+  margin:20px 10px 10px;
+}
+
+.nav a {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  margin:4px 0;
+  border-radius:9px;
+  color:#475569;
+  font-size:14px;
+}
+
+.nav a:hover,
+.nav a.active {
+  background:#eaf3fb;
+  color:var(--blue);
+}
+
+/* المحتوى الرئيسي */
+
+main {
+  padding:25px;
+  min-width:0;
+}
+
+.topbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:25px;
+}
+
+.topbar h1 {
+  font-size:23px;
+  margin:0 0 7px;
+}
+
+.topbar p {
+  color:var(--muted);
+  font-size:13px;
+  margin:0;
+}
+
+.user {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:white;
+  border:1px solid var(--border);
+  padding:8px 12px;
+  border-radius:12px;
+}
+
+.avatar {
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#eaf3fb;
+  color:var(--blue);
+  display:grid;
+  place-items:center;
+  font-weight:bold;
+}
+
+/* الترحيب */
+
+.hero {
+  background:linear-gradient(110deg,#176da9,#3498db);
+  color:white;
+  padding:25px;
+  border-radius:16px;
+  margin-bottom:25px;
+}
+
+.hero h2 {
+  margin:0 0 10px;
+  font-size:22px;
+}
+
+.hero p {
+  margin:0;
+  font-size:13px;
+  line-height:1.9;
+}
+
+/* الإحصائيات */
+
+.section-title {
+  margin:25px 0 15px;
+  font-size:19px;
+}
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.stat {
+  background:white;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:17px;
+}
+
+.stat strong {
+  display:block;
+  font-size:16px;
+  margin-bottom:7px;
+}
+
+.stat small {
+  color:var(--muted);
+}
+
+/* الخدمات */
+
+.services {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+
+.service {
+  background:white;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:17px;
+  min-height:145px;
+  transition:.2s;
+  display:flex;
+  flex-direction:column;
+}
+
+.service:hover {
+  transform:translateY(-3px);
+  border-color:var(--blue2);
+  box-shadow:0 8px 20px #217dbb18;
+}
+
+.service-icon {
+  width:43px;
+  height:43px;
+  border-radius:12px;
+  background:#eaf3fb;
+  display:grid;
+  place-items:center;
+  font-size:22px;
+  margin-bottom:12px;
+}
+
+.service h3 {
+  font-size:15px;
+  margin:0 0 8px;
+}
+
+.service p {
+  font-size:12px;
+  line-height:1.8;
+  color:var(--muted);
+  margin:0 0 10px;
+  flex:1;
+}
+
+.service span {
+  color:var(--blue);
+  font-size:12px;
+  font-weight:bold;
+}
+
+/* الأقسام الإضافية */
+
+.panel {
+  background:white;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:18px;
+  margin-top:22px;
+}
+
+.panel h3 {
+  margin-top:0;
+}
+
+.quick-links {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.quick-links a {
+  padding:12px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:9px;
+  font-size:13px;
+}
+
+footer {
+  text-align:center;
+  color:#94a3b8;
+  font-size:11px;
+  margin-top:30px;
+}
+
+/* الهاتف */
+
+.mobile-menu {
+  display:none;
+  background:white;
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:10px;
+}
+
+@media(max-width:1050px) {
+  .services {
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .stats {
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:750px) {
+  .layout {
+    display:block;
+  }
+
+  .sidebar {
+    position:fixed;
+    right:-260px;
+    width:245px;
+    z-index:10;
+    transition:.2s;
+  }
+
+  body.menu-open .sidebar {
+    right:0;
+  }
+
+  main {
+    padding:15px;
+  }
+
+  .mobile-menu {
+    display:block;
+  }
+
+  .services {
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .topbar h1 {
+    font-size:19px;
+  }
+}
+
+@media(max-width:390px) {
+  .services {
+    grid-template-columns:1fr;
+  }
+}
+</style>
 </head>
+
 <body>
-  <section class="register-section">
-    <h2>إنشاء حساب جديد</h2>
 
-    <form id="registerForm" novalidate>
-      <div class="form-group">
-        <label for="email">البريد الإلكتروني</label>
-        <input type="email" id="email" name="email" placeholder="أدخل بريدك الإلكتروني" />
-      </div>
+<div class="layout">
 
-      <div class="form-group">
-        <label for="username">اسم المستخدم</label>
-        <input type="text" id="username" name="username" placeholder="اختر اسم مستخدم" />
-      </div>
+<!-- القائمة الجانبية -->
 
-      <div class="form-group">
-        <label for="fullname">الاسم الكامل</label>
-        <input type="text" id="fullname" name="fullname" placeholder="أدخل الاسم الكامل" />
-      </div>
+<aside class="sidebar">
 
-      <div class="form-group">
-        <label for="password">كلمة المرور</label>
-        <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" />
-      </div>
-
-      <div class="form-group">
-        <label for="confirmPassword">تأكيد كلمة المرور</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="أعد إدخال كلمة المرور" />
-      </div>
-
-      <div class="form-group">
-        <label for="phone">رقم الهاتف (اختياري)</label>
-        <input type="tel" id="phone" name="phone" placeholder="أدخل رقم الهاتف" />
-      </div>
-
-      <div class="terms-checkbox" style="display:flex; align-items:center; gap:10px; margin-top:10px;">
-        <input type="checkbox" id="terms" />
-        <label for="terms" style="margin:0;">أوافق على الشروط</label>
-      </div>
-
-      <button id="submitBtn" type="submit">إنشاء حسابي</button>
-    </form>
-
-    <div id="feedback" class="feedback"></div>
-
-    <div class="login-link">
-      لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a>
+  <div class="brand">
+    <div class="logo">M</div>
+    <div>
+      <strong>Mix Platform</strong>
+      <small>منصة الخدمات الرقمية</small>
     </div>
-  </section>
+  </div>
 
-  <script src="../../static/pages/api.js"></script>
-  <script>
-    const registerForm = document.getElementById("registerForm");
-    const feedback = document.getElementById("feedback");
-    const submitBtn = document.getElementById("submitBtn");
+  <div class="nav-title">القائمة الرئيسية</div>
 
-    registerForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  <nav class="nav">
 
-      feedback.innerHTML = "";
+    <a class="active" href="dashboard.html">🏠 لوحة التحكم</a>
+    <a href="index.html">🌐 الرئيسية</a>
+    <a href="#services">▦ جميع الخدمات</a>
+    <a href="#profile">👤 الملف الشخصي</a>
 
-      const email = document.getElementById("email").value.trim();
-      const username = document.getElementById("username").value.trim();
-      const fullname = document.getElementById("fullname").value.trim();
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
-      const phone = document.getElementById("phone").value.trim();
-      const termsAccepted = document.getElementById("terms").checked;
+  </nav>
 
-      if (!email || !username || !fullname || !password || !confirmPassword) {
-        feedback.innerHTML = '<div class="error-message">❌ يرجى ملء جميع الحقول الأساسية</div>';
-        return;
-      }
+  <div class="nav-title">إدارة الحساب</div>
 
-      if (password.length < 8) {
-        feedback.innerHTML = '<div class="error-message">❌ كلمة المرور يجب أن لا تقل عن 8 أحرف</div>';
-        return;
-      }
+  <nav class="nav">
 
-      if (password !== confirmPassword) {
-        feedback.innerHTML = '<div class="error-message">❌ كلمة المرور وتأكيدها غير متطابقين</div>';
-        return;
-      }
+    <a href="#wallet">💳 المحفظة</a>
+    <a href="#messages">💬 الرسائل</a>
+    <a href="#notifications">🔔 الإشعارات</a>
+    <a href="#settings">⚙️ الإعدادات</a>
+    <a href="login.html" id="logout">↪ تسجيل الخروج</a>
 
-      if (!termsAccepted) {
-        feedback.innerHTML = '<div class="error-message">❌ يجب الموافقة على الشروط</div>';
-        return;
-      }
+  </nav>
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = "جاري الإنشاء...";
+</aside>
 
-      try {
-        const response = await fetch(`${window.MIX_API_BASE}/users/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            email,
-            username,
-            fullname,
-            password,
-            confirmPassword,
-            phone: phone || "",
-            termsAccepted: true
-          })
-        });
+<!-- المحتوى -->
 
-        const data = await response.json();
+<main>
 
-        if (!response.ok) {
-          throw new Error(data.message || "فشل في إنشاء الحساب");
-        }
+<header class="topbar">
 
-        feedback.innerHTML = '<div class="success-message">✅ تم إنشاء الحساب بنجاح</div>';
+  <div>
+    <h1>لوحة التحكم</h1>
+    <p>مرحباً بك في منصة Mix Platform</p>
+  </div>
 
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 1000);
+  <button class="mobile-menu" id="menuBtn">☰</button>
 
-      } catch (error) {
-        feedback.innerHTML = `<div class="error-message">❌ ${error.message}</div>`;
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "إنشاء حسابي";
-      }
-    });
-  </script>
+  <div class="user">
+    <div class="avatar" id="avatar">M</div>
+    <strong id="username">مستخدم Mix</strong>
+  </div>
+
+</header>
+
+<!-- الترحيب -->
+
+<section class="hero">
+
+  <h2>كل عالمك الرقمي في مكان واحد</h2>
+
+  <p>
+    مرحباً بك في Mix Platform.
+    اكتشف الخدمات الاجتماعية والترفيهية والمالية
+    والعوالم الافتراضية من لوحة تحكم واحدة.
+  </p>
+
+</section>
+
+<!-- ملخص الحساب -->
+
+<h2 class="section-title">ملخص الحساب</h2>
+
+<section class="stats">
+
+  <div class="stat">
+    <strong>👤 الحساب</strong>
+    <small id="accountStatus">حالة الحساب</small>
+  </div>
+
+  <div class="stat">
+    <strong>💳 المحفظة</strong>
+    <small>إدارة الرصيد</small>
+  </div>
+
+  <div class="stat">
+    <strong>💬 التواصل</strong>
+    <small>الرسائل والمجتمع</small>
+  </div>
+
+  <div class="stat">
+    <strong>🌌 العوالم</strong>
+    <small>العوالم الرقمية</small>
+  </div>
+
+</section>
+
+<!-- جميع خدمات المنصة -->
+
+<h2 class="section-title" id="services">جميع خدمات Mix Platform</h2>
+
+<section class="services">
+
+  <a class="service" href="index.html">
+    <div class="service-icon">🏠</div>
+    <h3>الرئيسية</h3>
+    <p>الواجهة الرئيسية للمنصة.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+  <a class="service" href="#social">
+    <div class="service-icon">👥</div>
+    <h3>الشبكة الاجتماعية</h3>
+    <p>المنشورات والتفاعل والمتابعة.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+  <a class="service" href="#messages">
+    <div class="service-icon">💬</div>
+    <h3>الرسائل والمحادثات</h3>
+    <p>التواصل بين مستخدمي المنصة.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+  <a class="service" href="#wallet">
+    <div class="service-icon">💳</div>
+    <h3>المحفظة الرقمية</h3>
+    <p>الرصيد والمعاملات المالية.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+  <a class="service" href="#games">
+    <div class="service-icon">🎮</div>
+    <h3>الألعاب</h3>
+    <p>الألعاب والترفيه الرقمي.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+  <a class="service" href="world.html">
+    <div class="service-icon">🌍</div>
+    <h3>العالم الافتراضي</h3>
+    <p>استكشاف العالم الافتراضي.</p>
+    <span>فتح العالم ←</span>
+  </a>
+
+  <a class="service" href="dream_world.html">
+    <div class="service-icon">✨</div>
+    <h3>عالم الأحلام</h3>
+    <p>إنشاء واستكشاف العوالم.</p>
+    <span>فتح العالم ←</span>
+  </a>
+
+  <a class="service" href="#dreams">
+    <div class="service-icon">💭</div>
+    <h3>محرك الأحلام</h3>
+    <p>الأفكار والتجارب الإبداعية.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+  <a class="service" href="#media">
+    <div class="service-icon">🎬</div>
+    <h3>الوسائط</h3>
+    <p>الصور والفيديو والمحتوى.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+  <a class="service" href="#matrix">
+    <div class="service-icon">🔷</div>
+    <h3>Mix Matrix</h3>
+    <p>الخدمات المترابطة للمنصة.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+  <a class="service" href="#store">
+    <div class="service-icon">🛍️</div>
+    <h3>المتجر</h3>
+    <p>المنتجات والخدمات الرقمية.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+  <a class="service" href="#gps">
+    <div class="service-icon">📍</div>
+    <h3>الخرائط و GPS</h3>
+    <p>الموقع والخرائط الجغرافية.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+  <a class="service" href="#profile">
+    <div class="service-icon">🪪</div>
+    <h3>الملف الشخصي</h3>
+    <p>إدارة بيانات المستخدم.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+  <a class="service" href="#settings">
+    <div class="service-icon">⚙️</div>
+    <h3>الإعدادات</h3>
+    <p>إعدادات الحساب والأمان.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+  <a class="service" href="#notifications">
+    <div class="service-icon">🔔</div>
+    <h3>الإشعارات</h3>
+    <p>التنبيهات والتحديثات.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+  <a class="service" href="#support">
+    <div class="service-icon">🛟</div>
+    <h3>الدعم والمساعدة</h3>
+    <p>المساعدة والإبلاغ عن المشاكل.</p>
+    <span>فتح الخدمة ←</span>
+  </a>
+
+</section>
+
+<!-- الاختصارات -->
+
+<section class="panel">
+
+  <h3>اختصارات سريعة</h3>
+
+  <div class="quick-links">
+
+    <a href="register.html">＋ إنشاء حساب</a>
+    <a href="login.html">↪ تسجيل الدخول</a>
+    <a href="world.html">🌍 العالم الافتراضي</a>
+    <a href="dream_world.html">✨ عالم الأحلام</a>
+
+  </div>
+
+</section>
+
+<footer>
+  © <span id="year"></span> Mix Platform
+  - جميع الحقوق محفوظة
+</footer>
+
+</main>
+</div>
+
+<script>
+
+// بيانات المستخدم
+
+(function () {
+
+  const storedUser = localStorage.getItem("currentUser");
+  let user = null;
+
+  try {
+    user = storedUser ? JSON.parse(storedUser) : null;
+  } catch (error) {
+    user = storedUser ? { username: storedUser } : null;
+  }
+
+  const name =
+    user && (user.username || user.name || user.email)
+      ? (user.username || user.name || user.email)
+      : "مستخدم Mix";
+
+  document.getElementById("username").textContent = name;
+
+  document.getElementById("avatar").textContent =
+    name.trim().charAt(0).toUpperCase() || "M";
+
+  document.getElementById("accountStatus").textContent =
+    localStorage.getItem("mixToken")
+      ? "جلسة مسجلة"
+      : "لا توجد جلسة API";
+
+  document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+})();
+
+// القائمة الجانبية للهاتف
+
+document.getElementById("menuBtn").addEventListener("click", function () {
+  document.body.classList.toggle("menu-open");
+});
+
+// تسجيل الخروج
+
+document.getElementById("logout").addEventListener("click", function (event) {
+
+  event.preventDefault();
+
+  localStorage.removeItem("mixToken");
+  localStorage.removeItem("currentUser");
+
+  window.location.href = "login.html";
+
+});
+
+</script>
+
 </body>
-</html>
+  </html>
+  
